@@ -101,7 +101,7 @@ const DocumentsPage = () => {
 			render: (value, record) => {
 				return (
 					<div className={'flex items-center'}>
-						<FlagIcon countryCode={record.countryCode.toLowerCase()} />
+						<FlagIcon countryCode={record.countryCode?.toLowerCase()} />
 						<span className={'truncate'}>{value}</span>
 					</div>
 				)

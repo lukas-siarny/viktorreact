@@ -1296,10 +1296,12 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type LanguageCode = string;
             export type Limit = number;
             export type Page = number;
         }
         export interface QueryParameters {
+            languageCode?: Parameters.LanguageCode;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -1308,11 +1310,7 @@ declare namespace Paths {
                 documents: {
                     id: string; // uuid
                     message?: string;
-                    /**
-                     * example:
-                     * SK
-                     */
-                    countryCode: string;
+                    languageCode: string;
                     createdAt: string; // date-time
                     files: ({
                         id: string; // uuid
@@ -1360,11 +1358,7 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AssetType = string;
-            /**
-             * example:
-             * SK
-             */
-            export type CountryCode = string;
+            export type LanguageCode = string;
             export type Limit = number;
             export type Page = number;
         }
@@ -1372,11 +1366,7 @@ declare namespace Paths {
             assetType: Parameters.AssetType;
         }
         export interface QueryParameters {
-            countryCode: /**
-             * example:
-             * SK
-             */
-            Parameters.CountryCode;
+            languageCode: Parameters.LanguageCode;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -1385,11 +1375,7 @@ declare namespace Paths {
                 documents: {
                     id: string; // uuid
                     message?: string;
-                    /**
-                     * example:
-                     * SK
-                     */
-                    countryCode: string;
+                    languageCode: string;
                     createdAt: string; // date-time
                     files: ({
                         id: string; // uuid
@@ -4593,6 +4579,10 @@ declare namespace Paths {
                     wallet?: {
                         id: string; // uuid
                     };
+                    qrCodes: {
+                        name: string;
+                        link: string;
+                    }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -6190,6 +6180,38 @@ declare namespace Paths {
                     formattedAmount: string;
                 };
             }
+        }
+    }
+    namespace GetApiB2BAdminSalonsSalonIdQrCode {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Ext = "png" | "svg";
+            export type SalonID = string; // uuid
+            export type Type = "raw";
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            ext: Parameters.Ext;
+            type: Parameters.Type;
+        }
+        namespace Responses {
+            /**
+             * Response is .png or .svg file buffer
+             */
+            export type $200 = any;
         }
     }
     namespace GetApiB2BAdminSalonsSalonIdWalletsWalletId {
@@ -11052,6 +11074,38 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BV1SalonsSalonIdQrCode {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Ext = "png" | "svg";
+            export type SalonID = string; // uuid
+            export type Type = "raw";
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            ext: Parameters.Ext;
+            type: Parameters.Type;
+        }
+        namespace Responses {
+            /**
+             * Response is .png or .svg file buffer
+             */
+            export type $200 = any;
+        }
+    }
     namespace GetApiB2BV1SalonsSalonIdWalletsWalletId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -11915,9 +11969,13 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type CalendarEventID = string; // uuid
+            export type T = string;
         }
         export interface PathParameters {
             calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface QueryParameters {
+            t?: Parameters.T;
         }
         namespace Responses {
             export interface $200 {
@@ -14444,8 +14502,8 @@ declare namespace Paths {
         export interface QueryParameters {
             dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
             dateTo: Parameters.DateTo /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
-            employeeID?: Parameters.EmployeeID /* uuid */;
             serviceID: Parameters.ServiceID /* uuid */;
+            employeeID?: Parameters.EmployeeID /* uuid */;
             serviceCategoryParameterValueID?: Parameters.ServiceCategoryParameterValueID /* uuid */;
         }
         namespace Responses {
@@ -14457,6 +14515,55 @@ declare namespace Paths {
                         to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[];
                 }[];
+            }
+        }
+    }
+    namespace GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type EmployeeID = string | null; // uuid
+            export type Page = number;
+            export type SalonID = string; // uuid
+            export type ServiceCategoryParameterValueID = string | null; // uuid
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            serviceID: Parameters.ServiceID /* uuid */;
+            employeeID?: Parameters.EmployeeID /* uuid */;
+            serviceCategoryParameterValueID?: Parameters.ServiceCategoryParameterValueID /* uuid */;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                availableReservations: {
+                    date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    items: {
+                        from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    }[];
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
             }
         }
     }
@@ -15188,9 +15295,13 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type CalendarEventID = string; // uuid
+            export type T = string;
         }
         export interface PathParameters {
             calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface QueryParameters {
+            t?: Parameters.T;
         }
         namespace Responses {
             export interface $200 {
@@ -16812,8 +16923,8 @@ declare namespace Paths {
         export interface QueryParameters {
             dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
             dateTo: Parameters.DateTo /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
-            employeeID?: Parameters.EmployeeID /* uuid */;
             serviceID: Parameters.ServiceID /* uuid */;
+            employeeID?: Parameters.EmployeeID /* uuid */;
             serviceCategoryParameterValueID?: Parameters.ServiceCategoryParameterValueID /* uuid */;
         }
         namespace Responses {
@@ -16825,6 +16936,55 @@ declare namespace Paths {
                         to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[];
                 }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type EmployeeID = string | null; // uuid
+            export type Page = number;
+            export type SalonID = string; // uuid
+            export type ServiceCategoryParameterValueID = string | null; // uuid
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            serviceID: Parameters.ServiceID /* uuid */;
+            employeeID?: Parameters.EmployeeID /* uuid */;
+            serviceCategoryParameterValueID?: Parameters.ServiceCategoryParameterValueID /* uuid */;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                availableReservations: {
+                    date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    items: {
+                        from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    }[];
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
             }
         }
     }
@@ -18203,7 +18363,7 @@ declare namespace Paths {
             }
         }
     }
-    namespace GetApiRegExpB2BB2CRedirectIEntity {
+    namespace GetApiRegExpB2BB2CRedirectIEntitySubEntity {
         export interface HeaderParameters {
             "accept-language"?: /**
              * example:
@@ -18218,23 +18378,25 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type Date = string;
-            export type Entity = "review" | "reservations";
+            export type Entity = "review" | "reservations" | "salons";
             export type Lang = string;
             export type Module = "b2b" | "b2c";
             export type ReservationID = string; // uuid
             export type SalonID = string; // uuid
+            export type SubEntity = ("detail");
             export type T = string;
         }
         export interface PathParameters {
             module: Parameters.Module;
             entity: Parameters.Entity;
+            subEntity: Parameters.SubEntity;
         }
         export interface QueryParameters {
-            reservationID: Parameters.ReservationID /* uuid */;
             salonID: Parameters.SalonID /* uuid */;
+            reservationID?: Parameters.ReservationID /* uuid */;
             t?: Parameters.T;
             date?: Parameters.Date;
-            lang: Parameters.Lang;
+            lang?: Parameters.Lang;
         }
         namespace Responses {
             export interface $200 {
@@ -62059,9 +62221,13 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type CalendarEventID = string; // uuid
+            export type T = string;
         }
         export interface PathParameters {
             calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface QueryParameters {
+            t?: Parameters.T;
         }
         export interface RequestBody {
         }
@@ -62229,9 +62395,13 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type CalendarEventID = string; // uuid
+            export type T = string;
         }
         export interface PathParameters {
             calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface QueryParameters {
+            t?: Parameters.T;
         }
         export interface RequestBody {
         }
@@ -62878,11 +63048,7 @@ declare namespace Paths {
              * test
              */
             message?: string | null;
-            /**
-             * example:
-             * SK
-             */
-            countryCode: string;
+            languageCode: string;
             fileIDs: [
                 string?,
                 string?,
@@ -71885,6 +72051,7 @@ declare namespace Paths {
             deviceID: string;
             reviewMessage: string;
             calendarEventID?: string | null; // uuid
+            t?: string;
         }
         namespace Responses {
             export interface $200 {
@@ -72248,6 +72415,7 @@ declare namespace Paths {
             deviceID: string;
             reviewMessage: string;
             calendarEventID?: string | null; // uuid
+            t?: string;
         }
         namespace Responses {
             export interface $200 {
@@ -72417,14 +72585,6 @@ declare namespace Paths {
                     salonName: string;
                 } | {
                     code: string;
-                    attachments?: ({
-                        filename?: string;
-                        content?: any;
-                    } | {
-                        filename?: string;
-                        path?: string;
-                        contentType?: string;
-                    })[];
                 } | {
                     salonName: string;
                     regID?: string;
@@ -73346,6 +73506,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
   /**
+   * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated - permissions: NO
+   */
+  'getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated.PathParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated.Responses.$200>
+  /**
    * postApiB2CWebSalonsSalonIdCalendarEventsReservations - permissions: NO
    */
   'postApiB2CWebSalonsSalonIdCalendarEventsReservations'(
@@ -73589,7 +73757,7 @@ export interface OperationMethods {
    * getApiB2CWebCalendarEventsReservationsCalendarEventId - permissions: NO
    */
   'getApiB2CWebCalendarEventsReservationsCalendarEventId'(
-    parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.QueryParameters & Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.Responses.$200>
@@ -73597,7 +73765,7 @@ export interface OperationMethods {
    * patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel - permissions: NO
    */
   'patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel'(
-    parameters?: Parameters<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+    parameters?: Parameters<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.QueryParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
     data?: Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
@@ -73617,6 +73785,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated - permissions: NO
+   */
+  'getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated.PathParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated.Responses.$200>
   /**
    * postApiB2CV1SalonsSalonIdCalendarEventsReservations - permissions: NO
    */
@@ -73877,7 +74053,7 @@ export interface OperationMethods {
    * getApiB2CV1CalendarEventsReservationsCalendarEventId - permissions: NO
    */
   'getApiB2CV1CalendarEventsReservationsCalendarEventId'(
-    parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.QueryParameters & Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.Responses.$200>
@@ -73885,7 +74061,7 @@ export interface OperationMethods {
    * patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel - permissions: NO
    */
   'patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel'(
-    parameters?: Parameters<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+    parameters?: Parameters<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.QueryParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
     data?: Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
@@ -73930,13 +74106,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1Documents.Responses.$200>
   /**
-   * getApiRegExpB2BB2CRedirectIEntity - Endpoint is used for getting redirect, permissions: NO
+   * getApiRegExpB2BB2CRedirectIEntitySubEntity - Endpoint is used for getting redirect, permissions: NO
    */
-  'getApiRegExpB2BB2CRedirectIEntity'(
-    parameters?: Parameters<Paths.GetApiRegExpB2BB2CRedirectIEntity.PathParameters & Paths.GetApiRegExpB2BB2CRedirectIEntity.QueryParameters & Paths.GetApiRegExpB2BB2CRedirectIEntity.HeaderParameters> | null,
+  'getApiRegExpB2BB2CRedirectIEntitySubEntity'(
+    parameters?: Parameters<Paths.GetApiRegExpB2BB2CRedirectIEntitySubEntity.PathParameters & Paths.GetApiRegExpB2BB2CRedirectIEntitySubEntity.QueryParameters & Paths.GetApiRegExpB2BB2CRedirectIEntitySubEntity.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiRegExpB2BB2CRedirectIEntity.Responses.$200>
+  ): OperationResponse<Paths.GetApiRegExpB2BB2CRedirectIEntitySubEntity.Responses.$200>
   /**
    * getApiMaintenanceHealth - permissions: NO
    */
@@ -74172,6 +74348,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdDashboard.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdQrCode - Endpoint is used for generating salon's QR code., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdQrCode'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdQrCode.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdQrCode.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdQrCode.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdQrCode.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
@@ -74461,14 +74645,6 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsBasic.Responses.$200>
   /**
-   * getApiB2BV1SalonsPreview - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
-   */
-  'getApiB2BV1SalonsPreview'(
-    parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
-  /**
    * getApiB2BV1SalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsBasicSuggestion'(
@@ -74476,6 +74652,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsBasicSuggestion.Responses.$200>
+  /**
+   * getApiB2BV1SalonsPreview - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BV1SalonsPreview'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
   /**
    * getApiB2BV1SalonsSalonId - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
@@ -74516,6 +74700,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonIdQrCode - Endpoint is used for generating salon's QR code., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BV1SalonsSalonIdQrCode'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdQrCode.PathParameters & Paths.GetApiB2BV1SalonsSalonIdQrCode.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdQrCode.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdQrCode.Responses.$200>
   /**
    * postApiB2BV1SalonsSalonIdUserInvite - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
@@ -75943,6 +76135,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
   }
+  ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/available/paginated']: {
+    /**
+     * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated.PathParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailablePaginated.Responses.$200>
+  }
   ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/']: {
     /**
      * postApiB2CWebSalonsSalonIdCalendarEventsReservations - permissions: NO
@@ -76244,7 +76446,7 @@ export interface PathsDictionary {
      * getApiB2CWebCalendarEventsReservationsCalendarEventId - permissions: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.QueryParameters & Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.Responses.$200>
@@ -76254,7 +76456,7 @@ export interface PathsDictionary {
      * patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel - permissions: NO
      */
     'patch'(
-      parameters?: Parameters<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+      parameters?: Parameters<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.QueryParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
       data?: Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
@@ -76278,6 +76480,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/available/paginated']: {
+    /**
+     * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated.PathParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailablePaginated.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/']: {
     /**
@@ -76600,7 +76812,7 @@ export interface PathsDictionary {
      * getApiB2CV1CalendarEventsReservationsCalendarEventId - permissions: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.QueryParameters & Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.Responses.$200>
@@ -76610,7 +76822,7 @@ export interface PathsDictionary {
      * patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel - permissions: NO
      */
     'patch'(
-      parameters?: Parameters<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+      parameters?: Parameters<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.QueryParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
       data?: Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
@@ -76665,15 +76877,15 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1Documents.Responses.$200>
   }
-  ['/api/ RegExp(/^\/(?:(b2b|b2c))\/redirect\/?(?=\/|$)/i) /{entity}']: {
+  ['/api/ RegExp(/^\/(?:(b2b|b2c))\/redirect\/?(?=\/|$)/i) /{entity}/{subEntity?}']: {
     /**
-     * getApiRegExpB2BB2CRedirectIEntity - Endpoint is used for getting redirect, permissions: NO
+     * getApiRegExpB2BB2CRedirectIEntitySubEntity - Endpoint is used for getting redirect, permissions: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiRegExpB2BB2CRedirectIEntity.PathParameters & Paths.GetApiRegExpB2BB2CRedirectIEntity.QueryParameters & Paths.GetApiRegExpB2BB2CRedirectIEntity.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiRegExpB2BB2CRedirectIEntitySubEntity.PathParameters & Paths.GetApiRegExpB2BB2CRedirectIEntitySubEntity.QueryParameters & Paths.GetApiRegExpB2BB2CRedirectIEntitySubEntity.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiRegExpB2BB2CRedirectIEntity.Responses.$200>
+    ): OperationResponse<Paths.GetApiRegExpB2BB2CRedirectIEntitySubEntity.Responses.$200>
   }
   ['/api/maintenance/health']: {
     /**
@@ -76947,6 +77159,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdDashboard.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/qr-code']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdQrCode - Endpoint is used for generating salon's QR code., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdQrCode.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdQrCode.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdQrCode.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdQrCode.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/accept-employee-invite']: {
     /**
@@ -77282,16 +77504,6 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsBasic.Responses.$200>
   }
-  ['/api/b2b/v1/salons/preview']: {
-    /**
-     * getApiB2BV1SalonsPreview - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
-  }
   ['/api/b2b/v1/salons/basic-suggestion']: {
     /**
      * getApiB2BV1SalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
@@ -77301,6 +77513,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsBasicSuggestion.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/preview']: {
+    /**
+     * getApiB2BV1SalonsPreview - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}']: {
     /**
@@ -77347,6 +77569,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/qr-code']: {
+    /**
+     * getApiB2BV1SalonsSalonIdQrCode - Endpoint is used for generating salon's QR code., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdQrCode.PathParameters & Paths.GetApiB2BV1SalonsSalonIdQrCode.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdQrCode.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdQrCode.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/user-invite']: {
     /**

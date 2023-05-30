@@ -78,7 +78,7 @@ const ActiveEmployeesTable = (props: Props) => {
 
 	const columns: Columns = [
 		{
-			title: <span id={'sortby-name'}>{t('loc:Meno')}</span>,
+			title: t('loc:Meno'),
 			dataIndex: 'fullName',
 			key: 'lastName',
 			ellipsis: true,
@@ -131,7 +131,7 @@ const ActiveEmployeesTable = (props: Props) => {
 			}
 		},
 		{
-			title: t('loc:Stav konta'),
+			title: <span id={'sortby-account-status'}>{t('loc:Stav konta')}</span>,
 			dataIndex: 'hasActiveAccount',
 			key: 'status',
 			ellipsis: true,

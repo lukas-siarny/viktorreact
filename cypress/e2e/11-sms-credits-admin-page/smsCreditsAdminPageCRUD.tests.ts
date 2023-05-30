@@ -38,7 +38,7 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 	context('Sms Unit Prices', () => {
 		it('Create SMS unit price', () => {
 			cy.visit('/sms-credits')
-			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.intercept({
 					method: 'GET',
 					pathname: '/api/b2b/admin/enums/sms-unit-prices/actual'
@@ -54,19 +54,23 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 					// NOTE: at least one SMS unit price should exists in DB
 					cy.get(`.${SMS_UNIT_PRICES_TABLE_ID}:first`).click()
 					cy.clickButton(CREATE_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
-					cy.setInputValue(FORM.SMS_UNIT_PRICES_FORM, 'amount', smsUnitPrices.create.amount)
-					// NOTE: SMS unit price cannot exist in DB for specified date
-					const now = dayjs()
-					const dateValue = now.add(1, 'month').format('YYYY-MM')
-					cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValue, now.month() === 11)
-					cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
-					cy.wait('@createSmsUnitPrice').then((interceptionCreate: any) => {
-						// check status code of request
-						expect(interceptionCreate.response.statusCode).to.equal(200)
-						smsPriceUnitId = interceptionCreate.response.body.smsUnitPrice.id
-						// check conf toast message
-						cy.checkSuccessToastMessage()
-					})
+					if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+						cy.setInputValue(FORM.SMS_UNIT_PRICES_FORM, 'amount', smsUnitPrices.create.amount)
+						// NOTE: SMS unit price cannot exist in DB for specified date
+						const now = dayjs()
+						const dateValue = now.add(1, 'month').format('YYYY-MM')
+						cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValue, now.month() === 11)
+						cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
+						cy.wait('@createSmsUnitPrice').then((interceptionCreate: any) => {
+							// check status code of request
+							expect(interceptionCreate.response.statusCode).to.equal(200)
+							smsPriceUnitId = interceptionCreate.response.body.smsUnitPrice.id
+							// check conf toast message
+							cy.checkSuccessToastMessage()
+						})
+					} else {
+						cy.checkForbiddenModal()
+					}
 				})
 			} else {
 				// check redirect to 403 unauthorized page
@@ -76,7 +80,7 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 
 		it('Update SMS unit price', () => {
 			cy.visit('/sms-credits')
-			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.intercept({
 					method: 'GET',
 					pathname: '/api/b2b/admin/enums/sms-unit-prices/actual'
@@ -115,12 +119,16 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 								const dateValueUpdate = now.add(2, 'month').format('YYYY-MM')
 								cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValueUpdate, now.month() >= 10)
 								cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
-								cy.wait('@updateSmsUnitPrice').then((interceptionCreate: any) => {
-									// check status code of request
-									expect(interceptionCreate.response.statusCode).to.equal(200)
-									// check conf toast message
+								if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+									cy.wait('@updateSmsUnitPrice').then((interceptionCreate: any) => {
+										// check status code of request
+										expect(interceptionCreate.response.statusCode).to.equal(200)
+										// check conf toast message
+										cy.checkSuccessToastMessage()
+									})
+								} else {
 									cy.checkSuccessToastMessage()
-								})
+								}
 							})
 						})
 				})
@@ -132,7 +140,7 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 
 		it('Delete SMS unit price', () => {
 			cy.visit('/sms-credits')
-			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.intercept({
 					method: 'GET',
 					pathname: '/api/b2b/admin/enums/sms-unit-prices/actual'
@@ -165,13 +173,18 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 								// check status code of request
 								expect(interceptionGetSmsPrices.response.statusCode).to.equal(200)
 								cy.get(`[data-row-key="${smsPriceUnitId}"]`).click()
-								cy.clickDeleteButtonWithConfCustom(FORM.SMS_UNIT_PRICES_FORM)
-								cy.wait('@deleteSmsUnitPrice').then((interceptionCreate: any) => {
-									// check status code of request
-									expect(interceptionCreate.response.statusCode).to.equal(200)
-									// check conf toast message
-									cy.checkSuccessToastMessage()
-								})
+								if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+									cy.clickDeleteButtonWithConfCustom(FORM.SMS_UNIT_PRICES_FORM)
+									cy.wait('@deleteSmsUnitPrice').then((interceptionCreate: any) => {
+										// check status code of request
+										expect(interceptionCreate.response.statusCode).to.equal(200)
+										// check conf toast message
+										cy.checkSuccessToastMessage()
+									})
+								} else {
+									cy.get(`#${FORM.SMS_UNIT_PRICES_FORM}-delete-btn`).click()
+									cy.checkForbiddenModal()
+								}
 							})
 						})
 				})
@@ -239,38 +252,37 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 		// NOTE: at least one PUBLISHED and PREMIUM salon with walletID must exists in the DB in order to test work correctly
 		it('Create transaction', () => {
 			cy.visit('/sms-credits')
-			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-					cy.intercept({
-						method: 'GET',
-						pathname: '/api/b2b/admin/salons*'
-					}).as('getSalons')
-					cy.intercept({
-						method: 'GET',
-						pathname: '/api/b2b/admin/enums/sms-unit-prices/actual'
-					}).as('getSmsUnitPricesActual')
-					cy.intercept({
-						method: 'POST',
-						pathname: '/admin/wallets/transactions'
-					}).as('createTransaction')
-					cy.get(`#${RECHARGE_SMS_CREDIT_BUTTON_ID}`).click()
-					cy.wait(['@getSalons', '@getSmsUnitPricesActual']).then(([interceptionGetSalons, interceptionGetSmsUnitPricesActual]: any[]) => {
-						// check status code of request
-						expect(interceptionGetSalons.response.statusCode).to.equal(200)
-						expect(interceptionGetSmsUnitPricesActual.response.statusCode).to.equal(200)
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE) || actions.includes(CRUD_OPERATIONS.READ)) {
+				cy.intercept({
+					method: 'GET',
+					pathname: '/api/b2b/admin/salons*'
+				}).as('getSalons')
+				cy.intercept({
+					method: 'GET',
+					pathname: '/api/b2b/admin/enums/sms-unit-prices/actual'
+				}).as('getSmsUnitPricesActual')
+				cy.intercept({
+					method: 'POST',
+					pathname: '/admin/wallets/transactions'
+				}).as('createTransaction')
+				cy.get(`#${RECHARGE_SMS_CREDIT_BUTTON_ID}`).click()
+				cy.wait(['@getSalons', '@getSmsUnitPricesActual']).then(([interceptionGetSalons, interceptionGetSmsUnitPricesActual]: any[]) => {
+					// check status code of request
+					expect(interceptionGetSalons.response.statusCode).to.equal(200)
+					expect(interceptionGetSmsUnitPricesActual.response.statusCode).to.equal(200)
 
-						// change lng to SK to load correct test data
-						cy.selectOptionDropdownCustom(FORM.RECHARGE_SMS_CREDIT_FILTER, 'countryCode', 'SK', true)
-						cy.wait('@getSalons').then((interception: any) => {
-							expect(interception.response.statusCode).to.equal(200)
-
-							cy.get('.noti-table .ant-table-thead .ant-table-selection-column .ant-checkbox-input').click({ force: true })
-							// wait for the animation
-							cy.wait(1000)
-							cy.get(`#${RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID}`).click()
-							cy.setInputValue(FORM.RECHARGE_SMS_CREDIT, 'amount', smsCredit.update.amount)
-							cy.setInputValue(FORM.RECHARGE_SMS_CREDIT, 'transactionNote', smsCredit.update.transactionNote)
-							cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
+					// change lng to SK to load correct test data
+					cy.selectOptionDropdownCustom(FORM.RECHARGE_SMS_CREDIT_FILTER, 'countryCode', 'SK', true)
+					cy.wait('@getSalons').then((interception: any) => {
+						expect(interception.response.statusCode).to.equal(200)
+						cy.get('.noti-table .ant-table-thead .ant-table-selection-column .ant-checkbox-input').click({ force: true })
+						// wait for the animation
+						cy.wait(1000)
+						cy.get(`#${RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID}`).click()
+						cy.setInputValue(FORM.RECHARGE_SMS_CREDIT, 'amount', smsCredit.update.amount)
+						cy.setInputValue(FORM.RECHARGE_SMS_CREDIT, 'transactionNote', smsCredit.update.transactionNote)
+						cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
+						if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 							cy.wait('@createTransaction').then((interceptionCreateTransaction: any) => {
 								// check status code of login request
 								expect(interceptionCreateTransaction.response.statusCode).to.equal(200)
@@ -278,12 +290,11 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 								cy.checkSuccessToastMessage()
 								cy.location('pathname').should('eq', '/sms-credits/recharge')
 							})
-						})
+						} else {
+							cy.checkForbiddenModal()
+						}
 					})
-				} else {
-					cy.get(`#${RECHARGE_SMS_CREDIT_BUTTON_ID}`).click()
-					cy.checkForbiddenModal()
-				}
+				})
 			} else {
 				// check redirect to 403 unauthorized page
 				cy.location('pathname').should('eq', '/403')

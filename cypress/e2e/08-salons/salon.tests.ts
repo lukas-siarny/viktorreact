@@ -8,7 +8,7 @@ import { ITests } from '../13-roles/roles.cy'
 import salon from '../../fixtures/salon.json'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, PAGE, PERMISSION, SALON_ROLES, SUBMIT_BUTTON_ID, TAB_KEYS } from '../../../src/utils/enums'
+import { DELETE_BUTTON_ID, FORM, PAGE, PERMISSION, SALON_ROLES, SALON_TABS_KEYS, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS, SALON_TESTS_SUITS, SALON_ID } from '../../enums'
 
 // test suits
@@ -211,8 +211,8 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				// skip for user with Salon roles - they can't see this tab
 				if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) && !(role in SALON_ROLES)) {
 					cy.get('main.ant-layout-content').then(($body) => {
-						if ($body.find(`[data-node-key="${TAB_KEYS.SALON_HISTORY}"]`).length) {
-							cy.clickTab(TAB_KEYS.SALON_HISTORY)
+						if ($body.find(`[data-node-key="${SALON_TABS_KEYS.SALON_HISTORY}"]`).length) {
+							cy.clickTab(SALON_TABS_KEYS.SALON_HISTORY)
 							cy.wait('@getSalonHistory').then((interceptionGetSalonHistory: any) => {
 								expect(interceptionGetSalonHistory.response.statusCode).to.equal(200)
 								if ($body.find('.noti-tag.bg-status-published').length) {

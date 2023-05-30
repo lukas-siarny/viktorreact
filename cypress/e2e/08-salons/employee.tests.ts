@@ -226,7 +226,7 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// sort table
-					cy.sortTable('sortby-name')
+					cy.sortTable('sortby-account-status')
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {

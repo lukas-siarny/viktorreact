@@ -10,10 +10,9 @@ import { useParams } from 'react-router-dom'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import FlagIcon from '../../components/FlagIcon'
-import { LOCALES } from '../../components/LanguagePicker'
 
 // utils
-import { ADMIN_PERMISSIONS, ASSET_TYPE, LANGUAGE, PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, ASSET_TYPE, LANGUAGE, PAGINATION, ROW_GUTTER_X_DEFAULT, DEFAULT_LANGUAGE } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 
@@ -37,9 +36,8 @@ const { Paragraph } = Typography
 
 const DocumentsByAssetTypePage = () => {
 	const dispatch = useDispatch()
-	const [t] = useTranslation()
+	const { t, i18n } = useTranslation()
 	const { assetType } = useParams<Required<{ assetType: ASSET_TYPE }>>()
-	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const documentsByAssetType = useSelector((state: RootState) => state.documents.documentsByAssetType)
 	const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
 	const fileName = assetTypes?.data?.assetTypes.find((item) => item.key === assetType)?.name
@@ -49,7 +47,7 @@ const DocumentsByAssetTypePage = () => {
 	const [query, setQuery] = useQueryParams(documentsAssetTypesPageURLQueryParamsSchema, {
 		page: 1,
 		limit: PAGINATION.limit,
-		countryCode: selectedCountry || LOCALES[LANGUAGE.CZ].countryCode
+		languageCode: (i18n.language || DEFAULT_LANGUAGE) as LANGUAGE
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -103,7 +101,7 @@ const DocumentsByAssetTypePage = () => {
 			render: (value, record) => {
 				return (
 					<div className={'flex items-center'}>
-						<FlagIcon countryCode={record.countryCode?.toLowerCase()} />
+						<FlagIcon countryCode={record.languageCode?.toLowerCase()} />
 						<span>{value}</span>
 					</div>
 				)

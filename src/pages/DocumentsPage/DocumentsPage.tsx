@@ -56,7 +56,7 @@ const DocumentsPage = () => {
 		limit: PAGINATION.limit
 	})
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
-	const [fileUploadVisible, setFileUploadVisible] = useState<{ assetType: ASSET_TYPE; countryCode: LANGUAGE }>()
+	const [fileUploadVisible, setFileUploadVisible] = useState<{ assetType: ASSET_TYPE; languageCode: LANGUAGE }>()
 	const isLoading = documents?.isLoading
 	const [message, setMessage] = useState('')
 
@@ -101,7 +101,7 @@ const DocumentsPage = () => {
 			render: (value, record) => {
 				return (
 					<div className={'flex items-center'}>
-						<FlagIcon countryCode={record.countryCode?.toLowerCase()} />
+						<FlagIcon countryCode={record.languageCode?.toLowerCase()} />
 						<span className={'truncate'}>{value}</span>
 					</div>
 				)
@@ -125,7 +125,7 @@ const DocumentsPage = () => {
 					<Button
 						onClick={(e) => {
 							e.stopPropagation()
-							setFileUploadVisible({ assetType: record.assetType.key, countryCode: record.countryCode })
+							setFileUploadVisible({ assetType: record.assetType.key, languageCode: record.languageCode })
 						}}
 						type='primary'
 						htmlType='button'
@@ -155,10 +155,10 @@ const DocumentsPage = () => {
 				],
 				category: UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE
 			})
-			if (fileUploadVisible?.assetType && fileUploadVisible.countryCode) {
+			if (fileUploadVisible?.assetType && fileUploadVisible.languageCode) {
 				const fileIDs = data?.files?.map((file) => file.id)
 				postReq('/api/b2b/admin/documents/', undefined, {
-					countryCode: fileUploadVisible.countryCode,
+					languageCode: fileUploadVisible.languageCode,
 					fileIDs: fileIDs as any,
 					message: message || null,
 					assetType: fileUploadVisible.assetType
@@ -221,7 +221,7 @@ const DocumentsPage = () => {
 							onRow={(record) => ({
 								onClick: () => {
 									const redirectQuery: IDocumentsAssetTypesPageURLQueryParams = {
-										countryCode: record.countryCode
+										languageCode: record.languageCode
 									}
 									navigate({
 										pathname: t('paths:documents/{{assetType}}', { assetType: record.assetType.key }),

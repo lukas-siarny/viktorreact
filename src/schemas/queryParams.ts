@@ -401,7 +401,7 @@ export type IDocumentsPageURLQueryParams = z.infer<typeof documentsPageURLQueryP
  */
 
 export const documentsAssetTypesRequestQueryParams = paginationSchema.extend({
-	countryCode: twoCharsConstraint,
+	languageCode: twoCharsConstraint,
 	assetType: z.nativeEnum(ASSET_TYPE)
 })
 

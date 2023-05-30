@@ -314,7 +314,7 @@ const AddressFields = (props: Props) => {
 														onError={() => setMapError(true)}
 														onLocationChange={changeLocation}
 														lat={inputValues?.latitude}
-														lng={inputValues?.latitude}
+														lng={inputValues?.longitude}
 														zoom={get(inputValues, 'zoom')}
 														disabled={disabled}
 													/>

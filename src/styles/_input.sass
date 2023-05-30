@@ -11,7 +11,7 @@
 .ant-form-item
 	.ant-input.noti-input, .noti-input
 		border-radius: 8px
-	// Vyhladavaci filter nad tabulami
+	// Vyhladavaci filter nad tabulkami
 	.noti-input-filter
 		background-color: $backgroundColor-notino-grayLighter
 		border-radius: 8px
@@ -52,12 +52,17 @@
 			svg
 				filter: brightness(0) saturate(100%) invert(66%) sepia(7%) saturate(473%) hue-rotate(179deg) brightness(99%) contrast(86%)
 
+.ant-form-item
+	.ant-input.noti-input
+		font-size: $input-font-size
+		&.ant-input-lg
+			font-size: $input-large-font-size
+
 // input field
 .ant-form-item:not(.ant-form-item-has-error)
 	// Normal state
 	.ant-input.noti-input
 		border: 1px solid $borderColor-notino-grayLight
-		font-size: $input-font-size
 		&:not(:disabled)
 			&:hover
 				border: 1px solid $borderColor-notino-grayDark
@@ -66,6 +71,7 @@
 				box-shadow: $field-shadow-focus-default
 			&::placeholder
 				color: $borderColor-notino-gray !important
+
 
 // password field
 .ant-form-item

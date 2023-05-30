@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
-import { find } from 'lodash'
 import { arrayMove } from '@dnd-kit/sortable'
 
 // utils
@@ -82,8 +81,6 @@ const ActiveEmployeesTable = (props: Props) => {
 			dataIndex: 'fullName',
 			key: 'lastName',
 			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'lastName'),
 			width: '25%',
 			render: (_value, record) => {
 				return (
@@ -156,43 +153,56 @@ const ActiveEmployeesTable = (props: Props) => {
 	]
 
 	const handleDrop = useCallback(
-		async (oldIndexStr: string, newIndexStr?: string) => {
-			const oldIndex = Number(oldIndexStr)
-			const newIndex = Number(newIndexStr)
-			try {
-				const employee = find(activeEmployees?.tableData, { orderIndex: oldIndex })
-				// oldIndex je v tomto pripade employee.orderIndex
-				if (employee?.id && oldIndex !== newIndex) {
-					// ordering v dnd libke je od 0 .. n ale na BE je od 1 ... n
-					const reorderedData = arrayMove(activeEmployees?.tableData, employee.orderIndex - 1, newIndex - 1)
-					// Akcia na update data v reduxe
-					dispatch(reorderEmployees(reorderedData))
-					// Update na BE
-					await patchReq(
-						`/api/b2b/admin/employees/{employeeID}/reorder`,
-						{ employeeID: employee?.id },
-						{ orderIndex: newIndex },
-						undefined,
-						NOTIFICATION_TYPE.NOTIFICATION,
-						true
-					)
+		async (oldID: string, newID?: string) => {
+			if (oldID && newID && oldID !== newID) {
+				let newOrderIndex: number | undefined
+				let newIndex: number | undefined
+				let oldIndex: number | undefined
+
+				for (let i = 0; i < activeEmployees?.tableData.length; i += 1) {
+					if (newIndex !== undefined && oldIndex !== undefined) {
+						break
+					}
+					if (activeEmployees?.tableData[i].id === oldID) {
+						oldIndex = i
+					}
+					if (activeEmployees?.tableData[i].id === newID) {
+						newIndex = i
+						newOrderIndex = activeEmployees?.tableData[i].orderIndex
+					}
 				}
-			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.error(e)
-			} finally {
-				// Data treba vzdy updatnut aj po uspesnom alebo neuspesom requeste. Aby sa pri dalsom a dalsom reorderi pracovalo s aktualne updatnutymi datami.
-				dispatch(
-					getActiveEmployees({
-						page: query.page,
-						limit: query.limit,
-						order: query.order,
-						search: query.search,
-						accountState: query.accountState,
-						serviceID: query.serviceID,
-						salonID
-					})
-				)
+				if (oldIndex !== undefined && newIndex !== undefined && newOrderIndex !== undefined) {
+					try {
+						const reorderedData = arrayMove(activeEmployees?.tableData, oldIndex, newIndex)
+						// Akcia na update data v reduxe
+						dispatch(reorderEmployees(reorderedData))
+						// Update na BE
+						await patchReq(
+							`/api/b2b/admin/employees/{employeeID}/reorder`,
+							{ employeeID: oldID },
+							{ orderIndex: newOrderIndex },
+							undefined,
+							NOTIFICATION_TYPE.NOTIFICATION,
+							true
+						)
+					} catch (e) {
+						// eslint-disable-next-line no-console
+						console.error(e)
+					} finally {
+						// Data treba vzdy updatnut aj po uspesnom alebo neuspesom requeste. Aby sa pri dalsom a dalsom reorderi pracovalo s aktualne updatnutymi datami.
+						dispatch(
+							getActiveEmployees({
+								page: query.page,
+								limit: query.limit,
+								order: query.order,
+								search: query.search,
+								accountState: query.accountState,
+								serviceID: query.serviceID,
+								salonID
+							})
+						)
+					}
+				}
 			}
 		},
 		[dispatch, activeEmployees.tableData, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
@@ -223,7 +233,7 @@ const ActiveEmployeesTable = (props: Props) => {
 							className='table-fixed'
 							onChange={onChangeTable}
 							columns={columns}
-							dataSource={activeEmployees?.tableData}
+							dataSource={activeEmployees.tableData}
 							rowClassName={'clickable-row'}
 							dnd={{ dndDrop: handleDrop }}
 							twoToneRows

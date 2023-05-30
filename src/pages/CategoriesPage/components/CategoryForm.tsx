@@ -52,7 +52,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm, pristine } = props
 
-	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
+	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 	const categoriesParameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const category = useSelector((state: RootState) => state.categories.category)
 	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))

@@ -1,9 +1,9 @@
 import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
-import { WrappedFieldProps, change, autofill } from 'redux-form'
-import { isEmpty, get, map } from 'lodash'
+import { autofill, change, WrappedFieldProps } from 'redux-form'
+import { get, isEmpty, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Form, Upload, UploadProps, Image, Popconfirm, Button, Checkbox } from 'antd'
+import { Button, Checkbox, Form, Image, Popconfirm, Upload, UploadProps } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
@@ -17,7 +17,7 @@ import cx from 'classnames'
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP, STRINGS } from '../utils/enums'
+import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, STRINGS, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
@@ -42,6 +42,7 @@ type Props = WrappedFieldProps &
 		uploaderClassName?: string
 		draggable?: boolean
 		selectable?: boolean
+		hasRawPermissions?: boolean
 	}
 
 interface IPreviewFile {
@@ -78,7 +79,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 		uploaderClassName = '',
 		draggable = false,
 		selectable = false,
-		tooltip
+		tooltip,
+		hasRawPermissions = false
 	} = props
 
 	const [t] = useTranslation()
@@ -134,6 +136,19 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 		if (isEmpty(info.fileList)) {
 			input.onChange(multiple ? [] : null)
 		}
+	}
+
+	const transformDownloadUrl = () => {
+		const originalUrl = images[previewImgIndex]?.url
+		if (hasRawPermissions) {
+			// Extract the file name and file extension from the original URL
+			const fileName = originalUrl?.substring(originalUrl.lastIndexOf('/') + 1)
+			const fileExtension = fileName?.substring(fileName.lastIndexOf('.') + 1)
+			// Append 'raw' to the file name before the file extension
+			const transformedUrl = originalUrl?.replace(`.${fileExtension}`, `-raw.${fileExtension}`)
+			return transformedUrl
+		}
+		return originalUrl
 	}
 
 	const showUploadList = useMemo(
@@ -350,7 +365,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 						<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
 							<Button
 								className={'w-full h-full m-0 p-0'}
-								href={`${images[previewImgIndex]?.url}?response-content-disposition=attachment`}
+								href={`${transformDownloadUrl()}?response-content-disposition=attachment`}
 								target='_blank'
 								rel='noopener noreferrer'
 								type={'link'}

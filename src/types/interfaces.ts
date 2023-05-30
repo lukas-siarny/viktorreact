@@ -410,7 +410,7 @@ export interface TimeStats extends ILoadingAndFailure {
 export type ICalendarFilter = Pick<ICalendarPageURLQueryParams, 'employeeIDs' | 'categoryIDs'>
 
 export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
-	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: string })[]
 }
 
 export interface IDeletedEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
@@ -418,7 +418,7 @@ export interface IDeletedEmployeesPayload extends ISearchable<Paths.GetApiB2BAdm
 }
 
 export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
-	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: string })[]
 }
 
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']

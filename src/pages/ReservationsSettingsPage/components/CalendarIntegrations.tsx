@@ -41,10 +41,8 @@ const CalendarIntegrations = () => {
 	const { salonID } = useParams<Required<{ salonID: string }>>()
 	const { instance } = useMsal()
 	const dispatch = useDispatch()
-
 	const [visibleModal, setVisibleModal] = useState<{ type: EXTERNAL_CALENDAR_TYPE; title: string; description: string; requestType: REQUEST_MODAL_TYPE } | undefined>(undefined)
 	const [pickedSalonIds, setPickedSalonIds] = useState<string[]>([])
-
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
 	const salonIdsValues: Partial<{ salonIDs: string[] }> = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
@@ -54,6 +52,7 @@ const CalendarIntegrations = () => {
 	const hasMicrosoftSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`)
 	const googleSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`))
 	const microsoftSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`))
+
 	const getOptionsData = () => {
 		if (visibleModal?.requestType === REQUEST_MODAL_TYPE.DELETE) {
 			if (visibleModal.type === EXTERNAL_CALENDAR_TYPE.GOOGLE) return googleSyncInitData
@@ -61,6 +60,7 @@ const CalendarIntegrations = () => {
 		}
 		return authUser?.data?.salons
 	}
+
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
 	const originalFetch = window.fetch
 	window.fetch = async (...args): Promise<any> => {
@@ -74,7 +74,7 @@ const CalendarIntegrations = () => {
 						const responseAuth = await axios.post(
 							EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].url,
 							{
-								grand_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].grand_type,
+								grant_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].grant_type,
 								// eslint-disable-next-line no-underscore-dangle
 								client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
 								scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes,
@@ -94,7 +94,8 @@ const CalendarIntegrations = () => {
 								...buildHeaders()
 							},
 							body: JSON.stringify({
-								salonIDs: pickedSalonIds,
+								// Ak je len jeden salon tak da ID ktore ma dany salon ak ma priradenych viacero salonov tak posle IDecka ktore su picknute v modaly
+								salonIDs: authUser?.data?.salons && partnerInOneSalon ? [authUser.data.salons[0].id] : pickedSalonIds,
 								refreshToken: responseAuth.data.refresh_token,
 								calendarType: EXTERNAL_CALENDAR_TYPE.MICROSOFT
 							})
@@ -146,19 +147,22 @@ const CalendarIntegrations = () => {
 		...EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.GOOGLE],
 		onSuccess: async (tokenResponse) => {
 			// NOTE: treba pockat kym sa vykona zmazanie syncu a potom sa zavola EP na aktualizovanie dat v getUser
-			await postReq(
-				'/api/b2b/admin/calendar-sync/sync-token',
-				null,
-				{
-					salonIDs: pickedSalonIds as [string],
-					authCode: tokenResponse.code,
-					calendarType: EXTERNAL_CALENDAR_TYPE.GOOGLE
-				},
-				undefined,
-				NOTIFICATION_TYPE.NOTIFICATION,
-				true
-			)
-			dispatch(getCurrentUser())
+			if (authUser?.data?.salons) {
+				await postReq(
+					'/api/b2b/admin/calendar-sync/sync-token',
+					null,
+					{
+						// Ak je len jeden salon tak da ID ktore ma dany salon ak ma priradenych viacero salonov tak posle IDecka ktore su picknute v modaly
+						salonIDs: partnerInOneSalon ? [authUser.data.salons[0].id] : (pickedSalonIds as [string]),
+						authCode: tokenResponse.code,
+						calendarType: EXTERNAL_CALENDAR_TYPE.GOOGLE
+					},
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+				dispatch(getCurrentUser())
+			}
 		},
 		// eslint-disable-next-line no-console
 		onError: (errorResponse) => console.error(errorResponse)

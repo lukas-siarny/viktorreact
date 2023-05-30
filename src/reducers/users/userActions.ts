@@ -148,7 +148,7 @@ export const logOutUser =
 			clearAccessToken()
 			clearRefreshToken()
 
-			dispatch({
+			await dispatch({
 				type: RESET_STORE
 			})
 

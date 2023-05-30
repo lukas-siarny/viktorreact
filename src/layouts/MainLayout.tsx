@@ -192,7 +192,7 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.NOTINO]}
 					render={(hasPermission) =>
 						hasPermission &&
-						(page === PAGE.HOME || page === PAGE.DOCUMENTS || page === PAGE.SMS_CREDITS) &&
+						(page === PAGE.HOME || page === PAGE.SMS_CREDITS) &&
 						!salonID && (
 							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
 								<Row className={'justify-end min-w-0 w-full'} wrap={false}>

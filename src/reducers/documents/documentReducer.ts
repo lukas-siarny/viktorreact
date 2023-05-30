@@ -1,22 +1,26 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { IDocumentPayload, IDocumentsActions, IDocumentsPayload } from './documentActions'
+import { IAssetTypesPayload, IDocumentsByAssetTypePayload, IDocumentsActions, IDocumentsPayload } from './documentActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { DOCUMENTS, DOCUMENT } from './documentTypes'
+import { DOCUMENTS, DOCUMENTS_BY_ASSET_TYPE, ASSET_TYPES } from './documentTypes'
 
 export const initState = {
 	documents: {
 		data: null,
 		isLoading: false,
-		tableData: [],
 		isFailure: false
 	} as IDocumentsPayload & ILoadingAndFailure,
 	documentsByAssetType: {
 		data: null,
-		tableData: [],
 		isLoading: false,
 		isFailure: false
-	} as IDocumentPayload & ILoadingAndFailure
+	} as IDocumentsByAssetTypePayload & ILoadingAndFailure,
+	assetTypes: {
+		data: null,
+		options: [],
+		isLoading: false,
+		isFailure: false
+	} as IAssetTypesPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -44,12 +48,11 @@ export default (state = initState, action: IDocumentsActions) => {
 				...state,
 				documents: {
 					...initState.documents,
-					data: action.payload.data,
-					tableData: action.payload.tableData
+					data: action.payload.data
 				}
 			}
 		// Documents by asset type
-		case DOCUMENT.DOCUMENT_LOAD_START:
+		case DOCUMENTS_BY_ASSET_TYPE.DOCUMENTS_BY_ASSET_TYPE_LOAD_START:
 			return {
 				...state,
 				documentsByAssetType: {
@@ -57,7 +60,7 @@ export default (state = initState, action: IDocumentsActions) => {
 					isLoading: true
 				}
 			}
-		case DOCUMENT.DOCUMENT_LOAD_FAIL:
+		case DOCUMENTS_BY_ASSET_TYPE.DOCUMENTS_BY_ASSET_TYPE_LOAD_FAIL:
 			return {
 				...state,
 				documentsByAssetType: {
@@ -65,13 +68,38 @@ export default (state = initState, action: IDocumentsActions) => {
 					isFailure: true
 				}
 			}
-		case DOCUMENT.DOCUMENT_LOAD_DONE:
+		case DOCUMENTS_BY_ASSET_TYPE.DOCUMENTS_BY_ASSET_TYPE_LOAD_DONE:
 			return {
 				...state,
 				documentsByAssetType: {
 					...initState.documentsByAssetType,
+					data: action.payload.data
+				}
+			}
+		// Asset types
+		case ASSET_TYPES.ASSET_TYPES_LOAD_START:
+			return {
+				...state,
+				assetTypes: {
+					...state.assetTypes,
+					isLoading: true
+				}
+			}
+		case ASSET_TYPES.ASSET_TYPES_LOAD_FAIL:
+			return {
+				...state,
+				assetTypes: {
+					...initState.assetTypes,
+					isFailure: true
+				}
+			}
+		case ASSET_TYPES.ASSET_TYPES_LOAD_DONE:
+			return {
+				...state,
+				assetTypes: {
+					...initState.assetTypes,
 					data: action.payload.data,
-					tableData: action.payload.tableData
+					options: action.payload.options
 				}
 			}
 		case RESET_STORE:

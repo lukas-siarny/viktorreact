@@ -738,6 +738,8 @@ export const CHANGE_SERVICES_ORDER_BUTTON_ID = 'change-services-order-button'
 
 export const CHANGE_SERVICES_ORDER_SAVE_BUTTON_ID = 'change-services-order-save-button'
 
+export const CATEGORY_PARAMS_SWITCH_TYPE_ID = 'category-params-switch-type-id'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {

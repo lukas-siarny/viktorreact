@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import dayjs from 'dayjs'
 
 import { loginViaApi } from '../../support/e2e'
@@ -29,15 +28,15 @@ const adminDashboardTestSuite = (actions: CRUD_OPERATIONS[], role: SALON_ROLES |
 			if (!salonID && !(role in SALON_ROLES)) {
 				cy.intercept({
 					method: 'GET',
-					pathname: '/api/b2b/admin/notino-dashboard/salon-development-time-stats*'
+					pathname: '/api/b2b/admin/notino-dashboard/salon-development-time-stats'
 				}).as('getSalonTimeStats')
 				cy.intercept({
 					method: 'GET',
-					pathname: 'api/b2b/admin/notino-dashboard/salon-reservations-time-stats*'
+					pathname: '/api/b2b/admin/notino-dashboard/salon-reservations-time-stats'
 				}).as('getReservationTimeStats')
 				cy.intercept({
 					method: 'GET',
-					pathname: '/api/b2b/admin/notino-dashboard*'
+					pathname: '/api/b2b/admin/notino-dashboard'
 				}).as('getNotinoDashboard')
 				cy.wait(['@getSalonTimeStats', '@getReservationTimeStats', '@getNotinoDashboard']).then(
 					([interceptionSalonTimeStats, interceptionReservationTimeStats, interceptionNotinoDashboard]: any[]) => {

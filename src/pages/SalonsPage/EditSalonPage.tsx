@@ -736,12 +736,18 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
 			</Modal>
-			<Modal title={t('loc:Kupón pre salón')} open={visibleVoucherModal} onCancel={() => {
-				setVisibleVoucherModal(false)
-				if (!b2bVoucher) {
-					dispatch(reset(FORM.VOUCHER_FORM))
-				}
-			}} footer={null} closeIcon={<CloseIcon />}>
+			<Modal
+				title={t('loc:Kupón pre salón')}
+				open={visibleVoucherModal}
+				onCancel={() => {
+					setVisibleVoucherModal(false)
+					if (!b2bVoucher) {
+						dispatch(reset(FORM.VOUCHER_FORM))
+					}
+				}}
+				footer={null}
+				closeIcon={<CloseIcon />}
+			>
 				<VoucherForm onSubmit={onSubmitVoucher} />
 			</Modal>
 			<Modal

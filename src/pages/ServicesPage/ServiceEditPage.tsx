@@ -20,7 +20,7 @@ import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SERVICE_DESCRIPTION_LNG } from '../../utils/enums'
+import { FORM, LANGUAGE, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SERVICE_DESCRIPTION_LNG } from '../../utils/enums'
 import { decodePrice, encodePrice } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import {
@@ -34,6 +34,7 @@ import {
 
 // schema
 import { IEmployeeServiceEditForm, IServiceForm } from '../../schemas/service'
+import { LOCALES } from '../../components/LanguagePicker'
 
 type Props = SalonSubPageProps & {
 	serviceID: string
@@ -48,6 +49,8 @@ const ServiceEditPage = (props: Props) => {
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const service = useSelector((state: RootState) => state.service.service.data?.service)
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const category = useSelector((state: RootState) => state.categories.category)
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 
 	const [visibleServiceEditModal, setVisibleServiceEditModal] = useState(false)
@@ -60,11 +63,10 @@ const ServiceEditPage = (props: Props) => {
 			navigate('/404')
 		}
 
-		const { categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
-
+		const { data: dataCategory } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
-			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
+			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, dataCategory as any, 'categoryParameterValueID')
 			const descDefaultLng = data.service.descriptionLocalizations.find((v) => v.language === SERVICE_DESCRIPTION_LNG.DEFAULT)
 			const descEnLng = data.service.descriptionLocalizations.find((v) => v.language === SERVICE_DESCRIPTION_LNG.EN)
 
@@ -84,13 +86,18 @@ const ServiceEditPage = (props: Props) => {
 				settings: data.service.settings,
 				descriptionLocalizations: {
 					use: !!descDefaultLng?.value,
-					defualtLanguage: descDefaultLng?.value || null,
-					enLanguage: descEnLng?.value || null
+					defualtLanguage:
+						descDefaultLng?.value ||
+						dataCategory?.descriptionLocalizations.find((desc) => {
+							return LOCALES[desc.language?.toLowerCase() as LANGUAGE]?.countryCode?.toLowerCase() === salon.data?.address?.countryCode?.toLowerCase()
+						})?.value ||
+						null,
+					enLanguage: descEnLng?.value || dataCategory?.descriptionLocalizations.find((desc) => desc.language?.toLowerCase() === LANGUAGE.EN.toLowerCase())?.value || null
 				}
 			}
 			dispatch(initialize(FORM.SERVICE_FORM, initData))
 		}
-	}, [dispatch, serviceID, navigate])
+	}, [dispatch, serviceID, navigate, salon.data?.address?.countryCode])
 
 	const editEmployeeService = async (values: IEmployeeServiceEditForm, _dispatch?: Dispatch<any>, customProps?: any) => {
 		const employeeID = values.employee?.id
@@ -138,11 +145,30 @@ const ServiceEditPage = (props: Props) => {
 			}
 
 			let descriptionLocalizations: any[] | null = []
-			if (values.descriptionLocalizations.use) {
-				descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.DEFAULT, value: values.descriptionLocalizations.defualtLanguage })
 
-				if (values.descriptionLocalizations.enLanguage) {
-					descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.EN, value: values.descriptionLocalizations.enLanguage })
+			const categoryDescDefaultLng =
+				category?.data?.descriptionLocalizations.find((desc) => {
+					return LOCALES[desc.language?.toLowerCase() as LANGUAGE]?.countryCode?.toLowerCase() === salon.data?.address?.countryCode?.toLowerCase()
+				})?.value || null
+			const categoryDescEnLng = category?.data?.descriptionLocalizations.find((desc) => desc.language?.toLowerCase() === LANGUAGE.EN?.toLowerCase())?.value || null
+			const serviceDescDefaultLng = values.descriptionLocalizations.defualtLanguage
+			const serviceDescEnLng = values.descriptionLocalizations.enLanguage
+
+			// musi byt potvrdeny checkbox
+			// porovnavaju sa hodnoty zadane v kategoriach a hodnoty vo formulari
+			// obe jazyky su rovnake => posleme null
+			// prvy jazyk je iny, druhy je rovnaky => posleme len prvy
+			// prvy jazyk je rovnaky, druhy je iny => vtedy musime poslat obe
+			// obe su ine => posleme obe
+
+			const isDefaultLngSame = categoryDescDefaultLng?.trim() === serviceDescDefaultLng?.trim()
+			const isEnLngSame = categoryDescEnLng?.trim() === serviceDescEnLng?.trim()
+
+			if (values.descriptionLocalizations.use && !(isDefaultLngSame && isEnLngSame)) {
+				descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.DEFAULT, value: serviceDescDefaultLng })
+
+				if (values.descriptionLocalizations.enLanguage && !isEnLngSame) {
+					descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.EN, value: serviceDescEnLng })
 				}
 			} else {
 				descriptionLocalizations = null

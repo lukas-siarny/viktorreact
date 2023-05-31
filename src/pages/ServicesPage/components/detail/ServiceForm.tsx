@@ -66,11 +66,12 @@ const ServiceForm: FC<Props> = (props) => {
 	const initialFormValues = (form as any)?.initial as IServiceForm
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
+	const categoryLoading = useSelector((state: RootState) => state.categories.category.isLoading)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
-	const isLoading = service.isLoading || categoriesLoading || isRemoving || salon.isLoading || submitting
+	const isLoading = service.isLoading || categoriesLoading || isRemoving || salon.isLoading || categoryLoading || submitting
 
 	const variableDuration = formValues?.variableDuration
 	const variablePrice = formValues?.variablePrice

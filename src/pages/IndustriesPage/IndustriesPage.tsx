@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
-import { getServices } from '../../reducers/services/serviceActions'
+import { getServices, setServicesActiveKeys } from '../../reducers/services/serviceActions'
 import { RootState } from '../../reducers'
 
 // components
@@ -79,6 +79,8 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 					categoryIDs: values.categoryIDs as unknown as CategoriesPatch['categoryIDs']
 				}
 			)
+			// clear selected keys for serivce settings table
+			dispatch(setServicesActiveKeys())
 			dispatch(getServices({ salonID }))
 		} catch (e) {
 			// eslint-disable-next-line no-console

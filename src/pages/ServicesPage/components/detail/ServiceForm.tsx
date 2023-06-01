@@ -293,7 +293,7 @@ const ServiceForm: FC<Props> = (props) => {
 													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
 													showLettersCount
 													name={'defualtLanguage'}
-													size={'middle'}
+													size={'large'}
 													rows={4}
 													validate={fixLength1500}
 													required
@@ -306,7 +306,7 @@ const ServiceForm: FC<Props> = (props) => {
 													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
 													showLettersCount
 													name={'enLanguage'}
-													size={'middle'}
+													size={'large'}
 													rows={4}
 													validate={fixLength1500}
 												/>

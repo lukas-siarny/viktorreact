@@ -26,7 +26,7 @@ import {
 	VALIDATION_MAX_LENGTH
 } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
-import { postReq } from '../../utils/request'
+import { postReq, uploadFile } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -157,12 +157,24 @@ const DocumentsPage = () => {
 			})
 			if (fileUploadVisible?.assetType && fileUploadVisible.languageCode) {
 				const fileIDs = data?.files?.map((file) => file.id)
-				postReq('/api/b2b/admin/documents/', undefined, {
+
+				await uploadFile({
+					action: data.files[0].signedUrl,
+					file: values?.file,
+					onError: (error: any) => {
+						setRequestStatus(REQUEST_STATUS.ERROR)
+						// eslint-disable-next-line no-console
+						console.error(error)
+					}
+				})
+
+				await postReq('/api/b2b/admin/documents/', undefined, {
 					languageCode: fileUploadVisible.languageCode,
 					fileIDs: fileIDs as any,
 					message: message || null,
 					assetType: fileUploadVisible.assetType
 				})
+				// TODO refetch table data (documents)
 				setRequestStatus(REQUEST_STATUS.SUCCESS)
 			}
 			setFileUploadVisible(undefined)

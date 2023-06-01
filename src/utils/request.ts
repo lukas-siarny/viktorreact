@@ -429,7 +429,9 @@ export const uploadFile = async (options: any) => {
 				'Content-Type': file.type
 			}
 		})
-		onSuccess(data.status, data.request)
+		if (onSuccess) {
+			onSuccess(data.status, data.request)
+		}
 	} catch (error) {
 		onError(error)
 	}

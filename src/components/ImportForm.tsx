@@ -61,7 +61,7 @@ const ImportForm: FC<Props> = (props) => {
 				name={'file'}
 				label={label}
 				accept={accept}
-				maxCount={1}
+				maxCount={100}
 				type={'file'}
 				disabled={submitting}
 				handleUploadOutside

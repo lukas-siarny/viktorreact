@@ -1,6 +1,5 @@
 import React, { FC, useMemo, useState } from 'react'
 import { WrappedFieldProps } from 'redux-form'
-import i18next from 'i18next'
 import { get, isEmpty, isEqual } from 'lodash'
 import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
@@ -9,11 +8,11 @@ import { RcFile, UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 
-import { MSG_TYPE, NOTIFICATION_TYPE } from '../utils/enums'
+import { NOTIFICATION_TYPE } from '../utils/enums'
 import { getAccessToken } from '../utils/auth'
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 import showNotifications from '../utils/tsxHelpers'
-import { formFieldID } from '../utils/helper'
+import { formFieldID, getMaxSizeNotifMessage } from '../utils/helper'
 
 const { Item } = Form
 
@@ -34,22 +33,6 @@ type Props = WrappedFieldProps &
 		maxFileSize: number
 	}
 
-export const getMaxSizeNotifMessage = (maxFileSize: any) => {
-	let notifMaxSize
-	if (maxFileSize >= 10 ** 6) {
-		notifMaxSize = [maxFileSize / 10 ** 6, 'MB']
-	} else {
-		notifMaxSize = [maxFileSize / 10 ** 3, 'KB']
-	}
-	return {
-		type: MSG_TYPE.ERROR,
-		message: i18next.t('loc:Súbor je príliš veľký (max. {{size}} {{unit}})', {
-			size: notifMaxSize[0],
-			unit: notifMaxSize[1]
-		})
-	}
-}
-
 /**
  * Umožňuje nahrať jeden súbor, nový súbor nahradí pôvodný
  */
@@ -66,7 +49,9 @@ const FileUploadField: FC<Props> = (props) => {
 		maxFileSize,
 		handleUploadOutside = true,
 		disabled,
-		className
+		className,
+		multiple,
+		maxCount
 	} = props
 
 	const [t] = useTranslation()
@@ -144,6 +129,8 @@ const FileUploadField: FC<Props> = (props) => {
 			fileList={getFileList()}
 			listType='picture-card'
 			id={formFieldID(form, input.name)}
+			multiple={multiple}
+			maxCount={maxCount}
 		>
 			{!staticMode && (
 				<div>

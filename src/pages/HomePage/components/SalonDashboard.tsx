@@ -11,6 +11,7 @@ import { getServices } from '../../../reducers/services/serviceActions'
 import { getActiveEmployees } from '../../../reducers/employees/employeesActions'
 import { getCustomers } from '../../../reducers/customers/customerActions'
 import { getSmsTimeStatsForSalon } from '../../../reducers/sms/smsActions'
+import { getPendingReservationsCount } from '../../../reducers/calendar/calendarActions'
 
 // utils
 import { PERMISSION, RESERVATION_STATE, RESERVATIONS_STATE, SALON_STATES } from '../../../utils/enums'
@@ -66,12 +67,13 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const getPath = useCallback((pathSuffix: string) => `${basePath}${pathSuffix}`, [basePath])
 
 	useEffect(() => {
-		if (selectedSalon?.data) {
+		if (selectedSalon?.data?.id) {
 			dispatch(getServices({ salonID: selectedSalon.data.id }, true))
 			dispatch(getCustomers({ salonID: selectedSalon.data.id, page: 1 }))
 			dispatch(getActiveEmployees({ salonID: selectedSalon.data.id, page: 1 }))
+			dispatch(getPendingReservationsCount(selectedSalon.data.id))
 		}
-	}, [dispatch, selectedSalon?.data])
+	}, [dispatch, selectedSalon?.data?.id])
 
 	useEffect(() => {
 		if (salonID && checkPermissions([...authUserPermissions, ...(salonPermission || [])], SMS_TIME_STATS_PERMISSIONS)) {

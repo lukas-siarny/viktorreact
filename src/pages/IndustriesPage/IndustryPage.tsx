@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { RootState } from '../../reducers'
-import { getServices, setServicesActiveKeys } from '../../reducers/services/serviceActions'
+import { getServices } from '../../reducers/services/serviceActions'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -192,8 +192,6 @@ const IndustryPage = (props: Props) => {
 				categoryIDs
 			} as CategoriesPatch)
 			const updatedServicesData = await dispatch(getServices({ salonID }))
-			// clear selected keys for serivce settings table
-			dispatch(setServicesActiveKeys())
 
 			// redirect to service detail edit page in case it's first selected service in salon
 			const servicesKeys = getServicesCategoryKeys(services.data?.groupedServicesByCategory || [])

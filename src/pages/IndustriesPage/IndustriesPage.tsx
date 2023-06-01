@@ -79,8 +79,6 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 					categoryIDs: values.categoryIDs as unknown as CategoriesPatch['categoryIDs']
 				}
 			)
-			// clear selected keys for serivce settings table
-			dispatch(setServicesActiveKeys())
 			dispatch(getServices({ salonID }))
 		} catch (e) {
 			// eslint-disable-next-line no-console

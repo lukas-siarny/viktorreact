@@ -312,10 +312,9 @@ const CategoriesTree = () => {
 		try {
 			let body: any = {
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
-				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
-				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,
-				categoryParameterID: formData.categoryParameterID?.value ?? undefined,
-				descriptionLocalizations
+				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? null,
+				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? null,
+				categoryParameterID: formData.categoryParameterID?.value ?? null
 			}
 
 			if (formData.id) {

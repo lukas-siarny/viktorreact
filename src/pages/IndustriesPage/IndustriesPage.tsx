@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
-import { getServices, setServicesActiveKeys } from '../../reducers/services/serviceActions'
+import { getServices } from '../../reducers/services/serviceActions'
 import { RootState } from '../../reducers'
 
 // components

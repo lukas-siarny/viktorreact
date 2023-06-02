@@ -197,9 +197,9 @@ const ReservationForm: FC<Props> = (props) => {
 			})
 			dispatch(
 				change(formName, 'customer', {
-					id: customer.data.customer?.id,
 					key: customer.data.customer?.id,
-					value: getAssignedUserLabel({
+					value: customer.data.customer?.id,
+					label: getAssignedUserLabel({
 						id: customer.data.customer?.id as string,
 						firstName: customer.data.customer?.firstName,
 						lastName: customer.data.customer?.lastName,
@@ -346,7 +346,7 @@ const ReservationForm: FC<Props> = (props) => {
 										size={'large'}
 										optionLabelProp={'label'}
 										suffixIcon={<CustomerIcon className={'text-notino-grayDark'} width={16} height={16} />}
-										update={(itemKey: number, ref: any) => ref.blur()}
+										update={(_itemKey: number, ref: any) => ref.blur()}
 										filterOption={false}
 										allowInfinityScroll
 										showSearch

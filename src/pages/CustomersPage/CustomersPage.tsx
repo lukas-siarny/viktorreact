@@ -170,51 +170,62 @@ const CustomersPage = (props: SalonSubPageProps) => {
 
 	return (
 		<>
-			<ImportForm
-				setRequestStatus={setRequestStatus}
-				requestStatus={uploadStatus}
-				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })}
-				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv'}
-				title={t('loc:Importovať zákazníkov')}
-				visible={customersImportVisible}
-				setVisible={setCustomersImportVisible}
-				onSubmit={clientImportsSubmit}
-				extraContent={
-					<>
-						<Divider className={'mt-1 mb-3'} />
-						<div className={'flex items-center justify-between gap-1'}>
-							<div className={'ant-form-item w-full'}>
-								<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
-									{t('loc:Vzorové šablóny súborov')}
-								</label>
-								<Select
-									id={'noti-customer-template-select'}
-									className={'noti-select-input w-full mb-4'}
-									size={'large'}
-									labelInValue
-									options={TEMPLATE_OPTIONS_CUSTOMERS()}
-									onChange={(val: any) => setTemplateValue(val)}
-									value={templateValue}
-									placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-									getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-								/>
-							</div>
-							<Button
-								id={DOWNLOAD_BUTTON_ID}
-								className={'noti-btn'}
-								href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
-								target='_blank'
-								rel='noopener noreferrer'
-								type={'default'}
-								disabled={!templateValue}
-								htmlType={'button'}
-								download
-							>
-								<div>{t('loc:Stiahnuť')}</div>
-							</Button>
-						</div>
-					</>
-				}
+			<Permissions
+				allowed={[PERMISSION.PARTNER_ADMIN]}
+				render={(hasPermission, { openForbiddenModal }) => (
+					<ImportForm
+						setRequestStatus={setRequestStatus}
+						requestStatus={uploadStatus}
+						label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })}
+						accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv'}
+						title={t('loc:Importovať zákazníkov')}
+						visible={customersImportVisible}
+						setVisible={setCustomersImportVisible}
+						onSubmit={(values: IDataUploadForm) => {
+							if (hasPermission) {
+								clientImportsSubmit(values)
+							} else {
+								openForbiddenModal()
+							}
+						}}
+						extraContent={
+							<>
+								<Divider className={'mt-1 mb-3'} />
+								<div className={'flex items-center justify-between gap-1'}>
+									<div className={'ant-form-item w-full'}>
+										<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+											{t('loc:Vzorové šablóny súborov')}
+										</label>
+										<Select
+											id={'noti-customer-template-select'}
+											className={'noti-select-input w-full mb-4'}
+											size={'large'}
+											labelInValue
+											options={TEMPLATE_OPTIONS_CUSTOMERS()}
+											onChange={(val: any) => setTemplateValue(val)}
+											value={templateValue}
+											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+										/>
+									</div>
+									<Button
+										id={DOWNLOAD_BUTTON_ID}
+										className={'noti-btn'}
+										href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+										target='_blank'
+										rel='noopener noreferrer'
+										type={'default'}
+										disabled={!templateValue}
+										htmlType={'button'}
+										download
+									>
+										<div>{t('loc:Stiahnuť')}</div>
+									</Button>
+								</div>
+							</>
+						}
+					/>
+				)}
 			/>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />

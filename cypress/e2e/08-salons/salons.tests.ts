@@ -145,7 +145,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 				method: 'GET',
 				pathname: '/api/b2b/admin/salons*'
 			}).as('getSalons')
-			cy.visit('/salons?salonState=deleted')
+			cy.visit('/salons/deleted')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getSalons').then((interceptionGetSalons: any) => {
 					// check status code
@@ -182,7 +182,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 				method: 'GET',
 				pathname: '/api/b2b/admin/salons/rejected-suggestions*'
 			}).as('getRejectedSuggestions')
-			cy.visit('/salons?salonState=mistakes')
+			cy.visit('/salons/rejected')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getRejectedSuggestions').then((interceptionGetSalons: any) => {
 					// check status code
@@ -215,7 +215,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 				method: 'GET',
 				pathname: '/api/b2b/admin/salons/rejected-suggestions*'
 			}).as('getRejectedSuggestions')
-			cy.visit('/salons?salonState=mistakes')
+			cy.visit('/salons/rejected')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getRejectedSuggestions').then((interceptionGetRejectedSuggestions: any) => {
 					// check status code

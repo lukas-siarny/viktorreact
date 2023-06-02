@@ -245,7 +245,7 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					salonID
 				}
 			}).as('getEmployees')
-			cy.visit(`/salons/${salonID}/employees`)
+			cy.visit(`/salons/${salonID}/employees?employeeState=deleted`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getEmployees').then((interceptionGetEmployees: any) => {
 					// check status code

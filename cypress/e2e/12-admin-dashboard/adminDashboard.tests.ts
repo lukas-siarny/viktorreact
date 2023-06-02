@@ -22,10 +22,10 @@ const adminDashboardTestSuite = (actions: CRUD_OPERATIONS[], role: SALON_ROLES |
 	})
 
 	it('Admin dashboard', () => {
-		cy.visit('/')
 		const salonID = Cypress.env(SALON_ID)
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
-			if (!salonID && !(role in SALON_ROLES)) {
+		if (!salonID && !(role in SALON_ROLES)) {
+			cy.visit('/')
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.intercept({
 					method: 'GET',
 					pathname: '/api/b2b/admin/notino-dashboard/salon-development-time-stats'
@@ -59,10 +59,10 @@ const adminDashboardTestSuite = (actions: CRUD_OPERATIONS[], role: SALON_ROLES |
 						cy.get(`#${PUBLISHED_PREMIUM_SALONS_BAR_ID}`).should('be.visible')
 					}
 				)
+			} else {
+				// check redirect to 403 unauthorized page
+				cy.location('pathname').should('eq', '/403')
 			}
-		} else {
-			// check redirect to 403 unauthorized page
-			cy.location('pathname').should('eq', '/403')
 		}
 	})
 }

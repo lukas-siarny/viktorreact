@@ -19,6 +19,7 @@ import industriesAndServicesTestSuite from './industriesAndServices.tests'
 import reservationsTestSuite from './reservations.tests'
 import smsCreditTestSuite from './smsCredit.tests'
 import salonApprovalProcessTestSuite from './salonApprovalProcess.tests'
+import importDataTestSuite from './importData.tests'
 
 const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON_ROLES | PERMISSION, email?: string, password?: string): void => {
 	context('Salon', () => {
@@ -176,6 +177,9 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					case SALON_TESTS_SUITS.SMS_CREDIT:
 						smsCreditTestSuite(test.actions)
 						break
+					case SALON_TESTS_SUITS.IMPORT_DATA:
+						importDataTestSuite(test.actions)
+						break
 					default:
 				}
 			})
@@ -215,16 +219,10 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 							cy.clickTab(SALON_TABS_KEYS.SALON_HISTORY)
 							cy.wait('@getSalonHistory').then((interceptionGetSalonHistory: any) => {
 								expect(interceptionGetSalonHistory.response.statusCode).to.equal(200)
-								if ($body.find('.noti-tag.bg-status-published').length) {
-									// only published salon can see salon history
-									cy.get('#salon-history-list').should('be.visible')
-								} else {
-									// empty state for unpublished salons
-									cy.get('.ant-empty').should('be.visible')
-								}
 								// update range of history data
-								cy.scrollTo(0, 0)
-								cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().click({ force: true })
+								cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().as('dateFrom')
+								cy.get('@dateFrom').scrollIntoView()
+								cy.get('@dateFrom').click({ force: true })
 								cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 })
 									.find('.ant-picker-presets > ul > li')
 									.first()

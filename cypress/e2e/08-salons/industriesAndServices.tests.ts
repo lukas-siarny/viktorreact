@@ -8,7 +8,6 @@ import {
 	FORM,
 	SUBMIT_BUTTON_ID
 } from '../../../src/utils/enums'
-import { parseServiceRowKey } from '../../../src/utils/helper'
 
 import service from '../../fixtures/service.json'
 
@@ -123,7 +122,7 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 							.as('firstRow')
 							.invoke('attr', 'data-row-key')
 							.then((dataRowKey) => {
-								const { categoryID, serviceID } = parseServiceRowKey(dataRowKey || '')
+								const [categoryID, serviceID] = (dataRowKey || '').split('_')
 
 								cy.intercept({
 									method: 'GET',
@@ -259,7 +258,7 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 							.as('firstRow')
 							.invoke('attr', 'data-row-key')
 							.then((dataRowKey) => {
-								const { categoryID, serviceID } = parseServiceRowKey(dataRowKey || '')
+								const [categoryID, serviceID] = (dataRowKey || '').split('_')
 
 								cy.intercept({
 									method: 'GET',
@@ -375,9 +374,10 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					}
 
 					// Switch to reorder mode
+					cy.get(`#${CHANGE_SERVICES_ORDER_BUTTON_ID}`).scrollIntoView()
 					cy.clickButton(CHANGE_SERVICES_ORDER_BUTTON_ID)
 					if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-						cy.get(CHANGE_SERVICES_ORDER_SAVE_BUTTON_ID).should('be.visible')
+						cy.get(`#${CHANGE_SERVICES_ORDER_SAVE_BUTTON_ID}`).scrollIntoView().should('be.visible')
 					} else {
 						cy.checkForbiddenModal()
 					}

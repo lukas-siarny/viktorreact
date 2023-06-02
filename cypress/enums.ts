@@ -21,7 +21,8 @@ export enum SALON_TESTS_SUITS {
 	EMPLOYEE = 'employee',
 	INDUSTRIES_AND_SERVICES = 'industriesAndServices',
 	RESERVATIONS = 'Reservations',
-	SMS_CREDIT = 'SmsCredit'
+	SMS_CREDIT = 'SmsCredit',
+	IMPORT_DATA = 'importData'
 }
 
 export enum CRUD_OPERATIONS {

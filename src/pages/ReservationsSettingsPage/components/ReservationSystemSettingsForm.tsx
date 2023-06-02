@@ -29,7 +29,9 @@ import {
 	SUBMIT_BUTTON_ID,
 	REQUEST_STATUS,
 	TEMPLATE_OPTIONS_CUSTOMERS,
-	TEMPLATE_OPTIONS_RESERVATIONS
+	TEMPLATE_OPTIONS_RESERVATIONS,
+	IMPORT_BUTTON_ID,
+	DOWNLOAD_BUTTON_ID
 } from '../../../utils/enums'
 import { formFieldID, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -258,55 +260,67 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 				<Divider className={'my-3'} />
 				<Row>
-					<ImportForm
-						accept={uploadModal.data.accept}
-						title={uploadModal.data.title}
-						label={uploadModal.data.label}
-						requestStatus={uploadModal.requestStatus}
-						setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
-						onSubmit={handleSubmitImport}
-						visible={uploadModal.visible}
-						extraContent={
-							<>
-								<Divider className={'mt-1 mb-3'} />
-								<div className={'flex items-center justify-between gap-1'}>
-									<div className={'ant-form-item w-full'}>
-										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
-											{t('loc:Vzorové šablóny súborov')}
-										</label>
-										<Select
-											id={'noti-template-select'}
-											style={{ zIndex: 999 }}
-											className={'noti-select-input w-full mb-4'}
-											size={'large'}
-											labelInValue
-											options={uploadModal.uploadType === UPLOAD_TYPE.CUSTOMER ? TEMPLATE_OPTIONS_CUSTOMERS() : TEMPLATE_OPTIONS_RESERVATIONS()}
-											onChange={(val) => setTemplateValue(val)}
-											value={templateValue}
-											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-										/>
-									</div>
+					<Permissions
+						allowed={[PERMISSION.PARTNER_ADMIN]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<ImportForm
+								accept={uploadModal.data.accept}
+								title={uploadModal.data.title}
+								label={uploadModal.data.label}
+								requestStatus={uploadModal.requestStatus}
+								setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
+								onSubmit={(values: IDataUploadForm) => {
+									if (hasPermission) {
+										handleSubmitImport(values)
+									} else {
+										openForbiddenModal()
+									}
+								}}
+								visible={uploadModal.visible}
+								extraContent={
+									<>
+										<Divider className={'mt-1 mb-3'} />
+										<div className={'flex items-center justify-between gap-1'}>
+											<div className={'ant-form-item w-full'}>
+												<label htmlFor={'noti-template-select'} className={'block mb-2'}>
+													{t('loc:Vzorové šablóny súborov')}
+												</label>
+												<Select
+													id={'noti-template-select'}
+													style={{ zIndex: 999 }}
+													className={'noti-select-input w-full mb-4'}
+													size={'large'}
+													labelInValue
+													options={uploadModal.uploadType === UPLOAD_TYPE.CUSTOMER ? TEMPLATE_OPTIONS_CUSTOMERS() : TEMPLATE_OPTIONS_RESERVATIONS()}
+													onChange={(val) => setTemplateValue(val)}
+													value={templateValue}
+													placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+													getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+												/>
+											</div>
 
-									<Button
-										className={'noti-btn'}
-										href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
-										target='_blank'
-										rel='noopener noreferrer'
-										type={'default'}
-										disabled={!templateValue}
-										htmlType={'button'}
-										download
-									>
-										<div>{t('loc:Stiahnuť')}</div>
-									</Button>
-								</div>
-							</>
-						}
-						setVisible={() => {
-							setTemplateValue(null)
-							setUploadModal(UPLOAD_MODAL_INIT)
-						}}
+											<Button
+												id={DOWNLOAD_BUTTON_ID}
+												className={'noti-btn'}
+												href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+												target='_blank'
+												rel='noopener noreferrer'
+												type={'default'}
+												disabled={!templateValue}
+												htmlType={'button'}
+												download
+											>
+												<div>{t('loc:Stiahnuť')}</div>
+											</Button>
+										</div>
+									</>
+								}
+								setVisible={() => {
+									setTemplateValue(null)
+									setUploadModal(UPLOAD_MODAL_INIT)
+								}}
+							/>
+						)}
 					/>
 					<Button
 						onClick={() => {
@@ -326,6 +340,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						htmlType='button'
 						className={'noti-btn mr-2'}
 						icon={<UploadIcon />}
+						id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, IMPORT_BUTTON_ID('reservations'))}
 					>
 						{t('loc:Importovať rezervácie')}
 					</Button>
@@ -347,6 +362,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						htmlType='button'
 						className={'noti-btn'}
 						icon={<UploadIcon />}
+						id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, IMPORT_BUTTON_ID('customers'))}
 					>
 						{t('loc:Importovať zákazníkov')}
 					</Button>

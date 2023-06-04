@@ -18,13 +18,14 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 				// check status code
 				expect(interceptionGetSalons.response.statusCode).to.equal(200)
 				cy.clickButton(IMPORT_BUTTON_ID(), FORM.CUSTOMERS_FILTER)
+				// wait for animation
+				cy.wait(2000)
+				cy.selectOptionDropdownCustom(undefined, 'noti-customer-template-select', undefined, true)
+				cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+				cy.uploadFile('file', '../files/import_of_clients_template.xlsx', FORM.IMPORT_FORM)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
+
 				if (actions.includes(CRUD_OPERATIONS.CREATE)) {
-					// wait for animation
-					cy.wait(2000)
-					cy.selectOptionDropdownCustom(undefined, 'noti-customer-template-select', undefined, true)
-					cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
-					cy.uploadFile('file', '../files/import_of_clients_template.xlsx', FORM.IMPORT_FORM)
-					cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
 					cy.wait('@importCustomers').then((interception: any) => {
 						// check status code
 						expect(interception.response.statusCode).to.equal(200)
@@ -75,13 +76,14 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 					cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-${IMPORT_BUTTON_ID('customers')}`).scrollIntoView()
 					cy.clickButton(IMPORT_BUTTON_ID('customers'), FORM.RESEVATION_SYSTEM_SETTINGS)
 
+					// wait for animation
+					cy.wait(2000)
+					cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
+					cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+					cy.uploadFile('file', '../files/import_of_clients_template.xlsx', FORM.IMPORT_FORM)
+					cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
+
 					if (actions.includes(CRUD_OPERATIONS.CREATE)) {
-						// wait for animation
-						cy.wait(2000)
-						cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
-						cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
-						cy.uploadFile('file', '../files/import_of_clients_template.xlsx', FORM.IMPORT_FORM)
-						cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
 						cy.wait('@importCustomers').then((interception: any) => {
 							// check status code
 							expect(interception.response.statusCode).to.equal(200)
@@ -136,12 +138,13 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 					cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-${IMPORT_BUTTON_ID('reservations')}`).scrollIntoView()
 					cy.clickButton(IMPORT_BUTTON_ID('reservations'), FORM.RESEVATION_SYSTEM_SETTINGS)
 
+					// wait for animation
+					cy.wait(2000)
+					cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
+					cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+					cy.uploadFile('file', '../files/import_of_reservations_template.xlsx', FORM.IMPORT_FORM)
+
 					if (actions.includes(CRUD_OPERATIONS.CREATE)) {
-						// wait for animation
-						cy.wait(2000)
-						cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
-						cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
-						cy.uploadFile('file', '../files/import_of_reservations_template.xlsx', FORM.IMPORT_FORM)
 						cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
 						cy.wait('@importReservations').then((interception: any) => {
 							// check status code

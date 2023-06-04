@@ -51,30 +51,47 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 			method: 'GET',
 			pathname: `/api/b2b/admin/salons/${salonID}`
 		}).as('getSalon')
+		cy.intercept({
+			method: 'GET',
+			pathname: `/api/b2b/admin/users/*`
+		}).as('getUser')
+		cy.intercept({
+			method: 'POST',
+			pathname: `/api/b2b/admin/imports/salons/${salonID}/customers`
+		}).as('importCustomers')
 		cy.visit(`/salons/${salonID}/reservations-settings`)
 		if (actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
-			cy.wait('@getSalon').then((interceptionGetSalon: any) => {
+			cy.wait(['@getUser', '@getSalon']).then(([interceptionGetUser, interceptionGetSalon]: any[]) => {
+				expect(interceptionGetUser.response.statusCode).to.equal(200)
 				expect(interceptionGetSalon.response.statusCode).to.equal(200)
 
-				cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-${IMPORT_BUTTON_ID('customers')}`).scrollIntoView()
-				cy.clickButton(IMPORT_BUTTON_ID('customers'), FORM.RESEVATION_SYSTEM_SETTINGS)
+				// wait for animations
+				cy.wait(2000)
+				cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-enabledReservations > button`).then(($element) => {
+					if (!$element.hasClass('ant-switch-checked')) {
+						cy.wrap($element).click()
+					}
 
-				if (actions.includes(CRUD_OPERATIONS.CREATE)) {
-					// wait for animation
-					cy.wait(2000)
-					cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
-					cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
-					cy.uploadFile('file', '../files/import_of_clients_template.xlsx', FORM.IMPORT_FORM)
-					cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
-					cy.wait('@importCustomers').then((interception: any) => {
-						// check status code
-						expect(interception.response.statusCode).to.equal(200)
-						// check conf toast message
-						cy.checkSuccessToastMessage()
-					})
-				} else {
-					cy.checkForbiddenModal()
-				}
+					cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-${IMPORT_BUTTON_ID('customers')}`).scrollIntoView()
+					cy.clickButton(IMPORT_BUTTON_ID('customers'), FORM.RESEVATION_SYSTEM_SETTINGS)
+
+					if (actions.includes(CRUD_OPERATIONS.CREATE)) {
+						// wait for animation
+						cy.wait(2000)
+						cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
+						cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+						cy.uploadFile('file', '../files/import_of_clients_template.xlsx', FORM.IMPORT_FORM)
+						cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
+						cy.wait('@importCustomers').then((interception: any) => {
+							// check status code
+							expect(interception.response.statusCode).to.equal(200)
+							// check conf toast message
+							cy.checkSuccessToastMessage()
+						})
+					} else {
+						cy.checkForbiddenModal()
+					}
+				})
 			})
 		} else {
 			// check redirect to 403 not allowed page
@@ -92,10 +109,22 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 			method: 'GET',
 			pathname: `/api/b2b/admin/salons/${salonID}`
 		}).as('getSalon')
+		cy.intercept({
+			method: 'GET',
+			pathname: `/api/b2b/admin/users/*`
+		}).as('getUser')
+		cy.intercept({
+			method: 'POST',
+			pathname: `/api/b2b/admin/imports/salons/${salonID}/calendar-events`
+		}).as('importReservations')
 		cy.visit(`/salons/${salonID}/reservations-settings`)
 		if (actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
-			cy.wait('@getSalon').then((interceptionGetSalon: any) => {
+			cy.wait(['@getUser', '@getSalon']).then(([interceptionGetUser, interceptionGetSalon]: any[]) => {
+				expect(interceptionGetUser.response.statusCode).to.equal(200)
 				expect(interceptionGetSalon.response.statusCode).to.equal(200)
+
+				// wait for animations
+				cy.wait(2000)
 
 				// wait for animations
 				cy.wait(2000)
@@ -103,27 +132,27 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 					if (!$element.hasClass('ant-switch-checked')) {
 						cy.wrap($element).click()
 					}
+
+					cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-${IMPORT_BUTTON_ID('reservations')}`).scrollIntoView()
+					cy.clickButton(IMPORT_BUTTON_ID('reservations'), FORM.RESEVATION_SYSTEM_SETTINGS)
+
+					if (actions.includes(CRUD_OPERATIONS.CREATE)) {
+						// wait for animation
+						cy.wait(2000)
+						cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
+						cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+						cy.uploadFile('file', '../files/import_of_reservations_template.xlsx', FORM.IMPORT_FORM)
+						cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
+						cy.wait('@importReservations').then((interception: any) => {
+							// check status code
+							expect(interception.response.statusCode).to.equal(200)
+							// check conf toast message
+							cy.checkSuccessToastMessage()
+						})
+					} else {
+						cy.checkForbiddenModal()
+					}
 				})
-
-				cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-${IMPORT_BUTTON_ID('reservations')}`).scrollIntoView()
-				cy.clickButton(IMPORT_BUTTON_ID('reservations'), FORM.RESEVATION_SYSTEM_SETTINGS)
-
-				if (actions.includes(CRUD_OPERATIONS.CREATE)) {
-					// wait for animation
-					cy.wait(2000)
-					cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
-					cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
-					cy.uploadFile('file', '../files/import_of_reservations_template.xlsx', FORM.IMPORT_FORM)
-					cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
-					cy.wait('@importCustomers').then((interception: any) => {
-						// check status code
-						expect(interception.response.statusCode).to.equal(200)
-						// check conf toast message
-						cy.checkSuccessToastMessage()
-					})
-				} else {
-					cy.checkForbiddenModal()
-				}
 			})
 		} else {
 			// check redirect to 403 not allowed page

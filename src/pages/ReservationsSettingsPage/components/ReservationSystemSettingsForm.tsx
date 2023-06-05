@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Divider, Form, Row, Select } from 'antd'
+import { Button, Divider, Form, Row } from 'antd'
 
 // atoms
 import SwitchField from '../../../atoms/SwitchField'
@@ -20,21 +20,11 @@ import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } fr
 import { RootState } from '../../../reducers'
 
 // utils
-import {
-	FORM,
-	NOTIFICATION_CHANNEL,
-	RS_NOTIFICATION,
-	STRINGS,
-	PERMISSION,
-	SUBMIT_BUTTON_ID,
-	REQUEST_STATUS,
-	TEMPLATE_OPTIONS_CUSTOMERS,
-	TEMPLATE_OPTIONS_RESERVATIONS
-} from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../../../utils/enums'
 import { formFieldID, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions, { checkPermissions } from '../../../utils/Permissions'
-import { postReq } from '../../../utils/request'
+import { getReq, postReq } from '../../../utils/request'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
@@ -93,6 +83,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		data: { accept: string; label: string; title: string }
 	}>(UPLOAD_MODAL_INIT)
 
+	// const [templateValue, setTemplateValue] = useState<string | null>()
 	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 
 	const handleSubmitImport = async (values: IDataUploadForm) => {
@@ -123,6 +114,31 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			setTemplateValue(null)
 		}
 	}
+
+	const searchTemplates = useCallback(async () => {
+		try {
+			const { data } = await getReq('/api/b2b/admin/config/', undefined)
+			let options: ISelectOptionItem[] = []
+
+			if (uploadModal.uploadType === UPLOAD_TYPE.CUSTOMER) {
+				options = Object.entries(data.importOfClientsTemplates).map(([key, value]) => ({
+					key: value.id,
+					value: value.original,
+					label: t('loc:Stiahnuť šablónu {{ template }}', { template: key })
+				}))
+			} else if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
+				options = Object.entries(data.importOfReservationsXlsxTemplate).map(([key, value]) => ({
+					key: value.id,
+					value: value.original,
+					label: t('loc:Stiahnuť šablónu {{ template }}', { template: key })
+				}))
+			}
+
+			return { data: options }
+		} catch (e) {
+			return { data: [] }
+		}
+	}, [uploadModal.uploadType, t])
 
 	return (
 		<Form layout='vertical' className='w-full'>
@@ -269,28 +285,29 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						extraContent={
 							<>
 								<Divider className={'mt-1 mb-3'} />
-								<div className={'flex items-center justify-between gap-1'}>
-									<div className={'ant-form-item w-full'}>
-										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
-											{t('loc:Vzorové šablóny súborov')}
-										</label>
-										<Select
-											id={'noti-template-select'}
-											style={{ zIndex: 999 }}
-											className={'noti-select-input w-full mb-4'}
-											size={'large'}
-											labelInValue
-											options={uploadModal.uploadType === UPLOAD_TYPE.CUSTOMER ? TEMPLATE_OPTIONS_CUSTOMERS() : TEMPLATE_OPTIONS_RESERVATIONS()}
-											onChange={(val) => setTemplateValue(val)}
-											value={templateValue}
-											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-										/>
-									</div>
-
+								<label htmlFor={'noti-template-select'} className={'block mb-2'}>
+									{t('loc:Vzorové šablóny súborov')}
+								</label>
+								<div className={'flex items-center justify-between gap-1 mb-4'}>
+									<SelectField
+										input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
+										meta={{} as any}
+										id={'noti-template-select'}
+										style={{ zIndex: 999 }}
+										className={'max-w-64 w-full pb-0'}
+										size={'large'}
+										filterOption={false}
+										allowInfinityScroll={false}
+										showSearch={false}
+										labelInValue
+										onSearch={searchTemplates}
+										popupMatchSelectWidth={false}
+										placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+										getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+									/>
 									<Button
-										className={'noti-btn'}
-										href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+										className={'noti-btn flex-shrink-0'}
+										href={templateValue?.value || undefined}
 										target='_blank'
 										rel='noopener noreferrer'
 										type={'default'}
@@ -320,6 +337,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx' })
 								}
 							})
+							setTemplateValue(null)
 						}}
 						disabled={disabled}
 						type='primary'
@@ -341,6 +359,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
 								}
 							})
+							setTemplateValue(null)
 						}}
 						disabled={disabled}
 						type='primary'

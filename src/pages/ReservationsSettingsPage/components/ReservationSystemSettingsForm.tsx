@@ -33,6 +33,7 @@ import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 import { ReactComponent as CalendarSyncIcon } from '../../../assets/icons/sync-calendar.svg'
+import { Paths } from '../../../types/api'
 
 type Props = InjectedFormProps<IReservationSystemSettingsForm, ComponentProps> & ComponentProps
 
@@ -65,6 +66,8 @@ enum UPLOAD_TYPE {
 	RESERVATION = 'reservation',
 	CUSTOMER = 'customer'
 }
+
+type Template = Paths.GetApiB2BAdminConfig.Responses.$200[keyof Paths.GetApiB2BAdminConfig.Responses.$200]
 
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
@@ -118,21 +121,19 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const searchTemplates = useCallback(async () => {
 		try {
 			const { data } = await getReq('/api/b2b/admin/config/', undefined)
-			let options: ISelectOptionItem[] = []
+			let entity: Template = {}
 
 			if (uploadModal.uploadType === UPLOAD_TYPE.CUSTOMER) {
-				options = Object.entries(data.importOfClientsTemplates).map(([key, value]) => ({
-					key: value.id,
-					value: value.original,
-					label: t('loc:Stiahnuť šablónu {{ template }}', { template: key })
-				}))
+				entity = data.importOfClientsTemplates
 			} else if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
-				options = Object.entries(data.importOfReservationsXlsxTemplate).map(([key, value]) => ({
-					key: value.id,
-					value: value.original,
-					label: t('loc:Stiahnuť šablónu {{ template }}', { template: key })
-				}))
+				entity = data.importOfReservationsXlsxTemplate
 			}
+
+			const options: ISelectOptionItem[] = Object.entries(entity).map(([key, value]) => ({
+				key: value.id,
+				value: value.original,
+				label: t('loc:Stiahnuť šablónu {{ template }}', { template: key })
+			}))
 
 			return { data: options }
 		} catch (e) {

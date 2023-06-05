@@ -43,6 +43,10 @@ const DocumentsByAssetTypePage = () => {
 	const fileName = assetTypes?.data?.assetTypes.find((item) => item.key === assetType)?.name
 	const isLoading = documentsByAssetType?.isLoading
 	const [backUrl] = useBackUrl(t('paths:documents'))
+	// TODO:
+	// Aktualizovat - selecty languageCode a assetType budu predvybrane a disabled a title: aktualizovat dokuemnt
+	// Pridat dokuemnt - vyber z languageCode a assetType a title: pridat dokument
+	// Filtre - languageCode a assetType (DOROBIT NA BE) -0 nebudu predvybrate ziadne (optional)
 
 	const [query, setQuery] = useQueryParams(documentsAssetTypesPageURLQueryParamsSchema, {
 		page: 1,
@@ -108,13 +112,6 @@ const DocumentsByAssetTypePage = () => {
 			}
 		},
 		{
-			title: t('loc:Dátum poslednej aktualizácie'),
-			dataIndex: 'createdAt',
-			key: 'createdAt',
-			ellipsis: true,
-			render: (value) => (value ? formatDateByLocale(value) : '-')
-		},
-		{
 			title: t('loc:Sprievodná správa'),
 			dataIndex: 'message',
 			key: 'message',
@@ -124,7 +121,8 @@ const DocumentsByAssetTypePage = () => {
 					className={'m-0 whitespace-pre-wrap'}
 					ellipsis={{
 						rows: 1,
-						expandable: true
+						expandable: true,
+						symbol: t('loc:Zobraziť viac')
 					}}
 					title={value}
 				>
@@ -133,7 +131,14 @@ const DocumentsByAssetTypePage = () => {
 			)
 		},
 		{
-			title: t('loc:história aktualizácii dokumentov'),
+			title: t('loc:Dátum poslednej aktualizácie'),
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			ellipsis: true,
+			render: (value) => (value ? formatDateByLocale(value) : '-')
+		},
+		{
+			title: t('loc:História aktualizácii dokumentov'),
 			dataIndex: 'files',
 			key: 'files',
 			ellipsis: true,
@@ -142,7 +147,7 @@ const DocumentsByAssetTypePage = () => {
 					return (
 						<Button
 							key={item.id}
-							className={'noti-btn text-notino-pink'}
+							className={'noti-btn text-notino-pink text-left p-0'}
 							href={item.original}
 							target='_blank'
 							rel='noopener noreferrer'

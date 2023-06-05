@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Input, Row } from 'antd'
+import { Button, Col, Input, Row, Select } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
@@ -17,11 +17,14 @@ import FlagIcon from '../../components/FlagIcon'
 import {
 	ADMIN_PERMISSIONS,
 	ASSET_TYPE,
+	ENUMERATIONS_KEYS,
 	IMPORT_TYPE,
 	LANGUAGE,
 	PAGINATION,
 	REQUEST_STATUS,
 	ROW_GUTTER_X_DEFAULT,
+	TEMPLATE_OPTIONS_CUSTOMERS,
+	TEMPLATE_OPTIONS_RESERVATIONS,
 	UPLOAD_IMG_CATEGORIES,
 	VALIDATION_MAX_LENGTH
 } from '../../utils/enums'
@@ -30,10 +33,10 @@ import { postReq, uploadFile } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getDocuments } from '../../reducers/documents/documentActions'
+import { getAssetTypes, getDocuments } from '../../reducers/documents/documentActions'
 
 // types
-import { Columns, IBreadcrumbs } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IDocumentsFilter, ISelectOptionItem } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // assets
@@ -44,22 +47,31 @@ import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 // schemas
 import { documentsPageURLQueryParamsSchema, IDocumentsAssetTypesPageURLQueryParams } from '../../schemas/queryParams'
+import DocumentsFilter from './components/DocumentsFilter'
 
 const DocumentsPage = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const documents = useSelector((state: RootState) => state.documents.documents)
+	const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
 		page: 1,
-		limit: PAGINATION.limit
+		limit: PAGINATION.limit,
+		languageCode: undefined,
+		assetType: undefined
 	})
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
-	const [fileUploadVisible, setFileUploadVisible] = useState<{ assetType: ASSET_TYPE; languageCode: LANGUAGE }>()
+	const [fileUploadVisible, setFileUploadVisible] = useState<{ assetType: ASSET_TYPE | undefined; languageCode: LANGUAGE | undefined }>()
 	const isLoading = documents?.isLoading
-	const [message, setMessage] = useState('')
-
+	const [uploadData, setUploadData] = useState<any>({
+		message: '',
+		assetType: undefined,
+		languageCode: undefined
+	})
+	console.log('uploadData', uploadData)
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
@@ -89,6 +101,7 @@ const DocumentsPage = () => {
 	}
 
 	useEffect(() => {
+		dispatch(getAssetTypes())
 		dispatch(getDocuments(query))
 	}, [dispatch, query])
 
@@ -98,6 +111,7 @@ const DocumentsPage = () => {
 			dataIndex: ['assetType', 'name'],
 			key: 'name',
 			ellipsis: true,
+			// width: '60%',
 			render: (value, record) => {
 				return (
 					<div className={'flex items-center'}>
@@ -111,6 +125,7 @@ const DocumentsPage = () => {
 			title: t('loc:Dátum poslednej aktualizácie'),
 			dataIndex: 'createdAt',
 			key: 'createdAt',
+			width: '20%',
 			ellipsis: true,
 			render: (value) => (value ? formatDateByLocale(value) : '-')
 		}
@@ -120,6 +135,7 @@ const DocumentsPage = () => {
 		{
 			dataIndex: '',
 			align: 'right',
+			width: '150px',
 			render(val, record) {
 				return (
 					<Button
@@ -171,16 +187,32 @@ const DocumentsPage = () => {
 				await postReq('/api/b2b/admin/documents/', undefined, {
 					languageCode: fileUploadVisible.languageCode,
 					fileIDs: fileIDs as any,
-					message: message || null,
+					message: uploadData?.message || null,
 					assetType: fileUploadVisible.assetType
 				})
-				// TODO refetch table data (documents)
 				setRequestStatus(REQUEST_STATUS.SUCCESS)
+				dispatch(getDocuments(query))
 			}
 			setFileUploadVisible(undefined)
+			setUploadData(undefined)
 		} catch {
 			setRequestStatus(REQUEST_STATUS.ERROR)
 		}
+	}
+	const handleSubmit = (values: IDocumentsFilter) => {
+		const newQuery = {
+			...query,
+			...values,
+			languageCode: values?.languageCode?.toLowerCase(),
+			page: 1
+		}
+		setQuery(newQuery)
+	}
+	const handleCreateDocument = () => {
+		setFileUploadVisible({
+			assetType: undefined,
+			languageCode: undefined
+		})
 	}
 
 	return (
@@ -202,7 +234,7 @@ const DocumentsPage = () => {
 							setVisible={setFileUploadVisible}
 							onSubmit={fileUploadSubmit}
 							extraContent={
-								<div className={'flex items-center justify-between gap-1'}>
+								<div className={''}>
 									<div className={'ant-form-item w-full'}>
 										<label htmlFor={'noti-message-input'} className={'block mb-2'}>
 											{t('loc:Sprievodná správa')}
@@ -210,17 +242,51 @@ const DocumentsPage = () => {
 										<Input.TextArea
 											maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
 											id={'noti-message-input'}
-											style={{ zIndex: 999 }}
 											className={'noti-input w-full mb-4'}
 											size={'large'}
-											onChange={(e) => setMessage(e.target.value)}
-											value={message}
+											onChange={(e) => setUploadData({ ...uploadData, message: e.target.value })}
+											value={uploadData?.message}
 											placeholder={t('loc:Zadajte sprievodnú správu')}
+										/>
+									</div>
+									<div className={'ant-form-item w-full'}>
+										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
+											{t('loc:Jazyk')}
+										</label>
+										<Select
+											id={'noti-template-select'}
+											className={'noti-select-input w-full'}
+											size={'large'}
+											labelInValue
+											loading={countries.isLoading}
+											options={countries.enumerationsOptions}
+											onChange={(val) => setUploadData({ ...uploadData, languageCode: val })}
+											value={uploadData?.languageCode}
+											placeholder={t('loc:Vyberte jazyk')}
+											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+										/>
+									</div>
+									<div className={'ant-form-item w-full'}>
+										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
+											{t('loc:Typ dokumentu')}
+										</label>
+										<Select
+											id={'noti-template-select'}
+											className={'noti-select-input w-full'}
+											size={'large'}
+											labelInValue
+											loading={assetTypes.isLoading}
+											options={assetTypes.options}
+											onChange={(val) => setUploadData({ ...uploadData, assetType: val })}
+											value={uploadData?.assetType}
+											placeholder={t('loc:Vyberte typ dokumentu')}
+											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
 										/>
 									</div>
 								</div>
 							}
 						/>
+						<DocumentsFilter createDocument={handleCreateDocument} onSubmit={handleSubmit} />
 						<CustomTable
 							className='table-fixed table-expandable'
 							onChange={onChangeTable}

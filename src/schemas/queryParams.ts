@@ -390,7 +390,10 @@ export type ISpecialistContactsPageURLQueryParams = z.infer<typeof specialistCon
  */
 
 export const documentsPageQueryParams = paginationSchema
-export const documentsPageURLQueryParamsSchema = documentsPageQueryParams
+export const documentsPageURLQueryParamsSchema = documentsPageQueryParams.extend({
+	languageCode: twoCharsConstraint.optional(),
+	assetType: z.nativeEnum(ASSET_TYPE).optional()
+})
 
 export type IDocumentsPageQueryParams = z.infer<typeof documentsPageQueryParams>
 

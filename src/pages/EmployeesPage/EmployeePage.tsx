@@ -316,7 +316,7 @@ const EmployeePage = (props: Props) => {
 								}
 						  ]
 						: [],
-					phone: employeesData.employee.phonePrefixCountryCode || employeesData.employee.user?.phone,
+					phone: employeesData.employee.phone || employeesData.employee.user?.phone,
 					phonePrefixCountryCode:
 						employeesData.employee.user?.phonePrefixCountryCode || salon?.data?.companyContactPerson?.phonePrefixCountryCode || salon?.data?.address?.countryCode,
 					deletedAt: employeesData.employee.deletedAt,

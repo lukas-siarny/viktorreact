@@ -71,7 +71,7 @@ const DocumentsPage = () => {
 		assetType: undefined,
 		languageCode: undefined
 	})
-	console.log('uploadData', uploadData)
+
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
@@ -111,7 +111,6 @@ const DocumentsPage = () => {
 			dataIndex: ['assetType', 'name'],
 			key: 'name',
 			ellipsis: true,
-			// width: '60%',
 			render: (value, record) => {
 				return (
 					<div className={'flex items-center'}>
@@ -135,7 +134,7 @@ const DocumentsPage = () => {
 		{
 			dataIndex: '',
 			align: 'right',
-			width: '150px',
+			width: '160px',
 			render(val, record) {
 				return (
 					<Button

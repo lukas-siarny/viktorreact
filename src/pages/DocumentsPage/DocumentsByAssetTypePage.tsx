@@ -46,7 +46,7 @@ const DocumentsByAssetTypePage = () => {
 	// TODO:
 	// Aktualizovat - selecty languageCode a assetType budu predvybrane a disabled a title: aktualizovat dokuemnt
 	// Pridat dokuemnt - vyber z languageCode a assetType a title: pridat dokument
-	// Filtre - languageCode a assetType (DOROBIT NA BE) -0 nebudu predvybrate ziadne (optional)
+	// Multiple upload
 
 	const [query, setQuery] = useQueryParams(documentsAssetTypesPageURLQueryParamsSchema, {
 		page: 1,

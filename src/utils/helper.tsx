@@ -916,7 +916,7 @@ export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNo
 	const style = { width: imageWidth, height: imageHeight }
 	return (
 		<div className='flex items-center'>
-			<div style={style} className={'mr-2 flex items-center'}>
+			<div style={style} className={'mr-4 flex items-center'}>
 				{icon || fallbackIcon}
 			</div>
 			<span className='truncate inline-block'>{label}</span>

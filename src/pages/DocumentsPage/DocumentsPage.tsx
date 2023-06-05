@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Input, Row, Select } from 'antd'
+import { Button, Col, Row } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
@@ -8,26 +8,13 @@ import { ColumnsType } from 'antd/lib/table'
 import { useNavigate } from 'react-router'
 
 // components
+import { initialize } from 'redux-form'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import ImportForm from '../../components/ImportForm'
 import FlagIcon from '../../components/FlagIcon'
 
 // utils
-import {
-	ADMIN_PERMISSIONS,
-	ASSET_TYPE,
-	ENUMERATIONS_KEYS,
-	IMPORT_TYPE,
-	LANGUAGE,
-	PAGINATION,
-	REQUEST_STATUS,
-	ROW_GUTTER_X_DEFAULT,
-	TEMPLATE_OPTIONS_CUSTOMERS,
-	TEMPLATE_OPTIONS_RESERVATIONS,
-	UPLOAD_IMG_CATEGORIES,
-	VALIDATION_MAX_LENGTH
-} from '../../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PAGINATION, REQUEST_STATUS, ROW_GUTTER_X_DEFAULT, UPLOAD_IMG_CATEGORIES } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { postReq, uploadFile } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
@@ -36,7 +23,7 @@ import { withPermissions } from '../../utils/Permissions'
 import { getAssetTypes, getDocuments } from '../../reducers/documents/documentActions'
 
 // types
-import { Columns, IBreadcrumbs, IDocumentsFilter, ISelectOptionItem } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IDocumentsFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // assets
@@ -48,14 +35,17 @@ import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 // schemas
 import { documentsPageURLQueryParamsSchema, IDocumentsAssetTypesPageURLQueryParams } from '../../schemas/queryParams'
 import DocumentsFilter from './components/DocumentsFilter'
+import DocumentsForm from './components/DocumentsForm'
+import { IDocumentForm } from '../../schemas/document'
 
 const DocumentsPage = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const documents = useSelector((state: RootState) => state.documents.documents)
-	const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+
+	// const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
+	// const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
 		page: 1,
@@ -63,15 +53,11 @@ const DocumentsPage = () => {
 		languageCode: undefined,
 		assetType: undefined
 	})
-	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
-	const [fileUploadVisible, setFileUploadVisible] = useState<{ assetType: ASSET_TYPE | undefined; languageCode: LANGUAGE | undefined }>()
-	const isLoading = documents?.isLoading
-	const [uploadData, setUploadData] = useState<any>({
-		message: '',
-		assetType: undefined,
-		languageCode: undefined
-	})
 
+	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
+	const isLoading = documents?.isLoading
+
+	const [visible, setVisible] = useState(false)
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
@@ -140,15 +126,21 @@ const DocumentsPage = () => {
 					<Button
 						onClick={(e) => {
 							e.stopPropagation()
-							setFileUploadVisible({ assetType: record.assetType.key, languageCode: record.languageCode })
+							setVisible(true)
+							dispatch(
+								initialize(FORM.DOCUMENTS_FORM, {
+									assetType: record.assetType.key,
+									languageCode: record.languageCode // TODO: syncnut s enum optionami
+								})
+							)
 						}}
 						type='primary'
 						htmlType='button'
 						size={'small'}
 						className={'noti-btn'}
-						icon={<UploadIcon className={'w-4 h-4 left-2'} />}
+						icon={<UploadIcon className={'w-4 h-4'} />}
 					>
-						{t('loc:Aktualizovať súbor')}
+						<span className={'pl-4'}>{t('loc:Aktualizovať súbor')}</span>
 					</Button>
 				)
 			}
@@ -157,7 +149,8 @@ const DocumentsPage = () => {
 
 	const cols = [...columns, ...actions]
 
-	const fileUploadSubmit = async (values: any) => {
+	const fileUploadSubmit = async (values: IDocumentForm) => {
+		console.log('values', values)
 		setRequestStatus(REQUEST_STATUS.SUBMITTING)
 		try {
 			const { data } = await postReq('/api/b2b/admin/files/sign-urls', undefined, {
@@ -170,30 +163,28 @@ const DocumentsPage = () => {
 				],
 				category: UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE
 			})
-			if (fileUploadVisible?.assetType && fileUploadVisible.languageCode) {
-				const fileIDs = data?.files?.map((file) => file.id)
+			const fileIDs = data?.files?.map((file) => file.id)
 
-				await uploadFile({
-					action: data.files[0].signedUrl,
-					file: values?.file,
-					onError: (error: any) => {
-						setRequestStatus(REQUEST_STATUS.ERROR)
-						// eslint-disable-next-line no-console
-						console.error(error)
-					}
-				})
+			await uploadFile({
+				action: data.files[0].signedUrl,
+				file: values?.file,
+				onError: (error: any) => {
+					setRequestStatus(REQUEST_STATUS.ERROR)
+					// eslint-disable-next-line no-console
+					console.error(error)
+				}
+			})
 
-				await postReq('/api/b2b/admin/documents/', undefined, {
-					languageCode: fileUploadVisible.languageCode,
-					fileIDs: fileIDs as any,
-					message: uploadData?.message || null,
-					assetType: fileUploadVisible.assetType
-				})
-				setRequestStatus(REQUEST_STATUS.SUCCESS)
-				dispatch(getDocuments(query))
-			}
-			setFileUploadVisible(undefined)
-			setUploadData(undefined)
+			await postReq('/api/b2b/admin/documents/', undefined, {
+				languageCode: values?.languageCode,
+				fileIDs: fileIDs as any,
+				message: values?.message || null,
+				assetType: values?.assetType
+			})
+			setRequestStatus(undefined)
+			dispatch(getDocuments(query))
+
+			setVisible(false)
 		} catch {
 			setRequestStatus(REQUEST_STATUS.ERROR)
 		}
@@ -208,10 +199,7 @@ const DocumentsPage = () => {
 		setQuery(newQuery)
 	}
 	const handleCreateDocument = () => {
-		setFileUploadVisible({
-			assetType: undefined,
-			languageCode: undefined
-		})
+		setVisible(true)
 	}
 
 	return (
@@ -222,69 +210,70 @@ const DocumentsPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body small'>
-						<ImportForm
-							setRequestStatus={setRequestStatus}
-							requestStatus={uploadStatus}
-							type={IMPORT_TYPE.UPLOAD}
-							label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })}
-							accept={'.pdf'}
-							title={t('loc:Nahrať dokument')}
-							visible={!!fileUploadVisible}
-							setVisible={setFileUploadVisible}
-							onSubmit={fileUploadSubmit}
-							extraContent={
-								<div className={''}>
-									<div className={'ant-form-item w-full'}>
-										<label htmlFor={'noti-message-input'} className={'block mb-2'}>
-											{t('loc:Sprievodná správa')}
-										</label>
-										<Input.TextArea
-											maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
-											id={'noti-message-input'}
-											className={'noti-input w-full mb-4'}
-											size={'large'}
-											onChange={(e) => setUploadData({ ...uploadData, message: e.target.value })}
-											value={uploadData?.message}
-											placeholder={t('loc:Zadajte sprievodnú správu')}
-										/>
-									</div>
-									<div className={'ant-form-item w-full'}>
-										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
-											{t('loc:Jazyk')}
-										</label>
-										<Select
-											id={'noti-template-select'}
-											className={'noti-select-input w-full'}
-											size={'large'}
-											labelInValue
-											loading={countries.isLoading}
-											options={countries.enumerationsOptions}
-											onChange={(val) => setUploadData({ ...uploadData, languageCode: val })}
-											value={uploadData?.languageCode}
-											placeholder={t('loc:Vyberte jazyk')}
-											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-										/>
-									</div>
-									<div className={'ant-form-item w-full'}>
-										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
-											{t('loc:Typ dokumentu')}
-										</label>
-										<Select
-											id={'noti-template-select'}
-											className={'noti-select-input w-full'}
-											size={'large'}
-											labelInValue
-											loading={assetTypes.isLoading}
-											options={assetTypes.options}
-											onChange={(val) => setUploadData({ ...uploadData, assetType: val })}
-											value={uploadData?.assetType}
-											placeholder={t('loc:Vyberte typ dokumentu')}
-											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-										/>
-									</div>
-								</div>
-							}
-						/>
+						<DocumentsForm requestStatus={uploadStatus} setRequestStatus={setRequestStatus} visible={visible} setVisible={setVisible} onSubmit={fileUploadSubmit} />
+						{/* <ImportForm */}
+						{/*	setRequestStatus={setRequestStatus} */}
+						{/*	requestStatus={uploadStatus} */}
+						{/*	type={IMPORT_TYPE.UPLOAD} */}
+						{/*	label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })} */}
+						{/*	accept={'.pdf'} */}
+						{/*	title={t('loc:Nahrať dokument')} */}
+						{/*	visible={!!fileUploadVisible} */}
+						{/*	setVisible={setFileUploadVisible} */}
+						{/*	onSubmit={fileUploadSubmit} */}
+						{/*	extraContent={ */}
+						{/*		<div className={''}> */}
+						{/*			<div className={'ant-form-item w-full'}> */}
+						{/*				<label htmlFor={'noti-message-input'} className={'block mb-2'}> */}
+						{/*					{t('loc:Sprievodná správa')} */}
+						{/*				</label> */}
+						{/*				<Input.TextArea */}
+						{/*					maxLength={VALIDATION_MAX_LENGTH.LENGTH_255} */}
+						{/*					id={'noti-message-input'} */}
+						{/*					className={'noti-input w-full mb-4'} */}
+						{/*					size={'large'} */}
+						{/*					onChange={(e) => setUploadData({ ...uploadData, message: e.target.value })} */}
+						{/*					value={uploadData?.message} */}
+						{/*					placeholder={t('loc:Zadajte sprievodnú správu')} */}
+						{/*				/> */}
+						{/*			</div> */}
+						{/*			<div className={'ant-form-item w-full'}> */}
+						{/*				<label htmlFor={'noti-template-select'} className={'block mb-2'}> */}
+						{/*					{t('loc:Jazyk')} */}
+						{/*				</label> */}
+						{/*				<Select */}
+						{/*					id={'noti-template-select'} */}
+						{/*					className={'noti-select-input w-full'} */}
+						{/*					size={'large'} */}
+						{/*					labelInValue */}
+						{/*					loading={countries.isLoading} */}
+						{/*					options={countries.enumerationsOptions} */}
+						{/*					onChange={(val) => setUploadData({ ...uploadData, languageCode: val })} */}
+						{/*					value={uploadData?.languageCode} */}
+						{/*					placeholder={t('loc:Vyberte jazyk')} */}
+						{/*					getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement} */}
+						{/*				/> */}
+						{/*			</div> */}
+						{/*			<div className={'ant-form-item w-full'}> */}
+						{/*				<label htmlFor={'noti-template-select'} className={'block mb-2'}> */}
+						{/*					{t('loc:Typ dokumentu')} */}
+						{/*				</label> */}
+						{/*				<Select */}
+						{/*					id={'noti-template-select'} */}
+						{/*					className={'noti-select-input w-full'} */}
+						{/*					size={'large'} */}
+						{/*					labelInValue */}
+						{/*					loading={assetTypes.isLoading} */}
+						{/*					options={assetTypes.options} */}
+						{/*					onChange={(val) => setUploadData({ ...uploadData, assetType: val })} */}
+						{/*					value={uploadData?.assetType} */}
+						{/*					placeholder={t('loc:Vyberte typ dokumentu')} */}
+						{/*					getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement} */}
+						{/*				/> */}
+						{/*			</div> */}
+						{/*		</div> */}
+						{/*	} */}
+						{/* /> */}
 						<DocumentsFilter createDocument={handleCreateDocument} onSubmit={handleSubmit} />
 						<CustomTable
 							className='table-fixed table-expandable'

@@ -1,12 +1,13 @@
 import React, { FC } from 'react'
-import { Field, InjectedFormProps, reduxForm, reset } from 'redux-form'
+import { destroy, Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Form, Modal, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
+import i18next from 'i18next'
 
 // utils
-import { formFieldID, optionRenderWithImage, showErrorNotification, validationRequired } from '../../../utils/helper'
-import { ENUMERATIONS_KEYS, FORM, IMPORT_TYPE, REQUEST_STATUS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, optionRenderWithIcon, optionRenderWithImage, showErrorNotification, validationRequired } from '../../../utils/helper'
+import { FORM, REQUEST_STATUS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 
 // types
 import { IDataUploadForm } from '../../../types/interfaces'
@@ -19,28 +20,28 @@ import SelectField from '../../../atoms/SelectField'
 import { RootState } from '../../../reducers'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import TextareaField from '../../../atoms/TextareaField'
+import { IDocumentForm, validationDocumentFn } from '../../../schemas/document'
+import { languageOptions } from '../../../components/LanguagePicker'
 
 type ComponentProps = {
 	visible: boolean
 	setVisible: React.Dispatch<React.SetStateAction<any>>
 	setRequestStatus: (status?: REQUEST_STATUS) => void
 	requestStatus: REQUEST_STATUS | undefined
-	accept: string
 	disabledForm?: boolean
 }
 
-type Props = InjectedFormProps<IDataUploadForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IDocumentForm, ComponentProps> & ComponentProps
 
 const DocumentsForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, submitting, disabledForm, pristine, visible, setVisible, setRequestStatus, requestStatus, accept } = props
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+	const { handleSubmit, submitting, disabledForm, pristine, visible, setVisible, setRequestStatus, requestStatus } = props
 	const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
-
+	console.log('languageOptions', languageOptions)
 	const resetUploadForm = () => {
 		setRequestStatus(undefined)
-		dispatch(reset(FORM.DOCUMENTS_FORM))
+		dispatch(destroy(FORM.DOCUMENTS_FORM))
 	}
 
 	return (
@@ -69,7 +70,7 @@ const DocumentsForm: FC<Props> = (props) => {
 							component={FileUploadField}
 							name={'file'}
 							label={t('loc:Vyberte súbor vo formáte .pdf')}
-							accept={accept}
+							accept={'.pdf'}
 							maxCount={100}
 							type={'file'}
 							disabled={submitting}
@@ -79,16 +80,14 @@ const DocumentsForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={SelectField}
-							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+							optionRender={(itemData: any) => optionRenderWithIcon(itemData, <GlobeIcon />)}
 							name={'languageCode'}
 							placeholder={t('loc:Jazyk')}
 							allowClear
 							size={'large'}
 							filterOptions
 							onDidMountSearch
-							options={countries?.enumerationsOptions}
-							loading={countries?.isLoading}
-							disabled={countries?.isLoading}
+							options={languageOptions}
 						/>
 						<Field
 							component={SelectField}
@@ -102,7 +101,7 @@ const DocumentsForm: FC<Props> = (props) => {
 							loading={assetTypes?.isLoading}
 							disabled={assetTypes?.isLoading}
 						/>
-						<Field name={'message'} label={t('loc:Sprievodná správa')} placeholder={t('loc:Zadajte sprievodnú správu')} className={'pb-0'} component={TextareaField} />
+						<Field name={'message'} label={t('loc:Sprievodná správa')} placeholder={t('loc:Zadajte sprievodnú správu')} className={'pb-4'} component={TextareaField} />
 						<Button
 							id={formFieldID(FORM.DOCUMENTS_FORM, SUBMIT_BUTTON_ID)}
 							className='noti-btn'
@@ -122,12 +121,13 @@ const DocumentsForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<IDataUploadForm, ComponentProps>({
+const form = reduxForm<IDocumentForm, ComponentProps>({
 	form: FORM.DOCUMENTS_FORM,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	onSubmitFail: showErrorNotification
+	onSubmitFail: showErrorNotification,
+	validate: validationDocumentFn
 })(DocumentsForm)
 
 export default form

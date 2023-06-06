@@ -33,6 +33,7 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
 import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices.svg'
+import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 
 // utils
 import { CYPRESS_CLASS_NAMES, PAGE, PERMISSION } from '../../utils/enums'
@@ -84,6 +85,7 @@ const MENU_ITEMS_ORDER = [
 	PAGE.EMPLOYEES,
 	PAGE.SALON_SETTINGS,
 	PAGE.SMS_CREDIT,
+	PAGE.AFFILIATE_PROGRAM,
 	'divider-2',
 	PAGE.CUSTOMERS,
 	PAGE.RESERVATIONS,
@@ -274,6 +276,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
 							icon: <IndustiresIcon />,
 							id: PAGE.INDUSTRIES_AND_SERVICES
+						},
+						{
+							key: PAGE.AFFILIATE_PROGRAM,
+							label: t('loc:Vernostný program'),
+							onClick: () => navigate(getPath(t('paths:loaylty-program'))),
+							icon: <CoinsIcon className={'text-black'} />,
+							id: PAGE.AFFILIATE_PROGRAM
 						},
 						{
 							type: 'divider',

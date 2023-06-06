@@ -63,7 +63,7 @@ const isOnlyReservationNoteChanged = (initialValues?: ICalendarReservationForm, 
 		initialValues?.timeFrom === values?.timeFrom &&
 		initialValues?.employee?.key === values?.employee?.key
 
-	const isNoteChanged = !!(initialValues?.note && values?.note && initialValues.note !== values.note)
+	const isNoteChanged = initialValues?.note !== values?.note
 
 	return areValuesWithoutNoteTheSame && isNoteChanged
 }
@@ -90,6 +90,8 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
 		const eventId = (values?.updateFromCalendar ? values?.eventId : queryEventId) || undefined
 		const onlyReservationNoteChanged = isOnlyReservationNoteChanged(initialFormValues, values)
+
+		console.log({ onlyReservationNoteChanged })
 
 		if (eventId) {
 			setConfirmModal({

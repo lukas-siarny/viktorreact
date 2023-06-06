@@ -43,6 +43,8 @@ const DocumentsPage = () => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const documents = useSelector((state: RootState) => state.documents.documents)
+	const [visible, setVisible] = useState(false)
+	const isLoading = documents?.isLoading
 
 	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
 		page: 1,
@@ -51,10 +53,6 @@ const DocumentsPage = () => {
 		assetType: undefined
 	})
 
-	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
-	const isLoading = documents?.isLoading
-
-	const [visible, setVisible] = useState(false)
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
@@ -158,7 +156,6 @@ const DocumentsPage = () => {
 	const cols = [...columns, ...actions]
 
 	const fileUploadSubmit = async (values: IDocumentForm) => {
-		setRequestStatus(REQUEST_STATUS.SUBMITTING)
 		try {
 			const { data } = await postReq('/api/b2b/admin/files/sign-urls', undefined, {
 				files: [
@@ -176,7 +173,6 @@ const DocumentsPage = () => {
 				action: data.files[0].signedUrl,
 				file: values?.file,
 				onError: (error: any) => {
-					setRequestStatus(REQUEST_STATUS.ERROR)
 					// eslint-disable-next-line no-console
 					console.error(error)
 				}
@@ -188,11 +184,11 @@ const DocumentsPage = () => {
 				message: values?.message || null,
 				assetType: values?.assetType
 			})
-			setRequestStatus(REQUEST_STATUS.SUCCESS)
-			// setVisible(false)
+			setVisible(false)
 			dispatch(getDocuments(query))
-		} catch {
-			setRequestStatus(REQUEST_STATUS.ERROR)
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
 		}
 	}
 	const handleSubmit = (values: IDocumentsFilter) => {
@@ -216,7 +212,7 @@ const DocumentsPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body small'>
-						<DocumentsForm requestStatus={uploadStatus} setRequestStatus={setRequestStatus} visible={visible} setVisible={setVisible} onSubmit={fileUploadSubmit} />
+						<DocumentsForm visible={visible} setVisible={setVisible} onSubmit={fileUploadSubmit} />
 						{/* <ImportForm */}
 						{/*	setRequestStatus={setRequestStatus} */}
 						{/*	requestStatus={uploadStatus} */}

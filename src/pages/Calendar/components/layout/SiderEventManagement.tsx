@@ -62,7 +62,7 @@ type Props = {
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	calendarApi?: CalendarApi
-	changeCalendarDate: (newDate: string) => void
+	changeCalendarDate: (newDate: string, setFromSidebar?: boolean) => void
 	phonePrefix?: string
 	loadingData?: boolean
 	query: ICalendarPageURLQueryParams

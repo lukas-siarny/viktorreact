@@ -276,23 +276,27 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
 export const getConfirmModalText = (
 	baseNotificationText: string,
 	disabledNotificationTypesToCheck: CALENDAR_DISABLED_NOTIFICATION_TYPE[],
-	disabledNotificationsSource?: DisabledNotificationsArray
+	disabledNotificationsSource?: DisabledNotificationsArray,
+	ignoreCustomerNotification = false,
+	ignoreEmployeeNotification = false
 ) => {
-	let isCustomerNotified = true
-	let isEmployeeNotified = true
+	let isCustomerNotified = !ignoreCustomerNotification
+	let isEmployeeNotified = !ignoreEmployeeNotification
 
-	disabledNotificationTypesToCheck.forEach((notificationToCheck) => {
-		const disabledNotificationSource = disabledNotificationsSource?.find((notificationSource) => notificationSource.eventType === notificationToCheck)
-		// when array length is equal to NOTIFICATION_TYPES length it means all notifications are disabled for entity
-		if (disabledNotificationSource && disabledNotificationSource?.channels?.length === NOTIFICATION_TYPES.length) {
-			if (disabledNotificationSource?.eventType?.endsWith('CUSTOMER')) {
-				isCustomerNotified = false
+	if (ignoreCustomerNotification && ignoreEmployeeNotification) {
+		disabledNotificationTypesToCheck.forEach((notificationToCheck) => {
+			const disabledNotificationSource = disabledNotificationsSource?.find((notificationSource) => notificationSource.eventType === notificationToCheck)
+			// when array length is equal to NOTIFICATION_TYPES length it means all notifications are disabled for entity
+			if (disabledNotificationSource && disabledNotificationSource?.channels?.length === NOTIFICATION_TYPES.length) {
+				if (disabledNotificationSource?.eventType?.endsWith('CUSTOMER')) {
+					isCustomerNotified = false
+				}
+				if (disabledNotificationSource?.eventType?.endsWith('EMPLOYEE')) {
+					isEmployeeNotified = false
+				}
 			}
-			if (disabledNotificationSource?.eventType?.endsWith('EMPLOYEE')) {
-				isEmployeeNotified = false
-			}
-		}
-	})
+		})
+	}
 
 	if (isCustomerNotified && isEmployeeNotified) {
 		return i18next.t('loc:{{baseNotificationText}} Zamestnanec aj zákazník dostanú notifikáciu.', { baseNotificationText })

@@ -42,7 +42,7 @@ export const setCalendarApi = (api?: CalendarApi) => {
 	calendarApi = api
 }
 
-export const setCalendarDateHandler = (handler: (newDate: string, monthViewFullRange?: boolean) => void) => {
+export const setCalendarDateHandler = (handler: (newDate: string, setFromSidebar?: boolean) => void) => {
 	changeCalendarDate = handler
 }
 

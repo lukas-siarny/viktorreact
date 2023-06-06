@@ -428,6 +428,7 @@ export const QUERY_LIMIT = {
 
 export const UPLOAD = {
 	MAX_FILE_SIZE: 20,
+	MAX_COUNT: 100,
 	MAX_SIZE: 100000000, // 100MB
 	INSURANCE_COMPANIES_LOGO: {
 		maxFileSize: 2 * 10 ** 6 // 2MB

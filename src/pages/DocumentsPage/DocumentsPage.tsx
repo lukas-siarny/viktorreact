@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
 
 // components
+import { map } from 'lodash'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import FlagIcon from '../../components/FlagIcon'
@@ -156,17 +157,20 @@ const DocumentsPage = () => {
 	const cols = [...columns, ...actions]
 
 	const fileUploadSubmit = async (values: IDocumentForm) => {
+		console.log('values', values)
+		const files: any = map(values.file, (item: any) => {
+			return {
+				name: item?.name,
+				size: item?.size,
+				mimeType: item.type
+			}
+		})
 		try {
 			const { data } = await postReq('/api/b2b/admin/files/sign-urls', undefined, {
-				files: [
-					{
-						name: values?.file.name,
-						size: values?.file.size,
-						mimeType: values?.file.type
-					}
-				],
+				files,
 				category: UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE
 			})
+			console.log('data', data)
 			const fileIDs = data?.files?.map((file) => file.id)
 
 			await uploadFile({

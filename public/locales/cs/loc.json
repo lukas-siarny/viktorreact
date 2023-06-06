@@ -126,7 +126,7 @@
   "Importovať ďalšie": "Importovat další",
   "Importujte si svojich klientov z externých rezervačných systémov": "Importujte si své klienty z externích rezervačních systémů",
   "Info": "Info",
-  "Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov.": null,
+  "Informácie o vašich udalostiach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Synchronizácia sa nevzťahuje na udalosti, ktoré prebehli v minulosti. Synchronizácia prebieha iba smerom z Notino Partner App do externých kalendárov, nie opačne. Zmeny, ktoré v rezerváciách vykonáte v externom kalendári sa neprenesú do Notino Partner aplikácie.": null,
   "Instagram": "Instagram",
   "Interná": "Interní",
   "Interné notifikácie": "Interní notifikace",

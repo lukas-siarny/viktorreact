@@ -232,22 +232,28 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Časové intervaly medzi rezerváciami.')}</p>
 				</div>
 			</Row>
-			{/* Integrate RS calendar to: Google, Outlook, iCal */}
-			{isPartner && (
-				<>
-					<div className={'flex mt-10'}>
-						<h3 className={'mb-0 mt-0 flex items-center'}>
-							<CalendarSyncIcon className={'text-notino-black mr-2'} />
-							{t('loc:Synchronizácia kalendára')}
-						</h3>
-					</div>
-					<Divider className={'my-3'} />
-					<p className='x-regular text-notino-grayDark mb-4'>
-						{t('loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov.')}
-					</p>
-					<CalendarIntegrations />
-				</>
-			)}
+			<Row justify={'space-between'} className='mt-10'>
+				<div className={'w-12/25'}>
+					{/* Integrate RS calendar to: Google, Outlook, iCal */}
+					{isPartner && (
+						<>
+							<div className={'flex mt-10'}>
+								<h3 className={'mb-0 mt-0 flex items-center'}>
+									<CalendarSyncIcon className={'text-notino-black mr-2'} />
+									{t('loc:Synchronizácia kalendára')}
+								</h3>
+							</div>
+							<Divider className={'my-3'} />
+							<p className='x-regular text-notino-grayDark mb-4'>
+								{t(
+									'loc:Informácie o vašich udalostiach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Synchronizácia sa nevzťahuje na udalosti, ktoré prebehli v minulosti. Synchronizácia prebieha iba smerom z Notino Partner App do externých kalendárov, nie opačne. Zmeny, ktoré v rezerváciách vykonáte v externom kalendári sa neprenesú do Notino Partner aplikácie.'
+								)}
+							</p>
+							<CalendarIntegrations />
+						</>
+					)}
+				</div>
+			</Row>
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Imports */}
 				<div className={'flex'}>

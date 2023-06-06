@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, submit } from 'redux-form'
+import { Field, FieldArray, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row, Select } from 'antd'
 
@@ -23,11 +23,11 @@ import { RootState } from '../../../reducers'
 import {
 	FORM,
 	NOTIFICATION_CHANNEL,
+	PERMISSION,
+	REQUEST_STATUS,
 	RS_NOTIFICATION,
 	STRINGS,
-	PERMISSION,
 	SUBMIT_BUTTON_ID,
-	REQUEST_STATUS,
 	TEMPLATE_OPTIONS_CUSTOMERS,
 	TEMPLATE_OPTIONS_RESERVATIONS
 } from '../../../utils/enums'
@@ -82,7 +82,10 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const dispatch = useDispatch()
 	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.wallet?.id)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
+	const isPartner = useMemo(
+		() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER], [PERMISSION.NOTINO, PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN]),
+		[authUser]
+	)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const disabled = !formValues?.enabledReservations
 

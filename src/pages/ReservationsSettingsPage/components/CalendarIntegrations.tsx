@@ -7,7 +7,7 @@ import axios, { AxiosError } from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { find, get } from 'lodash'
-import { Button } from 'antd'
+import { Button, Tooltip, Typography } from 'antd'
 import { getFormValues, initialize, submit } from 'redux-form'
 
 // utils
@@ -24,6 +24,8 @@ import ConfirmModal from '../../../atoms/ConfirmModal'
 
 // assets
 import { ReactComponent as CheckIcon } from '../../../assets/icons/checkbox-checked-icon-24.svg'
+import { ReactComponent as CopyableIcon } from '../../../assets/icons/copyable-icon.svg'
+import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-icon.svg'
 
 // redux
 import { getCurrentUser } from '../../../reducers/users/userActions'
@@ -36,6 +38,8 @@ enum REQUEST_MODAL_TYPE {
 	CREATE = 'CREATE'
 }
 
+const { Paragraph } = Typography
+
 const CalendarIntegrations = () => {
 	const { t } = useTranslation()
 	const { salonID } = useParams<Required<{ salonID: string }>>()
@@ -44,7 +48,7 @@ const CalendarIntegrations = () => {
 	const [visibleModal, setVisibleModal] = useState<{ type: EXTERNAL_CALENDAR_TYPE; title: string; description: string; requestType: REQUEST_MODAL_TYPE } | undefined>(undefined)
 	const [pickedSalonIds, setPickedSalonIds] = useState<string[]>([])
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
+	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink') || ''
 	const salonIdsValues: Partial<{ salonIDs: string[] }> = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
 	const partnerInOneSalon = authUser?.data?.salons.length === 1 && authUser.data.salons[0].id === salonID
 	const signedSalon = authUser?.data?.salons.find((salon) => salon.id === salonID)
@@ -52,6 +56,7 @@ const CalendarIntegrations = () => {
 	const hasMicrosoftSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`)
 	const googleSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`))
 	const microsoftSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`))
+	const httpsIcalUrl = icalUrl.replace(/^webcal:/i, 'https:')
 
 	const getOptionsData = () => {
 		if (visibleModal?.requestType === REQUEST_MODAL_TYPE.DELETE) {
@@ -327,9 +332,42 @@ const CalendarIntegrations = () => {
 				{t('loc:Sign in')}
 			</button>
 
-			<a href={icalUrl} className={'sync-button apple'}>
-				{t('loc:Import pomocou .ics súboru')}
-			</a>
+			<Tooltip
+				title={
+					<div>
+						<Paragraph
+							className={'flex text-white items-center text-xs m-0 w-full'}
+							copyable={{
+								text: httpsIcalUrl,
+								icon: [
+									<CopyableIcon width={24} height={24} className={'text-notino-pink hover:text-notino-pink'} />,
+									<CheckIcon width={24} height={24} className={'text-notino-pink hover:text-notino-pink'} />
+								]
+							}}
+						>
+							<>
+								{`${httpsIcalUrl.slice(0, Math.floor(httpsIcalUrl.length / 2))}...`}
+								<Button
+									className={'mx-2 p-0 hover:text-notino-pink'}
+									href={httpsIcalUrl}
+									target='_blank'
+									rel='noopener noreferrer'
+									type={'link'}
+									htmlType={'button'}
+									title='Download calendar'
+									download
+								>
+									<DownloadIcon width={24} />
+								</Button>
+							</>
+						</Paragraph>
+					</div>
+				}
+			>
+				<a href={icalUrl} className={'sync-button apple'}>
+					{t('loc:Import pomocou .ics súboru')}
+				</a>
+			</Tooltip>
 		</>
 	)
 }

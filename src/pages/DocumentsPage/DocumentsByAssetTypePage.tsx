@@ -43,10 +43,6 @@ const DocumentsByAssetTypePage = () => {
 	const fileName = assetTypes?.data?.assetTypes.find((item) => item.key === assetType)?.name
 	const isLoading = documentsByAssetType?.isLoading
 	const [backUrl] = useBackUrl(t('paths:documents'))
-	// TODO:
-	// Aktualizovat - selecty languageCode a assetType budu predvybrane a disabled a title: aktualizovat dokuemnt
-	// Pridat dokuemnt - vyber z languageCode a assetType a title: pridat dokument
-	// Multiple upload
 
 	const [query, setQuery] = useQueryParams(documentsAssetTypesPageURLQueryParamsSchema, {
 		page: 1,

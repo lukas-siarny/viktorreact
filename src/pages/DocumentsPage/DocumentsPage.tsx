@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { ColumnsType } from 'antd/lib/table'
 import { useNavigate } from 'react-router'
+import { initialize } from 'redux-form'
 
 // components
-import { initialize } from 'redux-form'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import FlagIcon from '../../components/FlagIcon'
+import DocumentsFilter from './components/DocumentsFilter'
+import DocumentsForm from './components/DocumentsForm'
 
 // utils
 import { ADMIN_PERMISSIONS, FORM, PAGINATION, REQUEST_STATUS, ROW_GUTTER_X_DEFAULT, UPLOAD_IMG_CATEGORIES } from '../../utils/enums'
@@ -34,8 +36,6 @@ import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 // schemas
 import { documentsPageURLQueryParamsSchema, IDocumentsAssetTypesPageURLQueryParams } from '../../schemas/queryParams'
-import DocumentsFilter from './components/DocumentsFilter'
-import DocumentsForm from './components/DocumentsForm'
 import { IDocumentForm } from '../../schemas/document'
 
 const DocumentsPage = () => {
@@ -43,9 +43,6 @@ const DocumentsPage = () => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const documents = useSelector((state: RootState) => state.documents.documents)
-
-	// const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
-	// const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
 		page: 1,
@@ -88,7 +85,17 @@ const DocumentsPage = () => {
 
 	useEffect(() => {
 		dispatch(getAssetTypes())
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	useEffect(() => {
 		dispatch(getDocuments(query))
+		dispatch(
+			initialize(FORM.DOCUMENTS_FILTER, {
+				assetType: query.assetType,
+				languageCode: query.languageCode
+			})
+		)
 	}, [dispatch, query])
 
 	const columns: Columns = [
@@ -130,7 +137,8 @@ const DocumentsPage = () => {
 							dispatch(
 								initialize(FORM.DOCUMENTS_FORM, {
 									assetType: record.assetType.key,
-									languageCode: record.languageCode // TODO: syncnut s enum optionami
+									languageCode: record.languageCode,
+									id: record.id
 								})
 							)
 						}}
@@ -150,7 +158,6 @@ const DocumentsPage = () => {
 	const cols = [...columns, ...actions]
 
 	const fileUploadSubmit = async (values: IDocumentForm) => {
-		console.log('values', values)
 		setRequestStatus(REQUEST_STATUS.SUBMITTING)
 		try {
 			const { data } = await postReq('/api/b2b/admin/files/sign-urls', undefined, {
@@ -181,10 +188,9 @@ const DocumentsPage = () => {
 				message: values?.message || null,
 				assetType: values?.assetType
 			})
-			setRequestStatus(undefined)
+			setRequestStatus(REQUEST_STATUS.SUCCESS)
+			// setVisible(false)
 			dispatch(getDocuments(query))
-
-			setVisible(false)
 		} catch {
 			setRequestStatus(REQUEST_STATUS.ERROR)
 		}

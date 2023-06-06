@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 // utils
 import { CHANGE_DEBOUNCE_TIME, FORM, ROW_GUTTER_X_M, STRINGS } from '../../../utils/enums'
-import { optionRenderWithIcon, optionRenderWithImage } from '../../../utils/helper'
+import { optionRenderWithIcon } from '../../../utils/helper'
 
 // atoms
 import SelectField from '../../../atoms/SelectField'

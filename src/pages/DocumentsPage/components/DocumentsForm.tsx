@@ -1,27 +1,31 @@
 import React, { FC } from 'react'
-import { destroy, Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { destroy, Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Form, Modal, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import i18next from 'i18next'
 
 // utils
-import { formFieldID, optionRenderWithIcon, optionRenderWithImage, showErrorNotification, validationRequired } from '../../../utils/helper'
+import { formFieldID, optionRenderWithIcon, showErrorNotification, validationRequired } from '../../../utils/helper'
 import { FORM, REQUEST_STATUS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 
-// types
-import { IDataUploadForm } from '../../../types/interfaces'
-
-// atoms, pages, components, assets
-import FileUploadField from '../../../atoms/FileUploadField'
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
-import RequestSuccess from '../../../components/RequestSuccess'
-import SelectField from '../../../atoms/SelectField'
-import { RootState } from '../../../reducers'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
-import TextareaField from '../../../atoms/TextareaField'
-import { IDocumentForm, validationDocumentFn } from '../../../schemas/document'
+// components
 import { languageOptions } from '../../../components/LanguagePicker'
+import RequestSuccess from '../../../components/RequestSuccess'
+
+// atoms
+import FileUploadField from '../../../atoms/FileUploadField'
+import SelectField from '../../../atoms/SelectField'
+import TextareaField from '../../../atoms/TextareaField'
+
+// assets
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+
+// reducers
+import { RootState } from '../../../reducers'
+
+// schemas
+import { IDocumentForm, validationDocumentFn } from '../../../schemas/document'
 
 type ComponentProps = {
 	visible: boolean
@@ -38,7 +42,8 @@ const DocumentsForm: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const { handleSubmit, submitting, disabledForm, pristine, visible, setVisible, setRequestStatus, requestStatus } = props
 	const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
-	console.log('languageOptions', languageOptions)
+	const formValues: Partial<IDocumentForm> = useSelector((state: RootState) => getFormValues(FORM.DOCUMENTS_FORM)(state))
+
 	const resetUploadForm = () => {
 		setRequestStatus(undefined)
 		dispatch(destroy(FORM.DOCUMENTS_FORM))
@@ -47,7 +52,7 @@ const DocumentsForm: FC<Props> = (props) => {
 	return (
 		<Modal
 			className='rounded-fields'
-			title={t('loc:Nahrať dokument')}
+			title={formValues?.id ? t('loc:Aktualizovať dokument') : t('loc:Nahrať dokument')}
 			centered
 			open={visible}
 			destroyOnClose
@@ -82,21 +87,27 @@ const DocumentsForm: FC<Props> = (props) => {
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithIcon(itemData, <GlobeIcon />)}
 							name={'languageCode'}
+							label={t('loc:Vyberte jazyk')}
 							placeholder={t('loc:Jazyk')}
 							allowClear
 							size={'large'}
 							filterOptions
+							required
+							readOnly={formValues?.id}
 							onDidMountSearch
 							options={languageOptions}
 						/>
 						<Field
 							component={SelectField}
 							name={'assetType'}
+							label={t('loc:Vyberte typ dokumentu')}
 							placeholder={t('loc:Typ dokumentu')}
 							allowClear
 							size={'large'}
 							filterOptions
+							required
 							onDidMountSearch
+							readOnly={formValues?.id}
 							options={assetTypes?.options}
 							loading={assetTypes?.isLoading}
 							disabled={assetTypes?.isLoading}
@@ -126,7 +137,6 @@ const form = reduxForm<IDocumentForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	onSubmitFail: showErrorNotification,
 	validate: validationDocumentFn
 })(DocumentsForm)
 

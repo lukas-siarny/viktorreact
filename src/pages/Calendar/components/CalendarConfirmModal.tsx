@@ -63,7 +63,7 @@ const isOnlyReservationNoteChanged = (initialValues?: ICalendarReservationForm, 
 		initialValues?.timeFrom === values?.timeFrom &&
 		initialValues?.employee?.key === values?.employee?.key
 
-	const isNoteChanged = initialValues?.note !== values?.note
+	const isNoteChanged = !!(!(!initialValues?.note && !values?.note) || (initialValues?.note && values?.note && initialValues.note !== values.note))
 
 	return areValuesWithoutNoteTheSame && isNoteChanged
 }

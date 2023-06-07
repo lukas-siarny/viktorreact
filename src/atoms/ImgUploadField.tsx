@@ -14,8 +14,8 @@ import update from 'immutability-helper'
 import cx from 'classnames'
 
 // utils
-import { uploadImage } from '../utils/request'
-import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
+import { uploadFiles } from '../utils/request'
+import { formFieldID, formatFileFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
 import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, STRINGS, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
 
@@ -90,7 +90,6 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 	const [images, setImages] = useState<any[]>([])
 	const [selectedValue, setSelectedValue] = useState<string>('')
 	const [previewImgIndex, setPreviewImgIndex] = useState<number>(0)
-
 	useEffect(() => {
 		if (!isEmpty(input.value)) {
 			// filter application/pdf file
@@ -118,8 +117,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			dispatch(autofill(form, IMAGE_UPLOADING_PROP, undefined))
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
-			const values = getImagesFormValues(info.fileList, imagesUrls.current)
-
+			const values = formatFileFormValues(info.fileList, imagesUrls.current)
 			// order application/['pdf'] file type to end of array
 			const splitted = splitArrayByCondition(values, (item: any) => item.type !== 'application/pdf')
 			const sorted = [...splitted[0], ...splitted[1]]
@@ -311,7 +309,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 				multiple={multiple}
 				customRequest={(options: any) => {
 					dispatch(change(form, IMAGE_UPLOADING_PROP, true))
-					uploadImage(options, signUrl, category, imagesUrls)
+					uploadFiles(options, signUrl, category, imagesUrls)
 				}}
 				itemRender={(originNode, file, currFileList, actions) =>
 					draggable ? DragableUploadListItem(originNode, file, currFileList, actions, moveRow, !!disabled) : renderGalleryImage(originNode, file, currFileList, actions)

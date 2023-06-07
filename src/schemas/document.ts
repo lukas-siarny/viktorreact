@@ -10,7 +10,7 @@ export const documentSchema = z.object({
 })
 
 export type IDocumentForm = z.infer<typeof documentSchema> & {
-	file: File
+	files: (File & { id: string })[]
 	id?: string // Pomocne ID dokumentu aby som vedel ci aktualizujem dokument alebo nahravam novy
 }
 

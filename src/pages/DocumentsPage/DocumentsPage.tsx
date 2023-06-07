@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
 
 // components
-import { map } from 'lodash'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import FlagIcon from '../../components/FlagIcon'
@@ -17,9 +16,9 @@ import DocumentsFilter from './components/DocumentsFilter'
 import DocumentsForm from './components/DocumentsForm'
 
 // utils
-import { ADMIN_PERMISSIONS, FORM, PAGINATION, REQUEST_STATUS, ROW_GUTTER_X_DEFAULT, UPLOAD_IMG_CATEGORIES } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
-import { postReq, uploadFile } from '../../utils/request'
+import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -157,31 +156,8 @@ const DocumentsPage = () => {
 	const cols = [...columns, ...actions]
 
 	const fileUploadSubmit = async (values: IDocumentForm) => {
-		console.log('values', values)
-		const files: any = map(values.file, (item: any) => {
-			return {
-				name: item?.name,
-				size: item?.size,
-				mimeType: item.type
-			}
-		})
 		try {
-			const { data } = await postReq('/api/b2b/admin/files/sign-urls', undefined, {
-				files,
-				category: UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE
-			})
-			console.log('data', data)
-			const fileIDs = data?.files?.map((file) => file.id)
-
-			await uploadFile({
-				action: data.files[0].signedUrl,
-				file: values?.file,
-				onError: (error: any) => {
-					// eslint-disable-next-line no-console
-					console.error(error)
-				}
-			})
-
+			const fileIDs = values?.files?.map((item) => item.id)
 			await postReq('/api/b2b/admin/documents/', undefined, {
 				languageCode: values?.languageCode,
 				fileIDs: fileIDs as any,

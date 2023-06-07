@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // utils
 import { formFieldID, optionRenderWithIcon, validationRequired } from '../../../utils/helper'
-import { FORM, SUBMIT_BUTTON_ID, UPLOAD } from '../../../utils/enums'
+import { FORM, SUBMIT_BUTTON_ID, UPLOAD, UPLOAD_IMG_CATEGORIES } from '../../../utils/enums'
 
 // components
 import { languageOptions } from '../../../components/LanguagePicker'
@@ -62,11 +62,12 @@ const DocumentsForm: FC<Props> = (props) => {
 				<Form onSubmitCapture={handleSubmit} layout={'vertical'} className={'form'}>
 					<Field
 						component={FileUploadField}
-						name={'file'}
+						name={'files'}
 						label={t('loc:Vyberte súbor vo formáte .pdf')}
 						accept={'.pdf'}
 						maxCount={UPLOAD.MAX_COUNT}
 						type={'file'}
+						category={UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE}
 						multiple
 						handleUploadOutside={false}
 						disabled={submitting}

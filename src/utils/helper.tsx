@@ -42,6 +42,8 @@ import UAParser from 'ua-parser-js'
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
+	BROWSER_TYPE,
+	BROWSERS,
 	BYTE_MULTIPLIER,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
@@ -58,17 +60,15 @@ import {
 	IMAGE_UPLOADING_PROP,
 	INVALID_DATE_FORMAT,
 	LANGUAGE,
+	MIN_SUPPORTED_BROWSER_VERSION,
 	MONDAY_TO_FRIDAY,
 	MSG_TYPE,
 	NOTIFICATION_TYPE,
-	QUERY_LIMIT,
-	RESERVATION_STATE,
 	PERMISSION,
+	QUERY_LIMIT,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE,
-	MIN_SUPPORTED_BROWSER_VERSION,
-	BROWSERS,
-	BROWSER_TYPE
+	RESERVATION_STATE
 } from './enums'
 import { LOCALES } from '../components/LanguagePicker'
 import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress, NameLocalizationsItem } from '../types/interfaces'
@@ -679,37 +679,36 @@ export const getMaxSizeNotifMessage = (maxFileSize: any) => {
 type ImgUploadData = { uid: string; path: string } & Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['files'][0]
 export type ImgUploadParam = { [key: string]: ImgUploadData }
 
-export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) => {
-	const values = map(fileList, (file) => {
-		const fileData = filesData[get(file, 'uid')]
+export const formatFileFormValues = (fileList: any, filesData: ImgUploadParam) => {
+	return map(fileList, (fileListItem) => {
+		const fileData = filesData[get(fileListItem, 'uid')]
 
-		let img = {
-			...file,
-			url: get(file, 'url') || fileData?.path
+		let file = {
+			...fileListItem,
+			url: get(fileListItem, 'url') || fileData?.path
 		}
 
-		if (get(file, 'resizedImages')) {
-			img = {
-				...img,
+		if (get(fileListItem, 'resizedImages')) {
+			file = {
+				...file,
 				thumbUrl: fileData?.resizedImages?.thumbnail
 			}
 		}
 
-		if (get(file, 'id') || fileData?.id) {
-			img = {
-				...img,
-				id: get(file, 'id') || fileData?.id
+		if (get(fileListItem, 'id') || fileData?.id) {
+			file = {
+				...file,
+				id: get(fileListItem, 'id') || fileData?.id
 			}
 		}
 		if (fileData?.signedUrl) {
-			img = {
-				...img,
+			file = {
+				...file,
 				signedUrl: fileData?.signedUrl
 			}
 		}
-		return img
+		return file
 	})
-	return values
 }
 
 export const getServiceRange = (from: number | undefined | null, to: number | undefined | null, unit = '') => {

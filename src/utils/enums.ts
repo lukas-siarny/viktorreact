@@ -685,7 +685,7 @@ export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
 	borderRadius: 2
 }
 
-export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
+export const URL_UPLOAD_FILE = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const GENDERS = Object.keys(GENDER) as GENDER[]
 export const DAYS = Object.keys(DAY) as DAY[]

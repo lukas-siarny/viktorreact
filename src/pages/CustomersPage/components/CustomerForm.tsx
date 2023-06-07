@@ -5,7 +5,7 @@ import { Col, Divider, Form, FormProps, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, GENDER, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, GENDER, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import { checkPermissions } from '../../../utils/Permissions'
@@ -62,7 +62,7 @@ const CustomerForm: FC<Props> = (props) => {
 							component={ImgUploadField}
 							name={'avatar'}
 							label={t('loc:Avatar')}
-							signUrl={URL_UPLOAD_IMAGES}
+							signUrl={URL_UPLOAD_FILE}
 							multiple={false}
 							maxCount={1}
 							disabled={disabled}
@@ -123,7 +123,7 @@ const CustomerForm: FC<Props> = (props) => {
 								component={ImgUploadField}
 								name={'avatar'}
 								label={t('loc:Avatar')}
-								signUrl={URL_UPLOAD_IMAGES}
+								signUrl={URL_UPLOAD_FILE}
 								multiple={false}
 								maxCount={1}
 								category={UPLOAD_IMG_CATEGORIES.CUSTOMER}
@@ -160,7 +160,7 @@ const CustomerForm: FC<Props> = (props) => {
 							name={'gallery'}
 							hasRawPermissions={hasRawPermissions}
 							label={t('loc:Fotogaléria')}
-							signUrl={URL_UPLOAD_IMAGES}
+							signUrl={URL_UPLOAD_FILE}
 							multiple
 							maxCount={10}
 							category={UPLOAD_IMG_CATEGORIES.CUSTOMER}

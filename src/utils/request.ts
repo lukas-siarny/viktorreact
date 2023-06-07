@@ -4,7 +4,7 @@ import { message as antMessage } from 'antd'
 import { get, has, isEmpty, split } from 'lodash'
 import i18next from 'i18next'
 import qs from 'qs'
-import { ERROR_MSG_CODE, CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
+import { ERROR_MSG_CODE, CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE } from './enums'
 import rootReducer from '../reducers'
 import { logOutUser } from '../reducers/users/userActions'
 import { getAccessToken, isLoggedIn } from './auth'
@@ -420,6 +420,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 	}
 }
 
+// Upload only one file
 export const uploadFile = async (options: any) => {
 	const { action, file, onSuccess, onError } = options
 
@@ -437,7 +438,9 @@ export const uploadFile = async (options: any) => {
 	}
 }
 
-export const uploadImage = async (options: any, signUrl: string, category: UPLOAD_IMG_CATEGORIES, imagesUrls: any) => {
+// Allow to upload multiple files (images, pdfs, docs...) to s3
+// use in beforeUpload or handleFunction
+export const uploadFiles = async (options: any, signUrl: string = URL_UPLOAD_FILE, category: UPLOAD_IMG_CATEGORIES, uploadRef: any) => {
 	const { file, onSuccess, onError } = options
 
 	const { uid, name, size, type } = file
@@ -446,11 +449,11 @@ export const uploadImage = async (options: any, signUrl: string, category: UPLOA
 	try {
 		// sign imageUrl
 		const { data } = await postReq(signUrl as any, undefined, { files, category })
-		const imgData = data?.files?.[0]
+		const fileData = data?.files?.[0]
 		// eslint-disable-next-line no-param-reassign
-		imagesUrls.current[uid] = { uid, ...imgData }
+		uploadRef.current[uid] = { uid, ...fileData }
 		// upload file to signed URL
-		const result = await axios.put(imgData.signedUrl, file, {
+		const result = await axios.put(fileData.signedUrl, file, {
 			headers: {
 				'Content-Type': file.type
 			}

@@ -103,7 +103,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			'Content-Type': 'multipart/form-data'
 		}
 		const formData = new FormData()
-		formData.append('file', values?.file)
+		formData.append('file', values?.file[0])
 
 		try {
 			if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {

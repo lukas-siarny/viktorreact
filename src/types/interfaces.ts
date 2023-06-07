@@ -269,7 +269,7 @@ export interface INoteModal {
 }
 
 export interface IDataUploadForm {
-	file: string | Blob
+	file: File[]
 }
 
 export interface ISalonsReportForm {

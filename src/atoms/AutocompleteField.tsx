@@ -173,14 +173,7 @@ const fetchSearchData = async ({
 		const newData: any = await onSearch(value, page, missingValues)
 		const dataOptions = get(newData, dataSourcePath)
 		if (newData.pagination || dataOptions) {
-			const mergedData = [...collectedData]
-			// filter duplicate values
-			dataOptions.forEach((data: any) => {
-				if (!mergedData.find((currentData) => currentData.key === data.key)) {
-					mergedData.push(data)
-				}
-			})
-
+			const mergedData = [...collectedData, ...dataOptions]
 			newState = { data: mergedData, pagination: newData.pagination, fetching: false }
 		} else if (!allowInfinityScroll && isArray(newData)) {
 			// NOTE: Výsledky sa nedoliepajú

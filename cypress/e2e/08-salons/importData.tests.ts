@@ -9,6 +9,10 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 			pathname: '/api/b2b/admin/customers'
 		}).as('getCustomers')
 		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/config/'
+		}).as('getTemplates')
+		cy.intercept({
 			method: 'POST',
 			pathname: `/api/b2b/admin/imports/salons/${salonID}/customers`
 		}).as('importCustomers')
@@ -20,8 +24,19 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 				cy.clickButton(IMPORT_BUTTON_ID(), FORM.CUSTOMERS_FILTER)
 				// wait for animation
 				cy.wait(2000)
-				cy.selectOptionDropdownCustom(undefined, 'noti-customer-template-select', undefined, true)
-				cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+
+				cy.get('#noti-customer-template-select').click()
+				cy.wait('@getTemplates').then((interceptorGetTempates: any) => {
+					expect(interceptorGetTempates.response.statusCode).to.equal(200)
+					// select first employee from the list
+					cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+						.should('be.visible')
+						.find('.ant-select-item-option')
+						.first()
+						.click({ force: true })
+					cy.get(`#${DOWNLOAD_BUTTON_ID}`).should('not.be.disabled')
+				})
+
 				cy.uploadFile('file', '../files/import_of_clients_template.xlsx', FORM.IMPORT_FORM)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
 
@@ -60,6 +75,10 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 			method: 'POST',
 			pathname: `/api/b2b/admin/imports/salons/${salonID}/customers`
 		}).as('importCustomers')
+		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/config/'
+		}).as('getTemplates')
 		cy.visit(`/salons/${salonID}/reservations-settings`)
 		if (actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.wait(['@getUser', '@getSalon']).then(([interceptionGetUser, interceptionGetSalon]: any[]) => {
@@ -78,8 +97,19 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 
 					// wait for animation
 					cy.wait(2000)
-					cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
-					cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+
+					cy.get('#noti-template-select').click()
+					cy.wait('@getTemplates').then((interceptorGetTempates: any) => {
+						expect(interceptorGetTempates.response.statusCode).to.equal(200)
+						// select first employee from the list
+						cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+							.should('be.visible')
+							.find('.ant-select-item-option')
+							.first()
+							.click({ force: true })
+							cy.get(`#${DOWNLOAD_BUTTON_ID}`).should('not.be.disabled')
+					})
+
 					cy.uploadFile('file', '../files/import_of_clients_template.xlsx', FORM.IMPORT_FORM)
 					cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
 
@@ -119,6 +149,10 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 			method: 'POST',
 			pathname: `/api/b2b/admin/imports/salons/${salonID}/calendar-events`
 		}).as('importReservations')
+		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/config/'
+		}).as('getTemplates')
 		cy.visit(`/salons/${salonID}/reservations-settings`)
 		if (actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.wait(['@getUser', '@getSalon']).then(([interceptionGetUser, interceptionGetSalon]: any[]) => {
@@ -140,8 +174,19 @@ const importDataTestSuite = (actions: CRUD_OPERATIONS[]) => {
 
 					// wait for animation
 					cy.wait(2000)
-					cy.selectOptionDropdownCustom(undefined, 'noti-template-select', undefined, true)
-					cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+
+					cy.get('#noti-template-select').click()
+					cy.wait('@getTemplates').then((interceptorGetTempates: any) => {
+						expect(interceptorGetTempates.response.statusCode).to.equal(200)
+						// select first employee from the list
+						cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+							.should('be.visible')
+							.find('.ant-select-item-option')
+							.first()
+							.click({ force: true })
+						cy.get(`#${DOWNLOAD_BUTTON_ID}`).should('not.be.disabled')
+					})
+
 					cy.uploadFile('file', '../files/import_of_reservations_template.xlsx', FORM.IMPORT_FORM)
 
 					if (actions.includes(CRUD_OPERATIONS.CREATE)) {

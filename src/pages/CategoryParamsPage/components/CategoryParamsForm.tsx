@@ -15,7 +15,17 @@ import Localizations from '../../../components/Localizations'
 
 // utils
 import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
-import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import {
+	ADD_BUTTON_ID,
+	CATEGORY_PARAMS_SWITCH_TYPE_ID,
+	DELETE_BUTTON_ID,
+	FORM,
+	MAX_VALUES_PER_PARAMETER,
+	PARAMETERS_VALUE_TYPES,
+	PERMISSION,
+	STRINGS,
+	SUBMIT_BUTTON_ID
+} from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -152,7 +162,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							}
 						/>
 						<Field
-							id='value-type-switch'
+							id={formFieldID(FORM.CATEGORY_PARAMS, CATEGORY_PARAMS_SWITCH_TYPE_ID)}
 							customOnChange={() =>
 								change('valueType', formValues?.valueType === PARAMETERS_VALUE_TYPES.TIME ? PARAMETERS_VALUE_TYPES.ENUM : PARAMETERS_VALUE_TYPES.TIME)
 							}
@@ -182,6 +192,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							inputSize={'middle'}
 							type='number'
 							emptyValue={{ value: null }}
+							buttonID={formFieldID(FORM.CATEGORY_PARAMS, ADD_BUTTON_ID)}
 							required
 						/>
 					) : (

@@ -17,7 +17,8 @@ import categoriesCRUDTestSuite from '../07-categories/categoriesCRUD.tests'
 import salonTestSuite from '../08-salons/salon.tests'
 import salonsTestSuite from '../08-salons/salons.tests'
 import reviewsTestSuite from '../09-reviews/reviews.tests'
-import smsUnitPricesCRUDTestSuite from '../10-sms-unit-prices/smsUnitPricesCRUD.tests'
+import smsCreditsAdminPageCRUDTestSuite from '../11-sms-credits-admin-page/smsCreditsAdminPageCRUD.tests'
+import adminDashboardTestSuite from '../12-admin-dashboard/adminDashboard.tests'
 
 export declare interface ITests {
 	name: SALON_TESTS_SUITS | LIST_OF_TESTS_SUITS
@@ -74,10 +75,13 @@ describe('Dynamic tests for roles', () => {
 						context(`ReviewsCRUD as ${user.role}`, () => reviewsTestSuite(test.actions, user.credentials.user, user.credentials.password))
 						break
 					case LIST_OF_TESTS_SUITS.ADMIN_RESERVATIONS:
-						context(`Admin reservations as ${user.role}`, () => reviewsTestSuite(test.actions, user.credentials.user, user.credentials.password))
+						context(`AdminReservations as ${user.role}`, () => reviewsTestSuite(test.actions, user.credentials.user, user.credentials.password))
 						break
-					case LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD:
-						context(`SMSUnitPricesCRUD as ${user.role}`, () => smsUnitPricesCRUDTestSuite(test.actions, user.credentials.user, user.credentials.password))
+					case LIST_OF_TESTS_SUITS.ADMIN_SMS_CREDIT:
+						context(`SMSUnitPricesCRUD as ${user.role}`, () => smsCreditsAdminPageCRUDTestSuite(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.ADMIN_DASHBOARD:
+						context(`AdminDashboard as ${user.role}`, () => adminDashboardTestSuite(test.actions, user.role, user.credentials.user, user.credentials.password))
 						break
 					default:
 				}

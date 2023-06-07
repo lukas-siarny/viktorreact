@@ -76,10 +76,10 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	}, [dispatch, selectedSalon?.data?.id])
 
 	useEffect(() => {
-		if (salonID && checkPermissions([...authUserPermissions, ...(salonPermission || [])], SMS_TIME_STATS_PERMISSIONS)) {
+		if (walletID && salonID && checkPermissions([...authUserPermissions, ...(salonPermission || [])], SMS_TIME_STATS_PERMISSIONS)) {
 			dispatch(getSmsTimeStatsForSalon(salonID, smsStatsDate.year(), smsStatsDate.month() + 1))
 		}
-	}, [dispatch, salonID, smsStatsDate, authUserPermissions, salonPermission])
+	}, [dispatch, salonID, walletID, smsStatsDate, authUserPermissions, salonPermission])
 
 	return loading ? (
 		<div className='w-full text-center'>

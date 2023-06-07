@@ -35,10 +35,13 @@ import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron
 import {
 	DASHBOARD_TAB_KEYS,
 	FILTER_PATHS,
+	PUBLISHED_PREMIUM_SALONS_BAR_ID,
 	SALON_CREATE_TYPE,
 	SALON_FILTER_RS,
 	SALON_FILTER_RS_AVAILABLE_ONLINE,
 	SALON_FILTER_STATES,
+	SALON_STATS_ANNUAL_ID,
+	SALON_STATS_MONTHLY_ID,
 	SALONS_TAB_KEYS,
 	SALONS_TIME_STATS_TYPE,
 	STRINGS,
@@ -150,7 +153,7 @@ const salonColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 
 const barContent = (data: any) => {
 	return (
-		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 statistics-box-wide'>
+		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 statistics-box-wide' id={PUBLISHED_PREMIUM_SALONS_BAR_ID}>
 			<div className='flex flex-wrap justify-between w-full'>
 				<h4>{data.title}</h4>
 			</div>
@@ -595,8 +598,9 @@ const NotinoDashboard: FC = () => {
 		} as DashboardData
 	}, [notino, t, navigate])
 
-	const timeStatsFilter = (handleChange: (date: Dayjs | null, dateString: string) => void, dateFormat?: string) => (
+	const timeStatsFilter = (handleChange: (date: Dayjs | null, dateString: string) => void, dateFormat?: string, id?: string) => (
 		<DatePicker
+			id={id}
 			onChange={(date, dateString) => handleChange(date, dateString)}
 			picker={dateFormat ? 'month' : 'year'}
 			size={'middle'}
@@ -642,23 +646,31 @@ const NotinoDashboard: FC = () => {
 							{lineContent(
 								t('loc:Vývoj salónov - mesačný'),
 								monthStats,
-								timeStatsFilter((date) => {
-									if (date) {
-										setMonthStatsDate(date)
-										dispatch(getSalonsMonthStats(Number(date.year()), Number(date.month() + 1)))
-									}
-								}, 'MMMM - YYYY'),
+								timeStatsFilter(
+									(date) => {
+										if (date) {
+											setMonthStatsDate(date)
+											dispatch(getSalonsMonthStats(Number(date.year()), Number(date.month() + 1)))
+										}
+									},
+									'MMMM - YYYY',
+									SALON_STATS_MONTHLY_ID
+								),
 								salonColumns(monthStats.data?.labels, monthStats.data?.breakIndex)
 							)}
 							{lineContent(
 								t('loc:Vývoj salónov - ročný'),
 								annualStats,
-								timeStatsFilter((date, dateString) => {
-									if (date) {
-										setAnnualStatsDate(date)
-									}
-									dispatch(getSalonsAnnualStats(Number(dateString)))
-								}),
+								timeStatsFilter(
+									(date, dateString) => {
+										if (date) {
+											setAnnualStatsDate(date)
+										}
+										dispatch(getSalonsAnnualStats(Number(dateString)))
+									},
+									undefined,
+									SALON_STATS_ANNUAL_ID
+								),
 								salonColumns(annualStats.data?.labels, annualStats.data?.breakIndex)
 							)}
 						</>

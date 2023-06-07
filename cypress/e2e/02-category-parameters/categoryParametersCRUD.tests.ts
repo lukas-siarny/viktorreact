@@ -3,7 +3,7 @@ import { loginViaApi } from '../../support/e2e'
 import category from '../../fixtures/category.json'
 
 // enums
-import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { ADD_BUTTON_ID, CATEGORY_PARAMS_SWITCH_TYPE_ID, DELETE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
@@ -64,11 +64,15 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('getCategoryParameters')
 		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/enums/category-parameters/'
+		}).as('getCategoryParametersList')
+		cy.intercept({
 			method: 'POST',
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/`
 		}).as('createCategoryParameterValue')
-		cy.visit(`/category-parameters/${categoryParameterID}`)
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
@@ -84,7 +88,37 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 					cy.checkSuccessToastMessage()
 				})
 			})
+		} else if (actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.visit('/category-parameters')
+			cy.wait('@getCategoryParametersList').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+
+				// open first category param from table
+				cy.get('main.ant-layout-content').then(($body) => {
+					if ($body.find('.ant-table .ant-table-row:first').length) {
+						cy.get('.ant-table .ant-table-row:first')
+							.as('detailRow')
+							.invoke('attr', 'data-row-key')
+							.then((dataRowKey) => {
+								const paramsID = dataRowKey || ''
+								cy.intercept({
+									method: 'GET',
+									url: `/api/b2b/admin/enums/category-parameters/${paramsID}`
+								}).as('getCategoryParametersForReadPermission')
+								cy.get('@detailRow').click()
+								cy.wait('@getCategoryParametersForReadPermission').then((intreceptionDetail: any) => {
+									expect(intreceptionDetail.response.statusCode).to.equal(200)
+									cy.clickButton(CATEGORY_PARAMS_SWITCH_TYPE_ID, FORM.CATEGORY_PARAMS, true)
+									cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
+									cy.checkForbiddenModal()
+								})
+							})
+					}
+				})
+			})
 		} else {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
 		}
@@ -97,12 +131,15 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('getCategoryParameters')
 		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/enums/category-parameters/'
+		}).as('getCategoryParametersList')
+		cy.intercept({
 			method: 'PATCH',
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/*`
 		}).as('updateCategoryParameterValue')
-		cy.visit(`/category-parameters/${categoryParameterID}`)
-
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
@@ -117,7 +154,37 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 					cy.checkSuccessToastMessage()
 				})
 			})
+		} else if (actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.visit('/category-parameters')
+			cy.wait('@getCategoryParametersList').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+
+				// open first category param from table
+				cy.get('main.ant-layout-content').then(($body) => {
+					if ($body.find('.ant-table .ant-table-row:first').length) {
+						cy.get('.ant-table .ant-table-row:first')
+							.as('detailRow')
+							.invoke('attr', 'data-row-key')
+							.then((dataRowKey) => {
+								const paramsID = dataRowKey || ''
+								cy.intercept({
+									method: 'GET',
+									url: `/api/b2b/admin/enums/category-parameters/${paramsID}`
+								}).as('getCategoryParametersForReadPermission')
+								cy.get('@detailRow').click()
+								cy.wait('@getCategoryParametersForReadPermission').then((intreceptionDetail: any) => {
+									expect(intreceptionDetail.response.statusCode).to.equal(200)
+									cy.clickButton(CATEGORY_PARAMS_SWITCH_TYPE_ID, FORM.CATEGORY_PARAMS, true)
+									cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
+									cy.checkForbiddenModal()
+								})
+							})
+					}
+				})
+			})
 		} else {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
 		}
@@ -130,15 +197,20 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('getCategoryParameters')
 		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/enums/category-parameters/'
+		}).as('getCategoryParametersList')
+		cy.intercept({
 			method: 'DELETE',
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/*`
 		}).as('deleteCategoryParameterValue')
-		cy.visit(`/category-parameters/${categoryParameterID}`)
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 				cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS, `${DELETE_BUTTON_ID}-${0}`)
+
 				cy.wait('@deleteCategoryParameterValue').then((interception: any) => {
 					// check status code of login request
 					expect(interception.response.statusCode).to.equal(200)
@@ -146,7 +218,36 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 					cy.checkSuccessToastMessage()
 				})
 			})
+		} else if (actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.visit('/category-parameters')
+			cy.wait('@getCategoryParametersList').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+
+				// open first category param from table
+				cy.get('main.ant-layout-content').then(($body) => {
+					if ($body.find('.ant-table .ant-table-row:first').length) {
+						cy.get('.ant-table .ant-table-row:first')
+							.as('detailRow')
+							.invoke('attr', 'data-row-key')
+							.then((dataRowKey) => {
+								const paramsID = dataRowKey || ''
+								cy.intercept({
+									method: 'GET',
+									url: `/api/b2b/admin/enums/category-parameters/${paramsID}`
+								}).as('getCategoryParametersForReadPermission')
+								cy.get('@detailRow').click()
+								cy.wait('@getCategoryParametersForReadPermission').then((intreceptionDetail: any) => {
+									expect(intreceptionDetail.response.statusCode).to.equal(200)
+									cy.get(`#${FORM.CATEGORY_PARAMS}-delete-btn`).click()
+									cy.checkForbiddenModal()
+								})
+							})
+					}
+				})
+			})
 		} else {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
 		}
@@ -159,16 +260,21 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('getCategoryParameters')
 		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/enums/category-parameters/'
+		}).as('getCategoryParametersList')
+		cy.intercept({
 			method: 'PATCH',
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('updateCategoryParameters')
-		cy.visit(`/category-parameters/${categoryParameterID}`)
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 				cy.setInputValue(FORM.CATEGORY_PARAMS, 'nameLocalizations-0-value', category.parameter.update.title, false, true)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
+
 				cy.wait('@updateCategoryParameters').then((interception: any) => {
 					// check status code of login request
 					expect(interception.response.statusCode).to.equal(200)
@@ -176,7 +282,37 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 					cy.checkSuccessToastMessage()
 				})
 			})
+		} else if (actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.visit('/category-parameters')
+			cy.wait('@getCategoryParametersList').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+
+				// open first category param from table
+				cy.get('main.ant-layout-content').then(($body) => {
+					if ($body.find('.ant-table .ant-table-row:first').length) {
+						cy.get('.ant-table .ant-table-row:first')
+							.as('detailRow')
+							.invoke('attr', 'data-row-key')
+							.then((dataRowKey) => {
+								const paramsID = dataRowKey || ''
+								cy.intercept({
+									method: 'GET',
+									url: `/api/b2b/admin/enums/category-parameters/${paramsID}`
+								}).as('getCategoryParametersForReadPermission')
+								cy.get('@detailRow').click()
+								cy.wait('@getCategoryParametersForReadPermission').then((intreceptionDetail: any) => {
+									expect(intreceptionDetail.response.statusCode).to.equal(200)
+									cy.clickButton(CATEGORY_PARAMS_SWITCH_TYPE_ID, FORM.CATEGORY_PARAMS, true)
+									cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
+									cy.checkForbiddenModal()
+								})
+							})
+					}
+				})
+			})
 		} else {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
 		}
@@ -189,16 +325,21 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('getCategoryParameters')
 		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/enums/category-parameters/'
+		}).as('getCategoryParametersList')
+		cy.intercept({
 			method: 'DELETE',
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('deleteCategoryParameters')
-		cy.visit(`/category-parameters/${categoryParameterID}`)
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 
 				cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS)
+
 				cy.wait('@deleteCategoryParameters').then((interception: any) => {
 					// check status code
 					expect(interception.response.statusCode).to.equal(200)
@@ -207,7 +348,36 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 					cy.location('pathname').should('eq', '/category-parameters')
 				})
 			})
+		} else if (actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.visit('/category-parameters')
+			cy.wait('@getCategoryParametersList').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+
+				// open first category param from table
+				cy.get('main.ant-layout-content').then(($body) => {
+					if ($body.find('.ant-table .ant-table-row:first').length) {
+						cy.get('.ant-table .ant-table-row:first')
+							.as('detailRow')
+							.invoke('attr', 'data-row-key')
+							.then((dataRowKey) => {
+								const paramsID = dataRowKey || ''
+								cy.intercept({
+									method: 'GET',
+									url: `/api/b2b/admin/enums/category-parameters/${paramsID}`
+								}).as('getCategoryParametersForReadPermission')
+								cy.get('@detailRow').click()
+								cy.wait('@getCategoryParametersForReadPermission').then((intreceptionDetail: any) => {
+									expect(intreceptionDetail.response.statusCode).to.equal(200)
+									cy.get(`#${FORM.CATEGORY_PARAMS}-delete-btn`).click()
+									cy.checkForbiddenModal()
+								})
+							})
+					}
+				})
+			})
 		} else {
+			cy.visit(`/category-parameters/${categoryParameterID}`)
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
 		}

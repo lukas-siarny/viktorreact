@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Row, Spin, Button } from 'antd'
@@ -17,7 +18,15 @@ import IconTooltip from '../../atoms/IconTooltip'
 import IndustriesList from './components/list/IndustriesList'
 
 // utils
-import { PERMISSION, SERVICES_LIST_INIT, STRINGS } from '../../utils/enums'
+import {
+	CHANGE_SERVICES_ORDER_BUTTON_ID,
+	CHANGE_SERVICES_ORDER_SAVE_BUTTON_ID,
+	ENABLE_RS_BUTTON_FAKE_BUTTON_ID,
+	ENABLE_RS_BUTTON_ID,
+	PERMISSION,
+	SERVICES_LIST_INIT,
+	STRINGS
+} from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
@@ -240,7 +249,43 @@ const ServicesPage = (props: SalonSubPageProps) => {
 							}
 							message={''}
 							icon={<InfoNotinoIcon className={'text-notino-pink'} />}
-							actionItem={<SwitchField input={{ value: enabledRS, onChange: handleChangeRsSettings } as any} meta={{} as any} />}
+							actionItem={
+								<Permissions
+									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<div className={'relative'} style={{ height: 30, width: 44 }}>
+											{!hasPermission && (
+												<div
+													id={ENABLE_RS_BUTTON_FAKE_BUTTON_ID}
+													role={'switch'}
+													aria-checked={enabledRS}
+													className={'absolute inset-0 cursor-pointer'}
+													style={{ top: 6, zIndex: 2 }}
+													onClick={() => {
+														openForbiddenModal()
+													}}
+													onKeyDown={() => {
+														openForbiddenModal()
+													}}
+													tabIndex={0}
+												/>
+											)}
+											<SwitchField
+												input={
+													{
+														value: enabledRS,
+														onChange: handleChangeRsSettings
+													} as any
+												}
+												meta={{} as any}
+												disabled={!hasPermission}
+												style={{ zIndex: 1 }}
+												id={ENABLE_RS_BUTTON_ID}
+											/>
+										</div>
+									)}
+								/>
+							}
 						/>
 
 						{/* Services stats cards */}
@@ -259,7 +304,13 @@ const ServicesPage = (props: SalonSubPageProps) => {
 										<Button type={'dashed'} className={'noti-btn'} onClick={handleCancelOrder} disabled={loading}>
 											{STRINGS(t).cancel('').trim()}
 										</Button>
-										<Button type={'primary'} className={'noti-btn'} onClick={handleSaveOrder} disabled={loading || !dirty}>
+										<Button
+											type={'primary'}
+											className={'noti-btn'}
+											onClick={handleSaveOrder}
+											disabled={loading || !dirty}
+											id={CHANGE_SERVICES_ORDER_SAVE_BUTTON_ID}
+										>
 											{STRINGS(t).save('').trim()}
 										</Button>
 									</>
@@ -269,6 +320,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 										render={(hasPermission, { openForbiddenModal }) => (
 											<>
 												<Button
+													id={CHANGE_SERVICES_ORDER_BUTTON_ID}
 													type={'dashed'}
 													className={'noti-btn'}
 													icon={<DragIcon />}

@@ -25,23 +25,27 @@ const languagesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 
 	it('Create language', () => {
 		cy.visit('/languages-in-salons')
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.intercept({
 				method: 'POST',
 				url: '/api/b2b/admin/enums/languages/'
 			}).as('createLanguage')
 			cy.clickButton(CREATE_BUTTON_ID, FORM.LANGUAGES)
-			cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.create.name)
-			cy.uploadFile('image', '../images/test.jpg', FORM.LANGUAGES)
-			cy.wait(CYPRESS.S3_UPLOAD_WAIT_TIME) // Cas ktory treba pockat kym sa nahra signed url obrazok
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.LANGUAGES)
-			cy.wait('@createLanguage').then((interception: any) => {
-				// check status code of request
-				expect(interception.response.statusCode).to.equal(200)
-				languageID = interception.response.body.language.id
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+				cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.create.name)
+				cy.uploadFile('image', '../images/test.jpg', FORM.LANGUAGES)
+				cy.wait(CYPRESS.S3_UPLOAD_WAIT_TIME) // Cas ktory treba pockat kym sa nahra signed url obrazok
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.LANGUAGES)
+				cy.wait('@createLanguage').then((interception: any) => {
+					// check status code of request
+					expect(interception.response.statusCode).to.equal(200)
+					languageID = interception.response.body.language.id
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
+			} else {
+				cy.checkForbiddenModal()
+			}
 		} else {
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
@@ -50,7 +54,7 @@ const languagesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 
 	it('Update language', () => {
 		cy.visit('/languages-in-salons')
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.intercept({
 				method: 'PATCH',
 				url: `/api/b2b/admin/enums/languages/${languageID}`
@@ -60,16 +64,28 @@ const languagesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 				url: '/api/b2b/admin/enums/languages/'
 			}).as('getLanguages')
 			cy.wait('@getLanguages')
-			cy.get(`[data-row-key="${languageID}"]`).click()
-			cy.wait(CYPRESS.ANIMATION_WAIT_TIME) // detail jazyka sa riesi len na strane FE tak 1sekunda je pre istotu kvoli animaciam kym sa vyrenderuju inputy
-			cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.update.name, false, true)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.LANGUAGES)
-			cy.wait('@updateLanguage').then((interception: any) => {
-				// check status code of request
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+				cy.get(`[data-row-key="${languageID}"]`).click()
+				cy.wait(CYPRESS.ANIMATION_WAIT_TIME) // detail jazyka sa riesi len na strane FE tak 1sekunda je pre istotu kvoli animaciam kym sa vyrenderuju inputy
+				cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.update.name, false, true)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.LANGUAGES)
+				cy.wait('@updateLanguage').then((interception: any) => {
+					// check status code of request
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
+			} else {
+				// open first language from table
+				cy.get('main.ant-layout-content').then(($body) => {
+					if ($body.find('.ant-table .ant-table-row:first').length) {
+						cy.get('.ant-table .ant-table-row:first').click()
+						cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.update.name, false, true)
+						cy.clickButton(SUBMIT_BUTTON_ID, FORM.LANGUAGES)
+						cy.checkForbiddenModal()
+					}
+				})
+			}
 		} else {
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
@@ -78,7 +94,7 @@ const languagesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 
 	it('Delete language', () => {
 		cy.visit('/languages-in-salons')
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.intercept({
 				method: 'DELETE',
 				url: `/api/b2b/admin/enums/languages/${languageID}`
@@ -88,16 +104,27 @@ const languagesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 				url: '/api/b2b/admin/enums/languages/'
 			}).as('getLanguages')
 			cy.wait('@getLanguages')
-			cy.get(`[data-row-key="${languageID}"]`).click()
-			cy.wait(CYPRESS.ANIMATION_WAIT_TIME) // detail jazyka sa riesi len na strane FE tak 1sekunda je pre istotu kvoli animaciam kym sa vyrenderuju inputy
-			cy.clickDeleteButtonWithConfCustom(FORM.LANGUAGES)
-			cy.wait('@deleteLanguage').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', '/languages-in-salons')
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+				cy.get(`[data-row-key="${languageID}"]`).click()
+				cy.wait(CYPRESS.ANIMATION_WAIT_TIME) // detail jazyka sa riesi len na strane FE tak 1sekunda je pre istotu kvoli animaciam kym sa vyrenderuju inputy
+				cy.clickDeleteButtonWithConfCustom(FORM.LANGUAGES)
+				cy.wait('@deleteLanguage').then((interception: any) => {
+					// check status code
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+					cy.location('pathname').should('eq', '/languages-in-salons')
+				})
+			} else {
+				// open first language from table
+				cy.get('main.ant-layout-content').then(($body) => {
+					if ($body.find('.ant-table .ant-table-row:first').length) {
+						cy.get('.ant-table .ant-table-row:first').click()
+						cy.get(`#${FORM.COSMETIC}-delete-btn`).click()
+						cy.checkForbiddenModal()
+					}
+				})
+			}
 		} else {
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')

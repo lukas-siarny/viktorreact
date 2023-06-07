@@ -908,24 +908,6 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const TEMPLATE_OPTIONS_CUSTOMERS = () => [
-	{
-		value: 'import_of_clients_template.csv',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
-	},
-	{
-		value: 'import_of_clients_template.xlsx',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
-	}
-]
-
-export const TEMPLATE_OPTIONS_RESERVATIONS = () => [
-	{
-		value: 'import_of_reservations_template.xlsx',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
-	}
-]
-
 export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
 	let string = ''
 	switch (eventType) {

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Row, Select, Spin } from 'antd'
+import { Button, Col, Divider, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -13,19 +13,20 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
 import UserAvatar from '../../components/AvatarComponents'
 import ImportForm from '../../components/ImportForm'
+import SelectField from '../../atoms/SelectField'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS_CUSTOMERS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { postReq } from '../../utils/request'
+import { getReq, postReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
-import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadForm } from '../../types/interfaces'
+import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadForm, ISelectOptionItem } from '../../types/interfaces'
 
 // hooks
 import useQueryParams from '../../hooks/useQueryParamsZod'
@@ -110,7 +111,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			ellipsis: true,
 			sorter: true,
 			sortOrder: setOrder(query.order, 'lastName'),
-			render: (value, record) => (
+			render: (_value, record) => (
 				<>
 					<UserAvatar className={'mr-1'} src={record.profileImage?.resizedImages?.thumbnail} fallBackSrc={record.profileImage?.original} size={'small'} />
 					{record?.firstName} {record?.lastName}
@@ -168,6 +169,21 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		}
 	}
 
+	const searchTemplates = useCallback(async () => {
+		try {
+			const { data } = await getReq('/api/b2b/admin/config/', undefined)
+			const options: ISelectOptionItem[] = Object.entries(data.importOfClientsTemplates).map(([key, value]) => ({
+				key: value.id,
+				value: value.original,
+				label: t('loc:Stiahnuť šablónu {{ template }}', { template: key })
+			}))
+
+			return { data: options }
+		} catch (e) {
+			return { data: [] }
+		}
+	}, [])
+
 	return (
 		<>
 			<ImportForm
@@ -182,26 +198,29 @@ const CustomersPage = (props: SalonSubPageProps) => {
 				extraContent={
 					<>
 						<Divider className={'mt-1 mb-3'} />
+						<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+							{t('loc:Vzorové šablóny súborov')}
+						</label>
 						<div className={'flex items-center justify-between gap-1'}>
-							<div className={'ant-form-item w-full'}>
-								<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
-									{t('loc:Vzorové šablóny súborov')}
-								</label>
-								<Select
-									id={'noti-customer-template-select'}
-									className={'noti-select-input w-full mb-4'}
-									size={'large'}
-									labelInValue
-									options={TEMPLATE_OPTIONS_CUSTOMERS()}
-									onChange={(val: any) => setTemplateValue(val)}
-									value={templateValue}
-									placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-									getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-								/>
-							</div>
+							<SelectField
+								input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
+								meta={{} as any}
+								id={'noti-customer-template-select'}
+								style={{ zIndex: 999 }}
+								className={'max-w-64 w-full pb-0'}
+								size={'large'}
+								filterOption={false}
+								allowInfinityScroll={false}
+								showSearch={false}
+								labelInValue
+								onSearch={searchTemplates}
+								popupMatchSelectWidth={false}
+								placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+								getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+							/>
 							<Button
-								className={'noti-btn'}
-								href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+								className={'noti-btn flex-shrink-0'}
+								href={templateValue?.value || undefined}
 								target='_blank'
 								rel='noopener noreferrer'
 								type={'default'}

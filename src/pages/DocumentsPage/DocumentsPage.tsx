@@ -193,69 +193,6 @@ const DocumentsPage = () => {
 				<Col span={24}>
 					<div className='content-body small'>
 						<DocumentsForm visible={visible} setVisible={setVisible} onSubmit={fileUploadSubmit} />
-						{/* <ImportForm */}
-						{/*	setRequestStatus={setRequestStatus} */}
-						{/*	requestStatus={uploadStatus} */}
-						{/*	type={IMPORT_TYPE.UPLOAD} */}
-						{/*	label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })} */}
-						{/*	accept={'.pdf'} */}
-						{/*	title={t('loc:Nahrať dokument')} */}
-						{/*	visible={!!fileUploadVisible} */}
-						{/*	setVisible={setFileUploadVisible} */}
-						{/*	onSubmit={fileUploadSubmit} */}
-						{/*	extraContent={ */}
-						{/*		<div className={''}> */}
-						{/*			<div className={'ant-form-item w-full'}> */}
-						{/*				<label htmlFor={'noti-message-input'} className={'block mb-2'}> */}
-						{/*					{t('loc:Sprievodná správa')} */}
-						{/*				</label> */}
-						{/*				<Input.TextArea */}
-						{/*					maxLength={VALIDATION_MAX_LENGTH.LENGTH_255} */}
-						{/*					id={'noti-message-input'} */}
-						{/*					className={'noti-input w-full mb-4'} */}
-						{/*					size={'large'} */}
-						{/*					onChange={(e) => setUploadData({ ...uploadData, message: e.target.value })} */}
-						{/*					value={uploadData?.message} */}
-						{/*					placeholder={t('loc:Zadajte sprievodnú správu')} */}
-						{/*				/> */}
-						{/*			</div> */}
-						{/*			<div className={'ant-form-item w-full'}> */}
-						{/*				<label htmlFor={'noti-template-select'} className={'block mb-2'}> */}
-						{/*					{t('loc:Jazyk')} */}
-						{/*				</label> */}
-						{/*				<Select */}
-						{/*					id={'noti-template-select'} */}
-						{/*					className={'noti-select-input w-full'} */}
-						{/*					size={'large'} */}
-						{/*					labelInValue */}
-						{/*					loading={countries.isLoading} */}
-						{/*					options={countries.enumerationsOptions} */}
-						{/*					onChange={(val) => setUploadData({ ...uploadData, languageCode: val })} */}
-						{/*					value={uploadData?.languageCode} */}
-						{/*					placeholder={t('loc:Vyberte jazyk')} */}
-						{/*					getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement} */}
-						{/*				/> */}
-						{/*			</div> */}
-						{/*			<div className={'ant-form-item w-full'}> */}
-						{/*				<label htmlFor={'noti-template-select'} className={'block mb-2'}> */}
-						{/*					{t('loc:Typ dokumentu')} */}
-						{/*				</label> */}
-						{/*				<Select */}
-						{/*					id={'noti-template-select'} */}
-						{/*					className={'noti-select-input w-full'} */}
-						{/*					size={'large'} */}
-						{/*					labelInValue */}
-						{/*					loading={assetTypes.isLoading} */}
-						{/*					options={assetTypes.options} */}
-						{/*					onChange={(val) => setUploadData({ ...uploadData, assetType: val })} */}
-						{/*					value={uploadData?.assetType} */}
-						{/*					placeholder={t('loc:Vyberte typ dokumentu')} */}
-						{/*					getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement} */}
-						{/*				/> */}
-						{/*			</div> */}
-						{/*		</div> */}
-						{/*	} */}
-						{/* /> */}
 						<DocumentsFilter createDocument={handleCreateDocument} onSubmit={handleSubmit} />
 						<CustomTable
 							className='table-fixed table-expandable'

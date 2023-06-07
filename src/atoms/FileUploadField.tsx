@@ -58,7 +58,7 @@ const FileUploadField: FC<Props> = (props) => {
 	} = props
 
 	const [t] = useTranslation()
-	const imagesUrls = useRef<ImgUploadParam>({})
+	const fileRef = useRef<ImgUploadParam>({})
 
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
@@ -66,7 +66,7 @@ const FileUploadField: FC<Props> = (props) => {
 			showNotifications(info.file.response?.messages, NOTIFICATION_TYPE.NOTIFICATION)
 		}
 		if (info.file.status === 'done') {
-			const values = formatFileFormValues(info.fileList, imagesUrls.current)
+			const values = formatFileFormValues(info.fileList, fileRef.current)
 			if (multiple) {
 				input.onChange(values)
 			} else {
@@ -110,7 +110,7 @@ const FileUploadField: FC<Props> = (props) => {
 					input.onChange([options.file])
 				} else {
 					// BE upload ktory podpise url na s3 - funguje aj multiple
-					uploadFiles(options, URL_UPLOAD_FILE, category, imagesUrls)
+					uploadFiles(options, URL_UPLOAD_FILE, category, fileRef)
 				}
 			}}
 			accept={accept}

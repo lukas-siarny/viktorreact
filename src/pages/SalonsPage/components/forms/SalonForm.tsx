@@ -3,10 +3,10 @@ import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Space } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-
-// components
 import { isEmpty } from 'lodash'
 import i18next from 'i18next'
+
+// components
 import OpeningHours from '../../../../components/OpeningHours/OpeningHours'
 import AddressFields from '../../../../components/AddressFields'
 
@@ -50,9 +50,11 @@ import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmeti
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
 import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-16.svg'
+import { ReactComponent as QrCodeIcon } from '../../../../assets/icons/qr-code-icon.svg'
 
 // schema
 import { ISalonForm, validationSalonFn } from '../../../../schemas/salon'
+import QrCode from '../../../../components/QrCode'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -116,7 +118,7 @@ const SalonForm: FC<Props> = (props) => {
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
-
+	console.log('salonData', salonData)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	const hasRawPermissions = useMemo(
@@ -288,6 +290,30 @@ const SalonForm: FC<Props> = (props) => {
 							selectable
 						/>
 					</Col>
+				</Row>
+				<Row>
+					<Col span={24}>
+						<div className={'flex items-center'}>
+							<h3 className={'mb-0 flex items-center'}>
+								<QrCodeIcon width={20} height={20} className={'text-notino-black mr-2'} />
+								{t('loc:QR kódy')}
+							</h3>
+							<span className={'ml-4 bg-notino-pink pr-3 pl-3 pt-1 pb-1 text-white rounded-full'}>{t('loc:Nové')}</span>
+						</div>
+						<Divider className={'mb-3 mt-3'} />
+						<span className={'text-xs text-notino-grayDark'}>
+							{t(
+								'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín ešte rýchlejšie a pohodlnejšie.'
+							)}
+						</span>
+					</Col>
+					{salonData?.qrCodes?.map((qrCode) => {
+						return (
+							<Col span={12}>
+								<QrCode description={qrCode.description} link={qrCode.link} />
+							</Col>
+						)
+					})}
 				</Row>
 				<Row>
 					<Col span={24}>

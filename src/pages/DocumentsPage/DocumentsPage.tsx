@@ -159,7 +159,7 @@ const DocumentsPage = () => {
 		try {
 			const fileIDs = values?.files?.map((item) => item.id)
 			await postReq('/api/b2b/admin/documents/', undefined, {
-				languageCode: values?.languageCode,
+				languageCode: values?.languageCode as any,
 				fileIDs: fileIDs as any,
 				message: values?.message || null,
 				assetType: values?.assetType

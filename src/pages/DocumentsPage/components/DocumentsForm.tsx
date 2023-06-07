@@ -63,7 +63,7 @@ const DocumentsForm: FC<Props> = (props) => {
 					<Field
 						component={FileUploadField}
 						name={'files'}
-						label={t('loc:Vyberte súbor vo formáte .pdf')}
+						label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })}
 						accept={'.pdf'}
 						maxCount={UPLOAD.MAX_COUNT}
 						type={'file'}

@@ -49,6 +49,7 @@ import AvatarComponents from '../AvatarComponents'
 
 // types
 import { setIsSiderCollapsed } from '../../reducers/helperSettings/helperSettingsActions'
+import NewBadge from '../NewBadge'
 
 const { Sider } = Layout
 
@@ -230,7 +231,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					mainGroupItems.push(
 						{
 							key: PAGE.SALONS,
-							label: t('loc:Detail salónu'),
+							className: 'text-black',
+							label: (
+								<div className={'flex items-center'}>
+									<span className={'ant-menu-title-content'}>{t('loc:Detail salónu')}</span>
+
+									<NewBadge showInMenu pageEnum={PAGE.SALONS} />
+								</div>
+							),
 							onClick: () => navigate(parentPath as string),
 							icon: <SalonIcon />,
 							id: PAGE.SALONS

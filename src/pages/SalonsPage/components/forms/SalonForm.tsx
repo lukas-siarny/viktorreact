@@ -21,7 +21,7 @@ import AutocompleteField from '../../../../atoms/AutocompleteField'
 
 // utils
 import { optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
-import { FILTER_ENTITY, FORM, PERMISSION, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { FILTER_ENTITY, FORM, PAGE, PERMISSION, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, getSalonTagSourceType } from '../salonUtils'
 import searchWrapper from '../../../../utils/filters'
@@ -55,6 +55,7 @@ import { ReactComponent as QrCodeIcon } from '../../../../assets/icons/qr-code-i
 // schema
 import { ISalonForm, validationSalonFn } from '../../../../schemas/salon'
 import QrCode from '../../../../components/QrCode'
+import NewBadge from '../../../../components/NewBadge'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -118,7 +119,6 @@ const SalonForm: FC<Props> = (props) => {
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
-	console.log('salonData', salonData)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	const hasRawPermissions = useMemo(
@@ -298,7 +298,7 @@ const SalonForm: FC<Props> = (props) => {
 								<QrCodeIcon width={20} height={20} className={'text-notino-black mr-2'} />
 								{t('loc:QR kódy')}
 							</h3>
-							<span className={'ml-4 bg-notino-pink pr-3 pl-3 pt-1 pb-1 text-white rounded-full'}>{t('loc:Nové')}</span>
+							<NewBadge pageEnum={PAGE.SALONS} />
 						</div>
 						<Divider className={'mb-3 mt-3'} />
 						<span className={'text-xs text-notino-grayDark'}>

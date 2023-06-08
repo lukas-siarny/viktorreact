@@ -80,13 +80,14 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 		}
 	}, [dispatch, selectedSalon?.data?.id])
 
-	const [showQrCode, setShowQrCode] = useState(true)
-
-	useEffect(() => {
-		const localStorageValue = localStorage.getItem('showQrCode')
-		setShowQrCode(localStorageValue !== 'false')
-	}, [])
 	// NOTE: docasne zakomentovane mozno sa v budcnosti prida tlacidlo na zatvaranie
+	// const [showQrCode, setShowQrCode] = useState(true)
+
+	// useEffect(() => {
+	// 	const localStorageValue = localStorage.getItem('showQrCode')
+	// 	setShowQrCode(localStorageValue !== 'false')
+	// }, [])
+
 	// const handleDivClose = () => {
 	// 	localStorage.setItem('showQrCode', 'false')
 	// 	setShowQrCode(false)
@@ -149,43 +150,43 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							onActionItemClick={() => navigate(basePath)}
 						/>
 					)}
-					{showQrCode && (
-						<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative'}>
-							<img src={qrCodeTemplate} alt='qr code' className='block' />
-							<h1>{t('loc:Naskenuj a rezervuj!')}</h1>
-							<h4 className={'text-notino-grayDarker'}>
-								{t('loc:Stiahnite si QR kód špeciálne vytvorený pre váš salón, a zdieľajte ho na svojich sociálnych sieťach alebo webe.')}
-							</h4>
-							<p>
-								{t(
-									'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín rýchlejšie a pohodlnejšie.'
-								)}
-							</p>
-							{selectedSalon.data.qrCodes.map((item, index) => (
-								<div className={'flex mr-2'} key={index}>
-									<Button
-										className={'noti-btn w-min'}
-										href={'#'}
-										rel='noopener noreferrer'
-										type={'primary'}
-										htmlType={'button'}
-										onClick={(e) => handleAuthorizedDownload(e, item.link, item.name)}
-										title='Download file'
-										icon={<DownloadIcon width={24} />}
-										download
-									>
-										{t('loc:Stiahnuť QR kód na tlač')}
-									</Button>
-								</div>
-							))}
-							{/* // NOTE: docasne zakomentovane mozno sa v budcnosti prida tlacidlo na zatvaranie */}
-							{/* <Button type={'link'} htmlType={'button'} className={'absolute top-6 right-6'} onClick={handleDivClose}> */}
-							{/*	<span role='img'> */}
-							{/*		<CloseIcon className={'text-black'} width={24} /> */}
-							{/*	</span> */}
-							{/* </Button> */}
-						</div>
-					)}
+					(
+					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative'}>
+						<img src={qrCodeTemplate} alt='qr code' className='block' />
+						<h1>{t('loc:Naskenuj a rezervuj!')}</h1>
+						<h4 className={'text-notino-grayDarker'}>
+							{t('loc:Stiahnite si QR kód špeciálne vytvorený pre váš salón, a zdieľajte ho na svojich sociálnych sieťach alebo webe.')}
+						</h4>
+						<p>
+							{t(
+								'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín rýchlejšie a pohodlnejšie.'
+							)}
+						</p>
+						{selectedSalon.data.qrCodes.map((item, index) => (
+							<div className={'flex mr-2'} key={index}>
+								<Button
+									className={'noti-btn w-min'}
+									href={'#'}
+									rel='noopener noreferrer'
+									type={'primary'}
+									htmlType={'button'}
+									onClick={(e) => handleAuthorizedDownload(e, item.link, item.name)}
+									title='Download file'
+									icon={<DownloadIcon width={24} />}
+									download
+								>
+									{t('loc:Stiahnuť QR kód na tlač')}
+								</Button>
+							</div>
+						))}
+						{/* // NOTE: docasne zakomentovane mozno sa v budcnosti prida tlacidlo na zatvaranie */}
+						{/* <Button type={'link'} htmlType={'button'} className={'absolute top-6 right-6'} onClick={handleDivClose}> */}
+						{/*	<span role='img'> */}
+						{/*		<CloseIcon className={'text-black'} width={24} /> */}
+						{/*	</span> */}
+						{/* </Button> */}
+					</div>
+					)
 					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>
 						<Statistics
 							title={t('loc:Rezervácie čakajúce na schválenie')}

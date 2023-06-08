@@ -16,7 +16,7 @@ type Props = {
 const QrCode = (props: Props) => {
 	const [t] = useTranslation()
 	const { link, description, name } = props
-	console.log('link', `${link}&t=${getAccessToken()}`)
+
 	return (
 		<div className={'flex items-center'}>
 			<img src={qrTemplateSmall} alt='qr code' className='block' />

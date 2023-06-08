@@ -113,11 +113,13 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 					)}
 					{/* Voucher */}
-					<div className={'mb-14'}>
-						<h2>{t('loc:Notino kupón')}</h2>
-						<p>{t('loc:Skopírujte kód zľavového kupónu, uplatnite si ho na svoju objednávku v Notino aplikácii a užívajte si výhodné nakupovanie!')}</p>
-						<Voucher code={selectedSalon.data.b2bVoucher} />
-					</div>
+					{selectedSalon.data.b2bVoucher && (
+						<div className={'mb-14'}>
+							<h2>{t('loc:Notino kupón')}</h2>
+							<p>{t('loc:Skopírujte kód zľavového kupónu, uplatnite si ho na svoju objednávku v Notino aplikácii a užívajte si výhodné nakupovanie!')}</p>
+							<Voucher code={selectedSalon.data.b2bVoucher} />
+						</div>
+					)}
 					{/* Statisctics */}
 					<h2>{t('loc:Štatistiky')}</h2>
 					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6 mb-14'>

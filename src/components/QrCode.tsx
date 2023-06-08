@@ -19,7 +19,7 @@ const QrCode = (props: Props) => {
 	console.log('link', `${link}&t=${getAccessToken()}`)
 	return (
 		<div className={'flex items-center'}>
-			<img src={`${link}&t=${getAccessToken()}`} alt='qr code' className='block' />
+			<img src={qrTemplateSmall} alt='qr code' className='block' />
 			<div className={'flex flex-col'}>
 				<h4>{t('loc:Digitálny QR kód')}</h4>
 				<span className={'mb-4 text-notino-grayDark'}>{description}</span>

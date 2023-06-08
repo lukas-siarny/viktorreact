@@ -86,12 +86,12 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 		const localStorageValue = localStorage.getItem('showQrCode')
 		setShowQrCode(localStorageValue !== 'false')
 	}, [])
-
-	const handleDivClose = () => {
-		localStorage.setItem('showQrCode', 'false')
-		setShowQrCode(false)
-		setVisible(true)
-	}
+	// NOTE: docasne zakomentovane mozno sa v budcnosti prida tlacidlo na zatvaranie
+	// const handleDivClose = () => {
+	// 	localStorage.setItem('showQrCode', 'false')
+	// 	setShowQrCode(false)
+	// 	setVisible(true)
+	// }
 	useEffect(() => {
 		if (salonID && checkPermissions([...authUserPermissions, ...(salonPermission || [])], SMS_TIME_STATS_PERMISSIONS)) {
 			dispatch(getSmsTimeStatsForSalon(salonID, smsStatsDate.year(), smsStatsDate.month() + 1))
@@ -178,12 +178,12 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 									</Button>
 								</div>
 							))}
-
-							<Button type={'link'} htmlType={'button'} className={'absolute top-6 right-6'} onClick={handleDivClose}>
-								<span role='img'>
-									<CloseIcon className={'text-black'} width={24} />
-								</span>
-							</Button>
+							{/* // NOTE: docasne zakomentovane mozno sa v budcnosti prida tlacidlo na zatvaranie */}
+							{/* <Button type={'link'} htmlType={'button'} className={'absolute top-6 right-6'} onClick={handleDivClose}> */}
+							{/*	<span role='img'> */}
+							{/*		<CloseIcon className={'text-black'} width={24} /> */}
+							{/*	</span> */}
+							{/* </Button> */}
 						</div>
 					)}
 					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>

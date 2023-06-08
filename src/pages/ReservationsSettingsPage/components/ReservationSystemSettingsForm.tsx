@@ -20,7 +20,7 @@ import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } fr
 import { RootState } from '../../../reducers'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, PERMISSION, REQUEST_STATUS, RS_NOTIFICATION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, IMPORT_BUTTON_ID, DOWNLOAD_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions, { checkPermissions } from '../../../utils/Permissions'
@@ -284,56 +284,68 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 				<Divider className={'my-3'} />
 				<Row>
-					<ImportForm
-						accept={uploadModal.data.accept}
-						title={uploadModal.data.title}
-						label={uploadModal.data.label}
-						requestStatus={uploadModal.requestStatus}
-						setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
-						onSubmit={handleSubmitImport}
-						visible={uploadModal.visible}
-						extraContent={
-							<>
-								<Divider className={'mt-1 mb-3'} />
-								<label htmlFor={'noti-template-select'} className={'block mb-2'}>
-									{t('loc:Vzorové šablóny súborov')}
-								</label>
-								<div className={'flex items-center justify-between gap-1 mb-4'}>
-									<SelectField
-										input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
-										meta={{} as any}
-										id={'noti-template-select'}
-										style={{ zIndex: 999 }}
-										className={'max-w-64 w-full pb-0'}
-										size={'large'}
-										filterOption={false}
-										allowInfinityScroll={false}
-										showSearch={false}
-										labelInValue
-										onSearch={searchTemplates}
-										popupMatchSelectWidth={false}
-										placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-										getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-									/>
-									<Button
-										className={'noti-btn flex-shrink-0'}
-										href={templateValue?.value || undefined}
-										target='_blank'
-										rel='noopener noreferrer'
-										type={'default'}
-										disabled={!templateValue}
-										htmlType={'button'}
-										download
-									>
-										<div>{t('loc:Stiahnuť')}</div>
-									</Button>
-								</div>
-							</>
-						}
-						setVisible={() => {
-							setTemplateValue(null)
-							setUploadModal(UPLOAD_MODAL_INIT)
-						}}
+					<Permissions
+						allowed={[PERMISSION.PARTNER_ADMIN]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<ImportForm
+								accept={uploadModal.data.accept}
+								title={uploadModal.data.title}
+								label={uploadModal.data.label}
+								requestStatus={uploadModal.requestStatus}
+								setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
+								onSubmit={(values: IDataUploadForm) => {
+									if (hasPermission) {
+										handleSubmitImport(values)
+									} else {
+										openForbiddenModal()
+									}
+								}}
+								visible={uploadModal.visible}
+								extraContent={
+									<>
+										<Divider className={'mt-1 mb-3'} />
+										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
+											{t('loc:Vzorové šablóny súborov')}
+										</label>
+										<div className={'flex items-center justify-between gap-1 mb-4'}>
+											<SelectField
+												input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
+												meta={{} as any}
+												id={'noti-template-select'}
+												style={{ zIndex: 999 }}
+												className={'max-w-64 w-full pb-0'}
+												size={'large'}
+												filterOption={false}
+												allowInfinityScroll={false}
+												showSearch={false}
+												labelInValue
+												onSearch={searchTemplates}
+												popupMatchSelectWidth={false}
+												placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+												getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+											/>
+											<Button
+												id={DOWNLOAD_BUTTON_ID}
+												className={'noti-btn flex-shrink-0'}
+												href={templateValue?.value || undefined}
+												target='_blank'
+												rel='noopener noreferrer'
+												type={'default'}
+												disabled={!templateValue}
+												htmlType={'button'}
+												download
+											>
+												<div>{t('loc:Stiahnuť')}</div>
+											</Button>
+										</div>
+									</>
+								}
+								setVisible={() => {
+									setTemplateValue(null)
+									setUploadModal(UPLOAD_MODAL_INIT)
+								}}
+							/>
+						)}
 					/>
 					<Button
 						onClick={() => {
@@ -354,6 +366,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						htmlType='button'
 						className={'noti-btn mr-2'}
 						icon={<UploadIcon />}
+						id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, IMPORT_BUTTON_ID('reservations'))}
 					>
 						{t('loc:Importovať rezervácie')}
 					</Button>
@@ -376,6 +389,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						htmlType='button'
 						className={'noti-btn'}
 						icon={<UploadIcon />}
+						id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, IMPORT_BUTTON_ID('customers'))}
 					>
 						{t('loc:Importovať zákazníkov')}
 					</Button>

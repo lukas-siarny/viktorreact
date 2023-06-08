@@ -7,6 +7,7 @@ import { DndContext, DragEndEvent, closestCenter, useDroppable } from '@dnd-kit/
 import { CSS } from '@dnd-kit/utilities'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { TFunction } from 'i18next'
+import cx from 'classnames'
 
 // assets
 import { ReactComponent as DragIcon } from '../../../../assets/icons/drag-icon.svg'
@@ -17,7 +18,7 @@ import { IServicesListInudstry } from '../../../../reducers/services/serviceActi
 
 // utils
 import { getExpandIcon } from '../../../../utils/helper'
-import { STRINGS } from '../../../../utils/enums'
+import { CYPRESS_CLASS_NAMES, STRINGS } from '../../../../utils/enums'
 
 // components
 import CategoriesList from './CategoriesList'
@@ -89,7 +90,7 @@ const IndustryPanel: FC<IndustryPanelProps> = React.memo((props) => {
 					<p>{t('loc:K tomuto oboru zatiaľ nemáte priradené žiadne služby.')}</p>
 					<Button
 						type={'primary'}
-						className={'noti-btn'}
+						className={cx('noti-btn', CYPRESS_CLASS_NAMES.ASSIGN_SERVICES_BUTTON)}
 						onClick={() => navigate(parentPath + t('paths:industries-and-services/{{industryID}}', { industryID: industry.id }))}
 					>
 						{STRINGS(t).assign(t('loc:služby'))}

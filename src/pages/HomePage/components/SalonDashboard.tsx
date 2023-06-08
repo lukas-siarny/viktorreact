@@ -30,8 +30,8 @@ import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg
 import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-icon.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 import { ReactComponent as QrCodeIcon } from '../../../assets/icons/qr-code-icon.svg'
-
 import qrCodeTemplate from '../../../assets/images/qrcode-big-template.png'
+
 // schema
 import { ISalonReservationsPageURLQueryParams } from '../../../schemas/queryParams'
 
@@ -150,35 +150,48 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							onActionItemClick={() => navigate(basePath)}
 						/>
 					)}
-					(
-					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative'}>
-						<img src={qrCodeTemplate} alt='qr code' className='block' />
-						<h1>{t('loc:Naskenuj a rezervuj!')}</h1>
-						<h4 className={'text-notino-grayDarker'}>
-							{t('loc:Stiahnite si QR kód špeciálne vytvorený pre váš salón, a zdieľajte ho na svojich sociálnych sieťach alebo webe.')}
-						</h4>
-						<p>
-							{t(
-								'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín rýchlejšie a pohodlnejšie.'
-							)}
-						</p>
-						{selectedSalon.data.qrCodes.map((item, index) => (
-							<div className={'flex mr-2'} key={index}>
-								<Button
-									className={'noti-btn w-min'}
-									href={'#'}
-									rel='noopener noreferrer'
-									type={'primary'}
-									htmlType={'button'}
-									onClick={(e) => handleAuthorizedDownload(e, item.link, item.name)}
-									title='Download file'
-									icon={<DownloadIcon width={24} />}
-									download
-								>
-									{t('loc:Stiahnuť QR kód na tlač')}
-								</Button>
-							</div>
-						))}
+
+					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative h-full'} style={{ height: 420 }}>
+						<div
+							style={{
+								backgroundImage: `url(${qrCodeTemplate})`,
+								backgroundSize: 'contain',
+								backgroundRepeat: 'no-repeat',
+								position: 'absolute',
+								top: 0,
+								right: 0,
+								height: '100%',
+								width: 920
+							}}
+						/>
+						<div className={'w-1/2'}>
+							<h1>{t('loc:Naskenuj a rezervuj!')}</h1>
+							<h4 className={'text-notino-grayDarker mb-4'}>
+								{t('loc:Stiahnite si QR kód špeciálne vytvorený pre váš salón, a zdieľajte ho na svojich sociálnych sieťach alebo webe.')}
+							</h4>
+							<p className={'mb-6'}>
+								{t(
+									'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín rýchlejšie a pohodlnejšie.'
+								)}
+							</p>
+							{selectedSalon.data.qrCodes.map((item, index) => (
+								<div className={'flex mr-2 flex-wrap'} key={index}>
+									<Button
+										className={'noti-btn w-min mr-2 mb-2'}
+										href={'#'}
+										rel='noopener noreferrer'
+										type={'primary'}
+										htmlType={'button'}
+										onClick={(e) => handleAuthorizedDownload(e, item.link, item.name)}
+										title='Download file'
+										icon={<DownloadIcon width={24} />}
+										download
+									>
+										{t('loc:Stiahnuť QR kód na tlač')}
+									</Button>
+								</div>
+							))}
+						</div>
 						{/* // NOTE: docasne zakomentovane mozno sa v budcnosti prida tlacidlo na zatvaranie */}
 						{/* <Button type={'link'} htmlType={'button'} className={'absolute top-6 right-6'} onClick={handleDivClose}> */}
 						{/*	<span role='img'> */}
@@ -186,7 +199,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						{/*	</span> */}
 						{/* </Button> */}
 					</div>
-					)
+
 					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>
 						<Statistics
 							title={t('loc:Rezervácie čakajúce na schválenie')}

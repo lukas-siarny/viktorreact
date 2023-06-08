@@ -696,7 +696,8 @@ const NotinoDashboard: FC = () => {
 						dispatch(
 							getReservationStats({
 								year: Number(date.year()),
-								month: Number(date.month() + 1)
+								month: Number(date.month() + 1),
+								countryCode: selectedCountry
 							})
 						)
 					}

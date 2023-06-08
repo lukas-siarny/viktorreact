@@ -5,7 +5,7 @@ import { Button, Form, Modal, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
-import { formFieldID, optionRenderWithIcon, validationRequired } from '../../../utils/helper'
+import { formFieldID, optionRenderWithIcon, validationRequired, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import { FORM, SUBMIT_BUTTON_ID, UPLOAD, UPLOAD_IMG_CATEGORIES } from '../../../utils/enums'
 
 // components
@@ -59,7 +59,7 @@ const DocumentsForm: FC<Props> = (props) => {
 			keyboard={false}
 		>
 			<Spin spinning={submitting}>
-				<Form onSubmitCapture={handleSubmit} layout={'vertical'} className={'form'}>
+				<Form onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)} layout={'vertical'} className={'form'}>
 					<Field
 						component={FileUploadField}
 						name={'files'}

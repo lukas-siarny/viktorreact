@@ -1,14 +1,15 @@
 import React, { FC, useMemo, useRef } from 'react'
-import { WrappedFieldProps } from 'redux-form'
+import { WrappedFieldProps, autofill, change } from 'redux-form'
 import { get, isEmpty, isEqual } from 'lodash'
 import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import { Form, Upload, UploadProps } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 
-import { NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE } from '../utils/enums'
+import { NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE, UPLOAD_IN_PROGRESS_PROP } from '../utils/enums'
 import { getAccessToken } from '../utils/auth'
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 import showNotifications from '../utils/tsxHelpers'
@@ -58,13 +59,17 @@ const FileUploadField: FC<Props> = (props) => {
 	} = props
 
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const fileRef = useRef<ImgUploadParam>({})
 
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
 			// NOTE: if uploaded file has a bad format (eg. txt)
 			showNotifications(info.file.response?.messages, NOTIFICATION_TYPE.NOTIFICATION)
+			// uploading finished with error -> remove UPLOAD_IN_PROGRESS_PROP from bodyForm
+			dispatch(autofill(form, UPLOAD_IN_PROGRESS_PROP, undefined))
 		}
+
 		if (info.file.status === 'done') {
 			const values = formatFileFormValues(info.fileList, fileRef.current)
 			if (multiple) {
@@ -77,13 +82,20 @@ const FileUploadField: FC<Props> = (props) => {
 				}
 				input.onChange(value)
 			}
+			// uploading is done -> remove UPLOAD_IN_PROGRESS_PROP from bodyForm
+			dispatch(autofill(form, UPLOAD_IN_PROGRESS_PROP, undefined))
 		}
+
 		if (info.file.status === 'uploading') {
 			input.onChange(info.fileList)
 		}
+
 		if (info.file.status === 'removed') {
 			input.onChange(null)
+			// file to upload was removed -> remove UPLOAD_IN_PROGRESS_PROP from bodyForm
+			dispatch(autofill(form, UPLOAD_IN_PROGRESS_PROP, undefined))
 		}
+
 		if (isEmpty(info.fileList)) {
 			input.onChange(multiple ? [] : null)
 		}
@@ -105,6 +117,7 @@ const FileUploadField: FC<Props> = (props) => {
 			}}
 			action={action}
 			customRequest={(options) => {
+				dispatch(change(form, UPLOAD_IN_PROGRESS_PROP, true))
 				if (handleUploadOutside) {
 					// FE upload (nezavola sa BE). Sluzi len pre !SINGLE! upload multiple nebude fungovat
 					input.onChange([options.file])

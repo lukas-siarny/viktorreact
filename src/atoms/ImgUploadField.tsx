@@ -17,7 +17,7 @@ import cx from 'classnames'
 import { uploadFiles } from '../utils/request'
 import { formFieldID, formatFileFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, STRINGS, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
+import { UPLOAD_IN_PROGRESS_PROP, MSG_TYPE, NOTIFICATION_TYPE, STRINGS, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
@@ -113,8 +113,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			values.pop()
 			input.onChange(values)
 
-			// uploading process finished -> remove IMAGE_UPLOADING_PROP from bodyForm
-			dispatch(autofill(form, IMAGE_UPLOADING_PROP, undefined))
+			// uploading finished with error -> remove UPLOAD_IN_PROGRESS_PROP from bodyForm
+			dispatch(autofill(form, UPLOAD_IN_PROGRESS_PROP, undefined))
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = formatFileFormValues(info.fileList, imagesUrls.current)
@@ -125,8 +125,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			setImages(splitted[0])
 			input.onChange(sorted)
 
-			// uploading process finished -> remove IMAGE_UPLOADING_PROP from bodyForm
-			dispatch(autofill(form, IMAGE_UPLOADING_PROP, undefined))
+			// uploading process finished -> remove UPLOAD_IN_PROGRESS_PROP from bodyForm
+			dispatch(autofill(form, UPLOAD_IN_PROGRESS_PROP, undefined))
 		}
 		if (info.file.status === 'uploading') {
 			input.onChange(info.fileList)
@@ -308,7 +308,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 				listType='picture-card'
 				multiple={multiple}
 				customRequest={(options: any) => {
-					dispatch(change(form, IMAGE_UPLOADING_PROP, true))
+					dispatch(change(form, UPLOAD_IN_PROGRESS_PROP, true))
 					uploadFiles(options, signUrl, category, imagesUrls)
 				}}
 				itemRender={(originNode, file, currFileList, actions) =>

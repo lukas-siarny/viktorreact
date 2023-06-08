@@ -57,7 +57,7 @@ import {
 	EN_DATE_WITH_TIME_FORMAT,
 	EN_DATE_WITHOUT_TIME_FORMAT,
 	FORM,
-	IMAGE_UPLOADING_PROP,
+	UPLOAD_IN_PROGRESS_PROP,
 	INVALID_DATE_FORMAT,
 	LANGUAGE,
 	MIN_SUPPORTED_BROWSER_VERSION,
@@ -782,7 +782,7 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		const errorKeys = Object.keys(errors)
 
 		// Error invoked during image uploading has custom notification
-		if (errorKeys.length === 1 && errorKeys[0] === IMAGE_UPLOADING_PROP) {
+		if (errorKeys.length === 1 && errorKeys[0] === UPLOAD_IN_PROGRESS_PROP) {
 			return undefined
 		}
 
@@ -976,11 +976,11 @@ export const formatLongQueryString = (search: string, limit?: number) => {
 export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
 	const { form } = props
 
-	if (values && values[IMAGE_UPLOADING_PROP]) {
+	if (values && values[UPLOAD_IN_PROGRESS_PROP]) {
 		const error = i18next.t('loc:Prebieha nahrávanie')
 		showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
 		throw new SubmissionError({
-			[IMAGE_UPLOADING_PROP]: error
+			[UPLOAD_IN_PROGRESS_PROP]: error
 		})
 	} else {
 		dispatch(submit(form))

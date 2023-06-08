@@ -307,10 +307,10 @@ const SalonForm: FC<Props> = (props) => {
 							)}
 						</span>
 					</Col>
-					{salonData?.qrCodes?.map((qrCode) => {
+					{salonData?.qrCodes?.map((qrCode, index) => {
 						return (
-							<Col span={12}>
-								<QrCode description={qrCode.description} link={qrCode.link} />
+							<Col key={index} xl={12} md={24}>
+								<QrCode description={qrCode.description} link={qrCode.link} name={qrCode.name} />
 							</Col>
 						)
 					})}

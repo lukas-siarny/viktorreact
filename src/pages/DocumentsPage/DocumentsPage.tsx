@@ -146,7 +146,7 @@ const DocumentsPage = () => {
 						className={'noti-btn'}
 						icon={<UploadIcon className={'w-4 h-4'} />}
 					>
-						<span className={'pl-4'}>{t('loc:Aktualizovať súbor')}</span>
+						<span className={'pl-4'}>{t('loc:Aktualizovať dokument')}</span>
 					</Button>
 				)
 			}

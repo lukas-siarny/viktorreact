@@ -143,7 +143,7 @@ const DocumentsByAssetTypePage = () => {
 					return (
 						<Button
 							key={item.id}
-							className={'noti-btn text-notino-pink text-left p-0'}
+							className={'noti-btn text-notino-pink text-left p-0 hover:text-black'}
 							href={item.original}
 							target='_blank'
 							rel='noopener noreferrer'

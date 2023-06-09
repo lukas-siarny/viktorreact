@@ -110,7 +110,7 @@ export const handleLanguageChange = (value: any, dispatch: any, reloadPageAfterC
 	i18next.changeLanguage(value)
 }
 
-export const languageOptions = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: <FlagIcon countryCode={value} /> }))
+export const languageOptions = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: <FlagIcon countryCode={value} />, key: value }))
 
 export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterChange = true): ItemType => {
 	let currentLanguage: LANGUAGE

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // utils
 import { formFieldID, optionRenderWithIcon, validationRequired, checkUploadingBeforeSubmit } from '../../../utils/helper'
-import { FORM, SUBMIT_BUTTON_ID, UPLOAD, UPLOAD_IMG_CATEGORIES } from '../../../utils/enums'
+import { FORM, SUBMIT_BUTTON_ID, UPLOAD, UPLOAD_IMG_CATEGORIES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // components
 import { languageOptions } from '../../../components/LanguagePicker'
@@ -103,7 +103,15 @@ const DocumentsForm: FC<Props> = (props) => {
 						loading={assetTypes?.isLoading}
 						disabled={assetTypes?.isLoading}
 					/>
-					<Field name={'message'} label={t('loc:Sprievodná správa')} placeholder={t('loc:Zadajte sprievodnú správu')} className={'pb-4'} component={TextareaField} />
+					<Field
+						name={'message'}
+						label={t('loc:Sprievodná správa')}
+						placeholder={t('loc:Zadajte sprievodnú správu')}
+						className={'pb-4'}
+						maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+						showLettersCount
+						component={TextareaField}
+					/>
 					<Button
 						id={formFieldID(FORM.DOCUMENTS_FORM, SUBMIT_BUTTON_ID)}
 						className='noti-btn'

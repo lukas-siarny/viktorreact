@@ -151,7 +151,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 					)}
 
-					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative h-full'} style={{ height: 420 }}>
+					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative h-full overflow-hidden'} style={{ height: 420 }}>
 						<div
 							style={{
 								backgroundImage: `url(${qrCodeTemplate})`,

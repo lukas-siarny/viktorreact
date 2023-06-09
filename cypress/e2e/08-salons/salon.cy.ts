@@ -3,7 +3,7 @@ import salonTestSuite from './salon.tests'
 
 import { CRUD_OPERATIONS, SALON_TESTS_SUITS } from '../../enums'
 
-import { ITests } from '../11-roles/roles.cy'
+import { ITests } from '../13-roles/roles.cy'
 import { PERMISSION } from '../../../src/utils/enums'
 import salonsTestSuite from './salons.tests'
 
@@ -31,6 +31,10 @@ const salonSubTests: ITests[] = [
 	{
 		name: SALON_TESTS_SUITS.SMS_CREDIT,
 		actions: [CRUD_OPERATIONS.ALL]
+	},
+	{
+		name: SALON_TESTS_SUITS.IMPORT_DATA,
+		actions: [CRUD_OPERATIONS.CREATE]
 	}
 ]
 

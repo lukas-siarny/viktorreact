@@ -76,10 +76,10 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	}, [dispatch, selectedSalon?.data?.id])
 
 	useEffect(() => {
-		if (salonID && checkPermissions([...authUserPermissions, ...(salonPermission || [])], SMS_TIME_STATS_PERMISSIONS)) {
+		if (walletID && salonID && checkPermissions([...authUserPermissions, ...(salonPermission || [])], SMS_TIME_STATS_PERMISSIONS)) {
 			dispatch(getSmsTimeStatsForSalon(salonID, smsStatsDate.year(), smsStatsDate.month() + 1))
 		}
-	}, [dispatch, salonID, smsStatsDate, authUserPermissions, salonPermission])
+	}, [dispatch, salonID, walletID, smsStatsDate, authUserPermissions, salonPermission])
 
 	return loading ? (
 		<div className='w-full text-center'>
@@ -112,8 +112,17 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							onActionItemClick={() => navigate(basePath)}
 						/>
 					)}
-
-					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>
+					{/* Voucher */}
+					{selectedSalon.data.b2bVoucher && (
+						<div className={'mb-14'}>
+							<h2>{t('loc:Notino kupón')}</h2>
+							<p>{t('loc:Skopírujte kód zľavového kupónu, uplatnite si ho na svoju objednávku v Notino aplikácii a užívajte si výhodné nakupovanie!')}</p>
+							<Voucher code={selectedSalon.data.b2bVoucher} />
+						</div>
+					)}
+					{/* Statisctics */}
+					<h2>{t('loc:Štatistiky')}</h2>
+					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6 mb-14'>
 						<Statistics
 							title={t('loc:Rezervácie čakajúce na schválenie')}
 							count={pendingReservationsCount.count}
@@ -157,7 +166,8 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						) : (
 							<>
 								{/* wallet */}
-								<div className={'grid lg:grid-cols-2 gap-4 3xl:gap-8 mt-10 empty:mt-0'}>
+								<h2>{t('loc:SMS kredit')}</h2>
+								<div className={'grid lg:grid-cols-2 gap-4 3xl:gap-8 empty:mt-0'}>
 									<Wallet salonID={salonID} parentPath={basePath} className={'!w-auto'} walletID={walletID} />
 								</div>
 								{/* sms monthly stats */}
@@ -167,13 +177,11 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 											setSmsStatsDate(date)
 										}
 									}}
-									title={<h3 className={'mb-0'}>{t('loc:Spotreba SMS kreditu za obdobie')}</h3>}
+									title={<h2 className={'mb-0'}>{t('loc:Spotreba SMS kreditu za obdobie')}</h2>}
 									selectedDate={smsStatsDate}
 									className={'mb-6 mt-10 pb-0'}
 									smsTimeStats={smsTimeStats}
 								/>
-								{/* Voucher */}
-								<Voucher code={selectedSalon.data.b2bVoucher} />
 							</>
 						)}
 					</Permissions>

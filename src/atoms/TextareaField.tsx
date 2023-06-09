@@ -8,6 +8,7 @@ import { TextAreaProps } from 'antd/lib/input'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { TextAreaRef } from 'antd/lib/input/TextArea'
 import cx from 'classnames'
+import { formFieldID } from '../utils/helper'
 
 type Props = WrappedFieldProps &
 	TextAreaProps &
@@ -25,7 +26,7 @@ const TextareaField = (props: Props) => {
 		label,
 		placeholder,
 		required,
-		meta: { error, touched },
+		meta: { error, touched, form },
 		rows,
 		autoSize,
 		allowClear,
@@ -109,6 +110,7 @@ const TextareaField = (props: Props) => {
 		>
 			<Input.TextArea
 				{...input}
+				id={formFieldID(form, input.name)}
 				onFocus={onFocus}
 				onBlur={onBlur}
 				onChange={onChange}

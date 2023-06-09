@@ -8,8 +8,6 @@ import { StyleProvider } from '@ant-design/cssinjs'
 import { Locale } from 'antd/lib/locale'
 import dayjs from 'dayjs'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { PublicClientApplication, Configuration } from '@azure/msal-browser'
-import { MsalProvider } from '@azure/msal-react'
 
 import 'antd/dist/reset.css'
 
@@ -18,7 +16,7 @@ import rootReducer from './reducers'
 // utils
 import configureStore from './utils/configureStore'
 import i18n from './utils/i18n'
-import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE, EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE } from './utils/enums'
+import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE } from './utils/enums'
 
 // components
 import ScrollToTop from './components/ScrollToTop'
@@ -27,7 +25,7 @@ import AppRoutes from './routes/AppRoutes'
 
 const { store, persistor } = configureStore(rootReducer)
 
-const msalConfig: Configuration = {
+/* const msalConfig: Configuration = {
 	auth: {
 		// eslint-disable-next-line no-underscore-dangle
 		clientId: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
@@ -35,7 +33,7 @@ const msalConfig: Configuration = {
 	}
 }
 
-const msalInstance = new PublicClientApplication(msalConfig)
+const msalInstance = new PublicClientApplication(msalConfig) */
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
@@ -87,16 +85,16 @@ const App = () => {
 							token: ANTD_THEME_VARIABLES_OVERRIDE
 						}}
 					>
-						<MsalProvider instance={msalInstance}>
-							{/* eslint-disable-next-line no-underscore-dangle */}
-							<GoogleOAuthProvider clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID} onScriptLoadError={() => console.error('GoogleOAuth error')}>
-								<Provider store={store}>
-									<StyleProvider hashPriority={'low'}>
-										<RouterProvider router={router} />
-									</StyleProvider>
-								</Provider>
-							</GoogleOAuthProvider>
-						</MsalProvider>
+						{/* <MsalProvider instance={msalInstance}> */}
+						{/* eslint-disable-next-line no-underscore-dangle */}
+						<GoogleOAuthProvider clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID} onScriptLoadError={() => console.error('GoogleOAuth error')}>
+							<Provider store={store}>
+								<StyleProvider hashPriority={'low'}>
+									<RouterProvider router={router} />
+								</StyleProvider>
+							</Provider>
+						</GoogleOAuthProvider>
+						{/* </MsalProvider> */}
 					</ConfigProvider>
 				</PersistGate>
 			</I18nextProvider>

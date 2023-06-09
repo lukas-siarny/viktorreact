@@ -384,3 +384,13 @@ export const specialistContactsPageURLQueryParams = z.object({
 })
 
 export type ISpecialistContactsPageURLQueryParams = z.infer<typeof specialistContactsPageURLQueryParams>
+
+/**
+ * MSredirect
+ */
+export const msRedircetPageURLQueryParams = z.object({
+	code: z.string().nullish(),
+	state: z.string().nullish()
+})
+
+export type IMsRedircetPageURLQueryParams = z.infer<typeof msRedircetPageURLQueryParams>

@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
-import qs from 'qs'
-import axios, { AxiosError } from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { find, get } from 'lodash'
@@ -11,9 +9,9 @@ import { Button, Tooltip, Typography } from 'antd'
 import { getFormValues, initialize, submit } from 'redux-form'
 
 // utils
-import { buildHeaders, deleteReq, postReq, showErrorNotifications } from '../../../utils/request'
-import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, FORM, MSG_TYPE, NOTIFICATION_TYPE } from '../../../utils/enums'
-import showNotifications from '../../../utils/tsxHelpers'
+import { deleteReq, postReq } from '../../../utils/request'
+import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, FORM, NOTIFICATION_TYPE } from '../../../utils/enums'
+import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
 
 // types
 import { RootState } from '../../../reducers'
@@ -43,7 +41,6 @@ const { Paragraph } = Typography
 const CalendarIntegrations = () => {
 	const { t } = useTranslation()
 	const { salonID } = useParams<Required<{ salonID: string }>>()
-	const { instance } = useMsal()
 	const dispatch = useDispatch()
 	const [visibleModal, setVisibleModal] = useState<{ type: EXTERNAL_CALENDAR_TYPE; title: string; description: string; requestType: REQUEST_MODAL_TYPE } | undefined>(undefined)
 	const [pickedSalonIds, setPickedSalonIds] = useState<string[]>([])
@@ -64,88 +61,6 @@ const CalendarIntegrations = () => {
 			return microsoftSyncInitData
 		}
 		return authUser?.data?.salons
-	}
-
-	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
-	const originalFetch = window.fetch
-	window.fetch = async (...args): Promise<any> => {
-		const [url, config] = args
-		if (url === EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].url) {
-			if (typeof config?.body === 'string') {
-				const data = qs.parse(config.body)
-
-				if (typeof data.code === 'string') {
-					try {
-						const responseAuth = await axios.post(
-							EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].url,
-							{
-								grant_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].grant_type,
-								// eslint-disable-next-line no-underscore-dangle
-								client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
-								scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes,
-								redirect_uri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri,
-								code_verifier: data.code_verifier,
-								code: data.code
-							},
-							{
-								headers: {
-									'Content-Type': 'application/x-www-form-urlencoded'
-								}
-							}
-						)
-						const responseData = await originalFetch('/api/b2b/admin/calendar-sync/sync-token', {
-							method: 'POST',
-							headers: {
-								...buildHeaders()
-							},
-							body: JSON.stringify({
-								// Ak je len jeden salon tak da ID ktore ma dany salon ak ma priradenych viacero salonov tak posle IDecka ktore su picknute v modaly
-								salonIDs: authUser?.data?.salons && partnerInOneSalon ? [authUser.data.salons[0].id] : pickedSalonIds,
-								refreshToken: responseAuth.data.refresh_token,
-								calendarType: EXTERNAL_CALENDAR_TYPE.MICROSOFT
-							})
-						})
-
-						const responseDataJson = await responseData.clone().json()
-
-						if (responseData.ok) {
-							showNotifications(responseDataJson.messages, NOTIFICATION_TYPE.NOTIFICATION)
-						} else {
-							showErrorNotifications({ response: { status: responseData.status, data: responseDataJson } }, NOTIFICATION_TYPE.NOTIFICATION)
-						}
-						dispatch(getCurrentUser())
-						return responseData
-					} catch (e) {
-						// eslint-disable-next-line no-console
-						console.error(e)
-						if (e instanceof AxiosError) {
-							const errorMsg = e.response?.data?.error_description
-							showErrorNotifications(
-								{
-									response: {
-										status: e.response?.status,
-										data: { messages: errorMsg ? [{ type: MSG_TYPE.ERROR, message: e.response?.data?.error_description }] : [] }
-									}
-								},
-								NOTIFICATION_TYPE.NOTIFICATION
-							)
-						} else {
-							// Show general error
-							showErrorNotifications(
-								{
-									response: {
-										data: { messages: [] }
-									}
-								},
-								NOTIFICATION_TYPE.NOTIFICATION
-							)
-						}
-					}
-				}
-			}
-			return Promise.reject()
-		}
-		return originalFetch(url, config)
 	}
 
 	const handleGoogleLogin = useGoogleLogin({
@@ -173,12 +88,20 @@ const CalendarIntegrations = () => {
 		onError: (errorResponse) => console.error(errorResponse)
 	})
 
-	const handleMSLogin = async () => {
+	const handleMSLogin = async (salonsIDs: (string | undefined)[]) => {
+		const msLoginQueryParams = formatObjToQuery({
+			// eslint-disable-next-line no-underscore-dangle
+			client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
+			redirect_uri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri,
+			response_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_type,
+			response_mode: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_mode,
+			scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scope,
+			prompt: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].prompt,
+			state: authUser?.data?.salons && partnerInOneSalon ? authUser.data.salons[0].id : salonsIDs.join(',')
+		})
+
 		try {
-			await instance.loginPopup({
-				scopes: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes,
-				prompt: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].prompt
-			})
+			window.open(`${EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].authorize_url}${msLoginQueryParams}`, '_self', 'popup,width=600,height=600')
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -208,7 +131,7 @@ const CalendarIntegrations = () => {
 					})
 					dispatch(getCurrentUser())
 				} else {
-					handleMSLogin()
+					handleMSLogin(values.salonIDs)
 				}
 			}
 		} catch (e) {
@@ -314,10 +237,11 @@ const CalendarIntegrations = () => {
 			<button
 				className={'sync-button microsoft mr-2'}
 				onClick={() => {
+					const salonIDs = [...(microsoftSyncInitData?.map((salon) => salon.id) || []), salonID]
 					if (partnerInOneSalon) {
-						handleMSLogin()
+						handleMSLogin(salonIDs)
 					} else {
-						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [...(microsoftSyncInitData?.map((salon) => salon.id) || []), salonID] }))
+						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs }))
 						setVisibleModal({
 							type: EXTERNAL_CALENDAR_TYPE.MICROSOFT,
 							requestType: REQUEST_MODAL_TYPE.CREATE,

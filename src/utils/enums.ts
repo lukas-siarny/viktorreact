@@ -1184,9 +1184,10 @@ export enum EXTERNAL_CALENDAR_TYPE {
 export const EXTERNAL_CALENDAR_CONFIG = {
 	[EXTERNAL_CALENDAR_TYPE.MICROSOFT]: {
 		redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
-		scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
-		url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-		grant_type: 'authorization_code',
+		scope: 'offline_access user.read Calendars.ReadWrite Calendars.Read',
+		authorize_url: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+		response_mode: 'query',
+		response_type: 'code',
 		prompt: 'select_account'
 	},
 	[EXTERNAL_CALENDAR_TYPE.GOOGLE]: {

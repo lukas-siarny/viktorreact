@@ -101,7 +101,7 @@ const CalendarIntegrations = () => {
 		})
 
 		try {
-			window.open(`${EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].authorize_url}${msLoginQueryParams}`, '_self', 'popup,width=600,height=600')
+			window.open(`${EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].authorize_url}${msLoginQueryParams}`, '_self')
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

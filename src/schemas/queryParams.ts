@@ -390,7 +390,7 @@ export type ISpecialistContactsPageURLQueryParams = z.infer<typeof specialistCon
  */
 export const msRedircetPageURLQueryParams = z.object({
 	code: z.string().nullish(),
-	state: z.string().nullish()
+	state: z.string().default('').catch('')
 })
 
 export type IMsRedircetPageURLQueryParams = z.infer<typeof msRedircetPageURLQueryParams>

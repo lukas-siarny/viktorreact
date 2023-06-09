@@ -8,9 +8,7 @@ import { StyleProvider } from '@ant-design/cssinjs'
 import { Locale } from 'antd/lib/locale'
 import dayjs from 'dayjs'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-
 import 'antd/dist/reset.css'
-
 import rootReducer from './reducers'
 
 // utils
@@ -24,16 +22,6 @@ import { LOCALES } from './components/LanguagePicker'
 import AppRoutes from './routes/AppRoutes'
 
 const { store, persistor } = configureStore(rootReducer)
-
-/* const msalConfig: Configuration = {
-	auth: {
-		// eslint-disable-next-line no-underscore-dangle
-		clientId: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
-		redirectUri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri
-	}
-}
-
-const msalInstance = new PublicClientApplication(msalConfig) */
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
@@ -85,7 +73,6 @@ const App = () => {
 							token: ANTD_THEME_VARIABLES_OVERRIDE
 						}}
 					>
-						{/* <MsalProvider instance={msalInstance}> */}
 						{/* eslint-disable-next-line no-underscore-dangle */}
 						<GoogleOAuthProvider clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID} onScriptLoadError={() => console.error('GoogleOAuth error')}>
 							<Provider store={store}>
@@ -94,7 +81,6 @@ const App = () => {
 								</StyleProvider>
 							</Provider>
 						</GoogleOAuthProvider>
-						{/* </MsalProvider> */}
 					</ConfigProvider>
 				</PersistGate>
 			</I18nextProvider>

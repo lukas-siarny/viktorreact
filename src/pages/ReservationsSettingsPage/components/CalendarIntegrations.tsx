@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
-import { useMsal } from '@azure/msal-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { find, get } from 'lodash'
@@ -10,7 +9,7 @@ import { getFormValues, initialize, submit } from 'redux-form'
 
 // utils
 import { deleteReq, postReq } from '../../../utils/request'
-import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, FORM, NOTIFICATION_TYPE } from '../../../utils/enums'
+import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, FORM, MS_REDIRECT_MESSAGE_KEY, NOTIFICATION_TYPE } from '../../../utils/enums'
 import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
 
 // types
@@ -30,6 +29,8 @@ import { getCurrentUser } from '../../../reducers/users/userActions'
 
 // schemas
 import { ISalonIdsForm } from '../../../schemas/reservation'
+import { MSRedirectMessage } from '../../../types/interfaces'
+import showNotifications from '../../../utils/tsxHelpers'
 
 enum REQUEST_MODAL_TYPE {
 	DELETE = 'DELETE',
@@ -54,6 +55,8 @@ const CalendarIntegrations = () => {
 	const googleSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`))
 	const microsoftSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`))
 	const httpsIcalUrl = icalUrl.replace(/^webcal:/i, 'https:')
+
+	const popupRef = useRef<Window | null>(null)
 
 	const getOptionsData = () => {
 		if (visibleModal?.requestType === REQUEST_MODAL_TYPE.DELETE) {
@@ -88,25 +91,54 @@ const CalendarIntegrations = () => {
 		onError: (errorResponse) => console.error(errorResponse)
 	})
 
-	const handleMSLogin = async (salonsIDs: (string | undefined)[]) => {
-		const msLoginQueryParams = formatObjToQuery({
-			// eslint-disable-next-line no-underscore-dangle
-			client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
-			redirect_uri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri,
-			response_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_type,
-			response_mode: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_mode,
-			scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scope,
-			prompt: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].prompt,
-			state: authUser?.data?.salons && partnerInOneSalon ? authUser.data.salons[0].id : salonsIDs.join(',')
-		})
+	const handleMSLogin = useCallback(
+		async (salonsIDs: (string | undefined)[]) => {
+			const msLoginQueryParams = formatObjToQuery({
+				// eslint-disable-next-line no-underscore-dangle
+				client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
+				redirect_uri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri,
+				response_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_type,
+				response_mode: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_mode,
+				scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scope,
+				prompt: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].prompt,
+				state: authUser?.data?.salons && partnerInOneSalon ? authUser.data.salons[0].id : salonsIDs.join(',')
+			})
 
-		try {
-			window.open(`${EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].authorize_url}${msLoginQueryParams}`, '_self')
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
+			try {
+				popupRef.current = window.open(
+					`${EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].authorize_url}${msLoginQueryParams}`,
+					'_blank',
+					'popup,width=600,height=600'
+				)
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			}
+		},
+		[authUser?.data?.salons, partnerInOneSalon]
+	)
+
+	useEffect(() => {
+		const messageLisnter = (event: MessageEvent<MSRedirectMessage>) => {
+			// check the origin of the data
+			if (event.origin === `${window.location.protocol}//${window.location.host}` && event.data.key === MS_REDIRECT_MESSAGE_KEY && popupRef.current) {
+				if (event.data.status === 'success') {
+					dispatch(getCurrentUser())
+					if (event.data.messages?.length) {
+						showNotifications(event.data.messages, NOTIFICATION_TYPE.NOTIFICATION)
+					}
+					popupRef.current.close()
+				} else if (event.data.status === 'error') {
+					showNotifications(event.data.messages || [], NOTIFICATION_TYPE.NOTIFICATION)
+					popupRef.current.close()
+				}
+			}
 		}
-	}
+
+		window.addEventListener('message', messageLisnter)
+
+		return () => window.addEventListener('message', messageLisnter)
+	}, [dispatch])
 
 	const handleSubmitSalons = async (values: ISalonIdsForm) => {
 		setVisibleModal(undefined)

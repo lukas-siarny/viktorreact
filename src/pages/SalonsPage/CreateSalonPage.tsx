@@ -32,7 +32,7 @@ import searchWrapper from '../../utils/filters'
 import { formFieldID } from '../../utils/helper'
 
 // assets
-import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
+import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-icon.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 // schema

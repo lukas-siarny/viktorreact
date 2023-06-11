@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 
 // assets
-import { ReactComponent as UsageIcon } from '../../assets/icons/usage.svg'
+import { ReactComponent as UsageIcon } from '../../assets/icons/usage-icon.svg'
 
 // types
 import { RootState } from '../../reducers'

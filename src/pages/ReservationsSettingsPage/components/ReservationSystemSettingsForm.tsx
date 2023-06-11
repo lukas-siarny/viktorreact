@@ -29,7 +29,7 @@ import { getReq, postReq } from '../../../utils/request'
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingsIcon } from '../../../assets/icons/setting.svg'
-import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
+import { ReactComponent as BellIcon } from '../../../assets/icons/bell-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 import { ReactComponent as CalendarSyncIcon } from '../../../assets/icons/sync-calendar.svg'
@@ -400,7 +400,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				<div className={'w-12/25'}>
 					<div className={'flex'}>
 						<h3 className={'mb-0 mt-0 flex items-center'}>
-							<BellIcon className={'text-notino-black mr-2'} />
+							<BellIcon className={'text-notino-black mr-2 medium-icon'} />
 							{t('loc:SMS a notifikácie')}
 						</h3>
 					</div>

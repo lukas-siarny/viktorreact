@@ -7,14 +7,14 @@ import { startsWith } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../../utils/enums'
 import { getAssignedUserLabel } from '../../../../utils/helper'
 
 // assets
 import { ReactComponent as QuestionMarkIcon } from '../../../../assets/icons/question-mark-10.svg'
 import { ReactComponent as CheckIcon } from '../../../../assets/icons/check-10.svg'
 import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-icon-10.svg'
-import { ReactComponent as AvatarIcon } from '../../../../assets/icons/avatar-10.svg'
+import { ReactComponent as AvatarIcon } from '../../../../assets/icons/avatar-icon.svg'
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-12.svg'
 import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-12.svg'
 import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
@@ -123,7 +123,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 
 	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
 	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
-	const iconAutoAssigned = isEmployeeAutoassigned && <AvatarIcon className={'icon employee'} />
+	const iconAutoAssigned = isEmployeeAutoassigned && <AvatarIcon style={{ width: 10, height: 10 }} className={'icon employee'} />
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 

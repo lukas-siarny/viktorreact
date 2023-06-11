@@ -129,8 +129,12 @@ const CalendarIntegrations = () => {
 	)
 
 	useEffect(() => {
+		/**
+		 * After successfull login to Microsoft account in login popup window, user is redirected to /ms-oauth2 URL, which renders MSRedirectPage.tsx component
+		 * Communication between login popup window and window that triggered the popup is handled via browser postMessage API
+		 */
 		const messageLisnter = (event: MessageEvent<MSRedirectMessage>) => {
-			// check the origin of the data
+			// Important! Check the origin of the data!! (only messages from our host are allowed)
 			if (event.origin === `${window.location.protocol}//${window.location.host}` && event.data.key === MS_REDIRECT_MESSAGE_KEY && popupRef.current) {
 				if (event.data.status === 'success') {
 					dispatch(getCurrentUser())

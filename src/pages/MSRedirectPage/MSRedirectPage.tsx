@@ -13,12 +13,19 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schemas
 import { msRedircetPageURLQueryParams } from '../../schemas/queryParams'
+
+// types
 import { IErrorMessage, MSRedirectMessage } from '../../types/interfaces'
 
 type Props = {}
 
 const postMessage = (msg: MSRedirectMessage) => window.opener.postMessage(msg, `${window.location.protocol}//${window.location.host}`)
-
+/**
+ * This page is rendered inside a popup window that handles Microsoft login (popup is triggered in '/salons/{salonID}/reservations-settings' (CalendarIntegration.tsx))
+ * After successfull login to Microsoft account, user is redirected to /ms-oauth2 URL, which renders this component
+ * Authorization code from MS is processed here and send to our BE
+ * Communication between this popup window and window that triggered the popup is handled via browser postMessage API
+ */
 const MSRedirectPage: FC<Props> = () => {
 	const [query] = useQueryParams(msRedircetPageURLQueryParams)
 	const salonIDs = query.state.split(',')

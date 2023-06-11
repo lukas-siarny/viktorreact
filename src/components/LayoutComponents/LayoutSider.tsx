@@ -137,7 +137,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.USERS,
 						label: t('loc:Používatelia'),
 						onClick: () => navigate(t('paths:users')),
-						icon: <UsersIcon />,
+						icon: <UsersIcon className={'text-notino-black'} />,
 						id: PAGE.USERS
 					})
 				}
@@ -147,49 +147,49 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.CATEGORIES,
 							label: t('loc:Kategórie'),
 							onClick: () => navigate(t('paths:categories')),
-							icon: <CategoryIcon />,
+							icon: <CategoryIcon className={'text-notino-black'} />,
 							id: PAGE.CATEGORIES
 						},
 						{
 							key: PAGE.CATEGORY_PARAMETERS,
 							label: t('loc:Parametre'),
 							onClick: () => navigate(t('paths:category-parameters')),
-							icon: <ParametersIcon />,
+							icon: <ParametersIcon className={'text-notino-black'} />,
 							id: PAGE.CATEGORY_PARAMETERS
 						},
 						{
 							key: PAGE.COSMETICS,
 							label: t('loc:Kozmetika'),
 							onClick: () => navigate(t('paths:cosmetics')),
-							icon: <CosmeticIcon />,
+							icon: <CosmeticIcon className={'text-notino-black'} />,
 							id: PAGE.COSMETICS
 						},
 						{
 							key: PAGE.LANGUAGES,
 							label: t('loc:Jazyky'),
 							onClick: () => navigate(t('paths:languages-in-salons')),
-							icon: <LanguagesIcon />,
+							icon: <LanguagesIcon className={'text-notino-black'} />,
 							id: PAGE.LANGUAGES
 						},
 						{
 							key: PAGE.SUPPORT_CONTACTS,
 							label: t('loc:Podpora'),
 							onClick: () => navigate(t('paths:support-contacts')),
-							icon: <HelpIcon />,
+							icon: <HelpIcon className={'text-notino-black'} />,
 							id: PAGE.SUPPORT_CONTACTS
 						},
 						{
 							key: PAGE.SPECIALIST_CONTACTS,
 							label: t('loc:Špecialisti'),
 							onClick: () => navigate(t('paths:specialist-contacts')),
-							icon: <SpecialistIcon />,
+							icon: <SpecialistIcon className={'text-notino-black'} />,
 							id: PAGE.SPECIALIST_CONTACTS
 						},
 						{
 							key: PAGE.REVIEWS,
 							label: t('loc:Recenzie'),
 							onClick: () => navigate(t('paths:reviews')),
-							icon: <ReviewsIcon />,
+							icon: <ReviewsIcon className={'text-notino-black'} />,
 							id: PAGE.REVIEWS
 						}
 					)
@@ -199,7 +199,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.SMS_CREDITS,
 						label: t('loc:SMS kredity'),
 						onClick: () => navigate(t('paths:sms-credits')),
-						icon: <SmsUnitPricesIcon />,
+						icon: <SmsUnitPricesIcon className={'text-notino-black'} />,
 						id: PAGE.SMS_CREDITS
 					})
 				}
@@ -210,14 +210,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.NOTINO_RESERVATIONS,
 							label: t('loc:Prehľad rezervacií'),
 							onClick: () => navigate(t('paths:reservations')),
-							icon: <ReservationsIcon />,
+							icon: <ReservationsIcon className={'text-notino-black'} />,
 							id: PAGE.NOTINO_RESERVATIONS
 						},
 						{
 							key: PAGE.SALONS,
 							label: t('loc:Salóny'),
 							onClick: () => navigate(t('paths:salons')),
-							icon: <SalonIcon />,
+							icon: <SalonIcon className={'text-notino-black'} />,
 							id: PAGE.SALONS
 						}
 					)
@@ -232,7 +232,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.SALONS,
 							label: t('loc:Detail salónu'),
 							onClick: () => navigate(parentPath as string),
-							icon: <SalonIcon />,
+							icon: <SalonIcon className={'text-notino-black'} />,
 							id: PAGE.SALONS
 						},
 						{
@@ -244,7 +244,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.BILLING_INFO,
 							label: t('loc:Fakturačné údaje'),
 							onClick: () => navigate(getPath(t('paths:billing-info'))),
-							icon: <InvoiceIcon />,
+							icon: <InvoiceIcon className={'text-notino-black'} />,
 							id: PAGE.BILLING_INFO
 						},
 						{
@@ -258,21 +258,21 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.EMPLOYEES,
 							label: t('loc:Zamestnanci'),
 							onClick: () => navigate(getPath(t('paths:employees'))),
-							icon: <EmployeesIcon />,
+							icon: <EmployeesIcon className={'text-notino-black'} />,
 							id: PAGE.EMPLOYEES
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
 							label: t('loc:Nastavenia rezervácií'),
 							onClick: () => navigate(getPath(t('paths:reservations-settings'))),
-							icon: <SettingIcon />,
+							icon: <SettingIcon className={'text-notino-black'} />,
 							id: PAGE.SALON_SETTINGS
 						},
 						{
 							key: PAGE.INDUSTRIES_AND_SERVICES,
 							label: t('loc:Odvetvia a služby'),
 							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
-							icon: <IndustiresIcon />,
+							icon: <IndustiresIcon className={'text-notino-black'} />,
 							id: PAGE.INDUSTRIES_AND_SERVICES
 						},
 						{
@@ -291,14 +291,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Prehľad rezervácií {{ reservationsCount }}', { reservationsCount: count }),
 							onClick: () => navigate(getPath(t('paths:salon-reservations'))),
-							icon: <ReservationsIcon />,
+							icon: <ReservationsIcon className={'text-notino-black'} />,
 							id: PAGE.RESERVATIONS
 						},
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Plánovací kalendár'),
 							onClick: () => navigate(getPath(t('paths:calendar'))),
-							icon: <CalendarIcon />,
+							icon: <CalendarIcon className={'text-notino-black'} />,
 							id: PAGE.CALENDAR
 						}
 					)
@@ -309,7 +309,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.SMS_CREDIT,
 						label: t('loc:SMS kredit'),
 						onClick: () => navigate(getPath(t('paths:sms-credit'))),
-						icon: <SmsUnitPricesIcon />,
+						icon: <SmsUnitPricesIcon className={'text-notino-black'} />,
 						id: PAGE.SMS_CREDIT
 					})
 				}

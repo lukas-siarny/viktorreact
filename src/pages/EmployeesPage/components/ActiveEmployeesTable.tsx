@@ -25,7 +25,7 @@ import { getActiveEmployees, reorderEmployees } from '../../../reducers/employee
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline-icon.svg'
-import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
+import { ReactComponent as QuestionIcon } from '../../../assets/icons/question-icon.svg'
 
 // types
 import { Columns } from '../../../types/interfaces'

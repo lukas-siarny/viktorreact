@@ -10,7 +10,7 @@ import DeleteButton from '../components/DeleteButton'
 import PhoneWithPrefixField from '../components/PhoneWithPrefixField'
 
 // assets
-import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon-16.svg'
+import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
 
 // utils
 import { ENUMERATIONS_KEYS } from '../utils/enums'

@@ -19,7 +19,7 @@ import { ICustomerForm } from '../../../../schemas/customer'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
-import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-icon.svg'
 import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
@@ -371,7 +371,7 @@ const ReservationForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							label={t('loc:Služba')}
-							suffixIcon={<ServiceIcon className={'text-notino-grayDark'} width={16} height={16} />}
+							suffixIcon={<ServiceIcon className={'text-notino-grayDark'} />}
 							placeholder={t('loc:Vyber službu')}
 							name={'service'}
 							size={'large'}

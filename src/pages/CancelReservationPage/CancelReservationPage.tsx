@@ -18,11 +18,11 @@ import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, RESERVATION_STATE } from '../../uti
 import { decodePrice, getAssignedUserLabel, getCountryPrefix, getServiceRange } from '../../utils/helper'
 
 // assets
-import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
+import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations-icon.svg'
 import { ReactComponent as DollarIcon } from '../../assets/icons/dollar-icon.svg'
 import { ReactComponent as EmployeeIcon } from '../../assets/icons/employees-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
-import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
+import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon.svg'
 
 // componenets
 import ConfirmModal from '../../atoms/ConfirmModal'
@@ -180,7 +180,7 @@ const CancelReservationPage = () => {
 							)}
 							{calendarReservationData?.createdAt && (
 								<div className={'flex items-start gap-2'}>
-									<PencilIcon width={16} height={16} />
+									<PencilIcon className={'text-notino-gray'} />
 									<span className={'inline-flex gap-2 flex-wrap'}>
 										{`${t('loc:Vytvorená')} ${dayjs(calendarReservationData.createdAt).format(`${D_M_YEAR_FORMAT} HH:mm`)}`}
 									</span>

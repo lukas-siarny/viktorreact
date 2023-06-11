@@ -31,7 +31,7 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // assets
-import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../assets/icons/service-icon.svg'
 import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
@@ -231,7 +231,7 @@ const IndustryPage = (props: Props) => {
 						<Spin spinning={loading || submitting}>
 							<Row justify='space-between'>
 								<h3 className={'mb-0 mt-0 flex items-center pr-4'}>
-									<ServiceIcon className={'text-notino-black mr-2'} />
+									<ServiceIcon className={'text-notino-black mr-2 medium-icon'} />
 									{t('loc:Priradiť služby')}
 								</h3>
 								<Permissions

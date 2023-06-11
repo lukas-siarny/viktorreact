@@ -28,7 +28,7 @@ import { getReq, postReq } from '../../../utils/request'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
-import { ReactComponent as SettingsIcon } from '../../../assets/icons/setting.svg'
+import { ReactComponent as SettingsIcon } from '../../../assets/icons/setting-icon.svg'
 import { ReactComponent as BellIcon } from '../../../assets/icons/bell-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'

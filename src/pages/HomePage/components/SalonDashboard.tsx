@@ -26,7 +26,7 @@ import Voucher from './Voucher'
 
 // assets
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-hidden-icon.svg'
-import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
+import { ReactComponent as SettingIcon } from '../../../assets/icons/setting-icon.svg'
 
 // schema
 import { ISalonReservationsPageURLQueryParams } from '../../../schemas/queryParams'

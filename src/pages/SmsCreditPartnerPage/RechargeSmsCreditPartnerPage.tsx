@@ -21,7 +21,7 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // assets
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
+import { ReactComponent as SettingIcon } from '../../assets/icons/setting-icon.svg'
 
 // redux
 import { getSmsUnitPrice } from '../../reducers/smsUnitPrices/smsUnitPricesActions'

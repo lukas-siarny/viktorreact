@@ -23,7 +23,7 @@ import { ADMIN_PERMISSIONS, FORM, PAGE, PERMISSION, STRINGS } from '../utils/enu
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
-import { ReactComponent as BackIcon } from '../assets/icons/rollback.svg'
+import { ReactComponent as BackIcon } from '../assets/icons/rollback-icon.svg'
 import { ReactComponent as ChevronIcon } from '../assets/icons/chevron-down.svg'
 import SalonDefaultAvatar from '../assets/icons/salon-default-avatar.png'
 

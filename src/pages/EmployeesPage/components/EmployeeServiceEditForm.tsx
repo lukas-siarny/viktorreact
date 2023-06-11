@@ -23,7 +23,7 @@ import AvatarComponents from '../../../components/AvatarComponents'
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as BinIcon } from '../../../assets/icons/bin-icon.svg'
-import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
+import { ReactComponent as QuestionIcon } from '../../../assets/icons/question-icon.svg'
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline-icon.svg'
 
 // schema

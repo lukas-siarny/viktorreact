@@ -11,8 +11,8 @@ import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
 import { ReactComponent as NotinoPartnerIcon } from '../../assets/icons/notino-partner-icon.svg'
 import { ReactComponent as HomeIcon } from '../../assets/icons/home-icon-filled.svg'
 import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-icon.svg'
-import { ReactComponent as SalonIcon } from '../../assets/icons/salon-24-icon.svg'
-import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
+import { ReactComponent as SalonIcon } from '../../assets/icons/salon-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../assets/icons/service-icon.svg'
 import { ReactComponent as UsersIcon } from '../../assets/icons/users-24-icon.svg'
 import { ReactComponent as CustomerIcon } from '../../assets/icons/customer-icon.svg'
 import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
@@ -24,15 +24,15 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees-ic
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
 import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon.svg'
 import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-icon.svg'
-import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
+import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-icon.svg'
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries-icon.svg'
 import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-icon.svg'
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
 import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-icon.svg'
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
-import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
+import { ReactComponent as SettingIcon } from '../../assets/icons/setting-icon.svg'
+import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations-icon.svg'
 import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
-import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices.svg'
+import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices-icon.svg'
 
 // utils
 import { CYPRESS_CLASS_NAMES, PAGE, PERMISSION } from '../../utils/enums'
@@ -251,7 +251,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.SERVICES_SETTINGS,
 							label: t('loc:Nastavenie služieb'),
 							onClick: () => navigate(getPath(t('paths:services-settings'))),
-							icon: <ServiceIcon className={'text-black'} />,
+							icon: <ServiceIcon className={'text-black medium-icon'} />,
 							id: PAGE.SERVICES_SETTINGS
 						},
 						{

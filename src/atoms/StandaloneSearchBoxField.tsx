@@ -6,7 +6,7 @@ import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { InputProps } from 'antd/lib/input'
 
 import { formFieldID } from '../utils/helper'
-import { ReactComponent as SearchIcon } from '../assets/icons/search-icon-16.svg'
+import { ReactComponent as SearchIcon } from '../assets/icons/search-icon.svg'
 import { mapApiConfig } from '../utils/enums'
 
 type Props = FormItemLabelProps &

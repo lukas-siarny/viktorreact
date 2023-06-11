@@ -11,7 +11,7 @@ import { parseTimeFromMinutes } from '../../calendarHelpers'
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon.svg'
-import { ReactComponent as RepeatIcon } from '../../../../assets/icons/repeat.svg'
+import { ReactComponent as RepeatIcon } from '../../../../assets/icons/repeat-icon.svg'
 
 // types
 import { IEventCardProps } from '../../../../types/interfaces'

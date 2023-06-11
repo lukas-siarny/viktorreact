@@ -121,7 +121,7 @@ const InputField = (props: Props) => {
 						suffix
 					)
 				}
-				prefix={fieldMode === FIELD_MODE.FILTER ? <SearchIcon /> : prefix}
+				prefix={fieldMode === FIELD_MODE.FILTER ? <SearchIcon className={'medium-icon'} /> : prefix}
 				disabled={disabled}
 				maxLength={maxLength}
 				ref={inputRef}

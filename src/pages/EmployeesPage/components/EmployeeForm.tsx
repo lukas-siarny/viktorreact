@@ -23,7 +23,7 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import ServicesListField from './ServicesListField'
 
 // assets
-import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../../assets/icons/service-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 
 // schema
@@ -110,7 +110,7 @@ const EmployeeForm: FC<Props> = (props) => {
 					{isEdit && (
 						<div>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
-								<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}
+								<ServiceIcon className={'text-notino-black mr-2 medium-icon'} /> {t('loc:Priradené služby')}
 							</h3>
 							<Divider className={'mb-3 mt-3'} />
 							<div className={'flex w-full flex-col md:flex-row md:gap-2'}>

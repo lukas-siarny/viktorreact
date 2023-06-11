@@ -17,7 +17,7 @@ import RechargeSmsCreditFilter from './components/RechargeSmsCreditFilter'
 
 // assets
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
-import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
+import { ReactComponent as CoinsIcon } from '../../assets/icons/coins-icon.svg'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'

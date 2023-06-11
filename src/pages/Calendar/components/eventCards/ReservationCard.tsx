@@ -15,8 +15,8 @@ import { ReactComponent as QuestionMarkIcon } from '../../../../assets/icons/que
 import { ReactComponent as CheckIcon } from '../../../../assets/icons/check-icon.svg'
 import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-icon-10.svg'
 import { ReactComponent as AvatarIcon } from '../../../../assets/icons/avatar-icon.svg'
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-12.svg'
-import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-12.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
 
 // types
@@ -60,7 +60,7 @@ const getIconState = ({
 	}
 
 	if (notRealized) {
-		return <CloseIcon className={'icon not-realized'} />
+		return <CloseIcon className={'icon not-realized small-icon'} />
 	}
 
 	return service?.icon?.resizedImages ? (

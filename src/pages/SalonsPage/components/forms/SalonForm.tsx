@@ -37,7 +37,7 @@ import { ISelectedSalonPayload } from '../../../../reducers/selectedSalon/select
 // assets
 import { ReactComponent as InstagramIcon } from '../../../../assets/icons/social-instagram-icon.svg'
 import { ReactComponent as FacebookIcon } from '../../../../assets/icons/social-facebook-icon.svg'
-import { ReactComponent as CreditCardIcon } from '../../../../assets/icons/credit-card-outlined-icon.svg'
+import { ReactComponent as CreditCardIcon } from '../../../../assets/icons/credit-card-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../../assets/icons/info-icon.svg'
 import { ReactComponent as PhoneIcon } from '../../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
@@ -46,7 +46,7 @@ import { ReactComponent as SocialIcon } from '../../../../assets/icons/social-24
 import { ReactComponent as SocialPinterest } from '../../../../assets/icons/social-pinterest.svg'
 import { ReactComponent as SocialYoutube } from '../../../../assets/icons/social-youtube.svg'
 import { ReactComponent as SocialTikTok } from '../../../../assets/icons/social-tiktok.svg'
-import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmetic-icon-24.svg'
+import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmetic-icon.svg'
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
 import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-16.svg'

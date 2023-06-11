@@ -16,7 +16,7 @@ import { LOCALES } from '../../components/LanguagePicker'
 
 // assets
 import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
-import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
+import { ReactComponent as TimerIcon } from '../../assets/icons/clock-icon.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
 import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
 import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
@@ -261,7 +261,7 @@ const ContactPage: FC<Props> = () => {
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>
-											<TimerIcon width={20} height={20} className={'mr-2'} />
+											<TimerIcon className={'mr-2 medium-icon text-notino-pink'} />
 											{t('loc:Otváracie hodiny')}
 										</h3>
 									}

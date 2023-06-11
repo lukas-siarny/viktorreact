@@ -4,7 +4,7 @@ import i18next from 'i18next'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
-import { ReactComponent as CheckIcon } from '../assets/icons/check-icon-circle.svg'
+import { ReactComponent as CheckIcon } from '../assets/icons/check-icon-circle-icon.svg'
 
 type Props = {
 	onRequestAgain: () => void

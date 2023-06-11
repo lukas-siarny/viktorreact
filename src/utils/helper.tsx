@@ -80,10 +80,10 @@ import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
 import { ReactComponent as NotRealizedIcon } from '../assets/icons/alert-circle-icon.svg'
 import { ReactComponent as CheckSuccessIcon } from '../assets/icons/approwed-icon.svg'
-import { ReactComponent as CreditCardIcon } from '../assets/icons/credit-card.svg'
+import { ReactComponent as CreditCardIcon } from '../assets/icons/credit-card-icon.svg'
 import { ReactComponent as WalletIcon } from '../assets/icons/wallet.svg'
-import { ReactComponent as DollarIcon } from '../assets/icons/dollar.svg'
-import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
+import { ReactComponent as DollarIcon } from '../assets/icons/dollar-icon.svg'
+import { ReactComponent as CrossedIcon } from '../assets/icons/close-circle-icon.svg'
 import { ReactComponent as ChevronDown } from '../assets/icons/chevron-down.svg'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
@@ -291,7 +291,7 @@ export const translateReservationState = (state?: RESERVATION_STATE) => {
 		case RESERVATION_STATE.CANCEL_BY_SALON:
 			return {
 				text: i18next.t('loc:Zrušená salónom'),
-				icon: <CrossedIcon />
+				icon: <CrossedIcon className={'text-danger'} />
 			}
 		case RESERVATION_STATE.APPROVED:
 			return {

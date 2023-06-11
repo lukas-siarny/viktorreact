@@ -19,9 +19,9 @@ import DeleteButton from '../../../components/DeleteButton'
 import AvatarComponents from '../../../components/AvatarComponents'
 
 // assets
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
-import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
+import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline-icon.svg'
 
 // schema
 import { IEmployeeServiceEditForm } from '../../../schemas/service'
@@ -105,7 +105,7 @@ const ServicesListField: FC<Props> = (props) => {
 											id={formFieldID(FORM.SERVICE_FORM, ROW_BUTTON_WITH_ID(field.employee.id))}
 											htmlType={'button'}
 											size={'small'}
-											icon={<EditIcon />}
+											icon={<EditIcon className={'small-icon'} />}
 											className={cx('ant-btn noti-btn', {
 												'pointer-events-none': disabledEditButton || disabled
 											})}

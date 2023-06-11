@@ -20,7 +20,7 @@ import { ICustomerForm } from '../../../../schemas/customer'
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-24-icon.svg'
+import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
 import { ReactComponent as DateSuffixIcon } from '../../../../assets/icons/date-suffix-icon.svg'

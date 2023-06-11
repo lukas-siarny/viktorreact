@@ -5,7 +5,7 @@ import cx from 'classnames'
 import { ISalonRolePermission } from '../types/interfaces'
 
 // assets
-import { ReactComponent as CheckIcon } from '../assets/icons/checkbox-checked-pink.svg'
+import { ReactComponent as CheckIcon } from '../assets/icons/check-icon-circle-filled-icon.svg'
 import { ReactComponent as CrossedIcon } from '../assets/icons/checkbox-rejected.svg'
 
 type Props = {

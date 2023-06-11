@@ -41,7 +41,7 @@ import { getSalonDataForSubmission, initSalonFormData } from './components/salon
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
-import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
 interface EditSalonPageProps extends SalonPageProps {
@@ -484,7 +484,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 								<Button
 									id={formFieldID(FORM.SALON, 'decline-salon')}
 									type={'primary'}
-									icon={<CloseCricleIcon />}
+									icon={<CloseCricleIcon className={'medium-icon'} />}
 									size={'middle'}
 									className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
 									onClick={(e) => {

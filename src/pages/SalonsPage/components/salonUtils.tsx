@@ -26,8 +26,8 @@ import {
 import { ISalonForm } from '../../../schemas/salon'
 
 // assets
-import { ReactComponent as CheckerIcon } from '../../../assets/icons/check-icon-circle.svg'
-import { ReactComponent as CrossIcon } from '../../../assets/icons/cross.svg'
+import { ReactComponent as CheckerIcon } from '../../../assets/icons/check-icon-circle-icon.svg'
+import { ReactComponent as CrossIcon } from '../../../assets/icons/close-circle-icon.svg'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
@@ -298,4 +298,5 @@ export const getSalonTagSourceType = (sourceType?: string | SALON_SOURCE_TYPE) =
 	}
 }
 
-export const getCheckerIcon = (valid?: boolean) => (valid ? <CheckerIcon className={'medium-icon text-notino-success'} /> : <CrossIcon width={24} height={24} color={'#BFBFBF'} />)
+export const getCheckerIcon = (valid?: boolean) =>
+	valid ? <CheckerIcon className={'medium-icon text-notino-success'} /> : <CrossIcon className={'medium-icon text-notino-gray'} />

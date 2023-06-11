@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { useDispatch, useSelector } from 'react-redux'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 
 // utils
 import { LANGUAGE, SMS_TIME_STATS_COUNTRY_PICKER_ID } from '../../../utils/enums'

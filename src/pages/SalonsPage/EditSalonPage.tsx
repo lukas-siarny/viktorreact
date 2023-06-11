@@ -39,7 +39,7 @@ import { getSalonDataForSubmission, initSalonFormData } from './components/salon
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
-import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
+import { ReactComponent as EyeoffIcon } from '../../assets/icons/eye-hidden-icon.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
@@ -298,7 +298,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 					id={formFieldID(FORM.SALON, 'hide-salon')}
 					type={'dashed'}
 					size={'middle'}
-					icon={<EyeoffIcon color={'#000'} />}
+					icon={<EyeoffIcon className={'medium-icon'} color={'#000'} />}
 					className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 					onClick={(e) => {
 						if (hasPermission) {

@@ -25,7 +25,7 @@ import SmsTimeStats from '../../../components/Dashboards/SmsTimeStats'
 import Voucher from './Voucher'
 
 // assets
-import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
+import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-hidden-icon.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 
 // schema
@@ -97,7 +97,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							subTitle={`${t('loc:Salón bol skrytý z dôvodu')}:`}
 							message={selectedSalon.data?.publicationDeclineReason}
 							actionLabel={t('loc:Upraviť údaje salónu')}
-							icon={<EyeOffIcon />}
+							icon={<EyeOffIcon className={'text-danger'} />}
 							onActionItemClick={() => navigate(basePath)}
 						/>
 					)}

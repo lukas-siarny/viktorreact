@@ -18,7 +18,7 @@ import { ENUMERATIONS_KEYS, FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } fro
 
 // assets
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 
 // reducers
 import { RootState } from '../../../reducers'

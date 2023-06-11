@@ -3,7 +3,7 @@ import { isString } from 'lodash'
 import { Button } from 'antd'
 
 // assets
-import { ReactComponent as ExclamationIcon } from '../../assets/icons/exclamation-pink.svg'
+import { ReactComponent as ExclamationIcon } from '../../assets/icons/exclamation-icon.svg'
 
 type Props = {
 	id?: string
@@ -22,7 +22,7 @@ const Alert = (props: Props) => {
 
 	return (
 		<div id={id} className={`min-w-full p-4 flex rounded shadow-lg bg-notino-white ${className}`}>
-			<div className='h-full w-6 mr-4 pt-0-5'>{icon || <ExclamationIcon />}</div>
+			<div className='h-full w-6 mr-4 pt-0-5'>{icon || <ExclamationIcon className={'text-danger'} />}</div>
 			<div className='flex justify-between w-full'>
 				<div className='flex-1'>
 					{isString(title) ? <h4>{title}</h4> : title}

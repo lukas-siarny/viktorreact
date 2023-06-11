@@ -16,7 +16,7 @@ import { ENUMERATIONS_KEYS, FORM } from '../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../utils/helper'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../assets/icons/globe-icon.svg'
 
 export interface IHeaderCountryForm {
 	countryCode?: string

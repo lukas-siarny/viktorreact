@@ -18,7 +18,7 @@ import { LOCALES } from '../../components/LanguagePicker'
 import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
 import { ReactComponent as TimerIcon } from '../../assets/icons/clock-icon.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
-import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-icon.svg'
 import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 

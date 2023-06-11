@@ -21,7 +21,7 @@ import Filters from '../../../components/Filters'
 import { RootState } from '../../../reducers'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 
 // schemas
 import { IReviewFilterForm, validationReviewFilterFn } from '../../../schemas/review'

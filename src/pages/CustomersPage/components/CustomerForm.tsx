@@ -27,7 +27,7 @@ import { RootState } from '../../../reducers'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 
 type ComponentProps = FormProps & {
 	inModal?: boolean

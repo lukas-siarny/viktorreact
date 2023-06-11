@@ -20,7 +20,7 @@ import { decodePrice, getAssignedUserLabel, getCountryPrefix, getServiceRange } 
 // assets
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 import { ReactComponent as DollarIcon } from '../../assets/icons/dollar-icon.svg'
-import { ReactComponent as EmployeeIcon } from '../../assets/icons/employees-16-current-color.svg'
+import { ReactComponent as EmployeeIcon } from '../../assets/icons/employees-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
 
@@ -174,7 +174,7 @@ const CancelReservationPage = () => {
 							</div>
 							{employeeName && (
 								<div className={'flex items-start gap-2'}>
-									<EmployeeIcon width={16} height={16} />
+									<EmployeeIcon className={'small-icon'} />
 									{t('loc:Obslúži vás {{ employeeName }}', { employeeName })}
 								</div>
 							)}

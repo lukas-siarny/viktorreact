@@ -104,11 +104,21 @@ const CalendarIntegrations = () => {
 				state: authUser?.data?.salons && partnerInOneSalon ? authUser.data.salons[0].id : salonsIDs.join(',')
 			})
 
+			const width = 500
+			const height = 600
+
 			try {
 				popupRef.current = window.open(
 					`${EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].authorize_url}${msLoginQueryParams}`,
 					'_blank',
-					'popup,width=600,height=600'
+					`
+					popup
+					scrollbars,
+					width=${width},
+					height=${height},
+					left=${(window.screen.width - width) / 2},
+					top=${(window.screen.height - height) / 2}
+				  	`
 				)
 			} catch (e) {
 				// eslint-disable-next-line no-console

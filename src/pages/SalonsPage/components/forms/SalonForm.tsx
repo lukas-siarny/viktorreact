@@ -47,9 +47,8 @@ import { ReactComponent as SocialPinterest } from '../../../../assets/icons/soci
 import { ReactComponent as SocialYoutube } from '../../../../assets/icons/social-youtube.svg'
 import { ReactComponent as SocialTikTok } from '../../../../assets/icons/social-tiktok.svg'
 import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmetic-icon.svg'
-import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
-import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
-import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-16.svg'
+import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-icon.svg'
+import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-icon.svg'
 
 // schema
 import { ISalonForm, validationSalonFn } from '../../../../schemas/salon'
@@ -276,7 +275,7 @@ const SalonForm: FC<Props> = (props) => {
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'gallery'}
-							tooltip={{ title: t('loc:Poradie fotiek môžete zmeniť ich presunutím pomocou Drag & Drop'), icon: <InfoIcon16 /> }}
+							tooltip={{ title: t('loc:Poradie fotiek môžete zmeniť ich presunutím pomocou Drag & Drop'), icon: <InfoIcon /> }}
 							label={t('loc:Fotogaléria')}
 							signUrl={URL_UPLOAD_IMAGES}
 							multiple

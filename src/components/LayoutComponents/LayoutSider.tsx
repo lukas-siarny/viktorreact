@@ -8,8 +8,8 @@ import { sortBy } from 'lodash'
 
 // assets
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
-import { ReactComponent as LogoCollapsedIcon } from '../../assets/icons/logoCollapsed.svg'
-import { ReactComponent as HomeIcon } from '../../assets/icons/home-icon.svg'
+import { ReactComponent as NotinoPartnerIcon } from '../../assets/icons/notino-partner-icon.svg'
+import { ReactComponent as HomeIcon } from '../../assets/icons/home-icon-filled.svg'
 import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-icon.svg'
 import { ReactComponent as SalonIcon } from '../../assets/icons/salon-24-icon.svg'
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
@@ -23,10 +23,10 @@ import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.s
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees-icon.svg'
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
 import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon.svg'
-import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24.svg'
+import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-icon.svg'
 import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
-import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
-import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
+import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries-icon.svg'
+import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-icon.svg'
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
 import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-icon.svg'
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
@@ -446,7 +446,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<div id={'noti-sider-wrapper'} className='flex flex-col h-full'>
 				{collapsed ? (
 					<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
-						<LogoCollapsedIcon className='h-8' />
+						<NotinoPartnerIcon className='h-8' />
 					</Link>
 				) : (
 					<Link className='flex justify-center items-center' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>

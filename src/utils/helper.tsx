@@ -76,7 +76,7 @@ import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
 
-import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon.svg'
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
 import { ReactComponent as NotRealizedIcon } from '../assets/icons/alert-circle-icon.svg'
 import { ReactComponent as CheckSuccessIcon } from '../assets/icons/approwed-icon.svg'

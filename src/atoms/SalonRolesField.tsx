@@ -8,8 +8,7 @@ import { IRoleDescription, ISelectOptionItem } from '../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
-import { ReactComponent as InfoIcon24 } from '../assets/icons/info-icon.svg'
-import { ReactComponent as InfoIcon16 } from '../assets/icons/info-icon-16.svg'
+import { ReactComponent as InfoIcon } from '../assets/icons/info-icon.svg'
 
 // atoms
 import SelectField from './SelectField'
@@ -43,7 +42,7 @@ const SalonRolesField: FC<Props> = (props) => {
 				label={
 					<>
 						{t('loc:Rola')}{' '}
-						<InfoIcon16
+						<InfoIcon
 							className={'ml-1 cursor-pointer'}
 							onClick={() => {
 								setVisible(true)
@@ -64,7 +63,7 @@ const SalonRolesField: FC<Props> = (props) => {
 				className={'noti-roles-tooltip-modal rounded-fields md:p-4'}
 				title={
 					<div className={'gap-1 flex items-center'}>
-						<InfoIcon24 />
+						<InfoIcon className={'medium-icon'} />
 						{t('loc:Výber role')}
 					</div>
 				}

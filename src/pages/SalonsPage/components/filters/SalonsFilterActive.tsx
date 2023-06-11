@@ -17,7 +17,7 @@ import { RootState } from '../../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
-import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-icon.svg'
 import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
 import { ReactComponent as MoreInfoIcon } from '../../../../assets/icons/more-info-horizontal-icon.svg'
 

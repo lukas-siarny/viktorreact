@@ -18,7 +18,7 @@ import { RootState } from '../../../reducers'
 import { optionRenderWithImage } from '../../../utils/helper'
 
 // assets
-import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-icon.svg'
 import { IRequestNewServiceForm, validationRequestNewServiceFn } from '../../../schemas/service'
 
 type ComponentProps = {}

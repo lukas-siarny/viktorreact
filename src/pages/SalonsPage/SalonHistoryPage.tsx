@@ -22,7 +22,7 @@ import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, DEFAUL
 import { formatDateByLocale } from '../../utils/helper'
 
 // assets
-import { ReactComponent as CheckIcon } from '../../assets/icons/check-12.svg'
+import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as ResetIcon } from '../../assets/icons/reset-icon.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -35,7 +35,7 @@ const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => 
 		case SALON_HISTORY_OPERATIONS.DELETE:
 			return <CloseIcon className={'history-icon danger'} />
 		case SALON_HISTORY_OPERATIONS.INSERT:
-			return <CheckIcon width={24} height={24} className={'history-icon success'} />
+			return <CheckIcon className={'history-icon success medium-icon'} />
 		case SALON_HISTORY_OPERATIONS.RESTORE:
 			return <ResetIcon className={'history-icon info'} />
 		case SALON_HISTORY_OPERATIONS.UPDATE:

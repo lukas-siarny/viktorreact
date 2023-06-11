@@ -4,7 +4,7 @@ import i18next from 'i18next'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
-import { ReactComponent as CheckIcon } from '../assets/icons/check-icon-success.svg'
+import { ReactComponent as CheckIcon } from '../assets/icons/check-icon-circle.svg'
 
 type Props = {
 	onRequestAgain: () => void
@@ -25,7 +25,13 @@ const RequestSuccess = (props: Props) => {
 
 	return (
 		<div className={'data-upload-success flex items-center gap-4 flex-col'}>
-			<Alert message={successMessage} type={'success'} className={'noti-alert success-request-alert'} showIcon icon={<CheckIcon />} />
+			<Alert
+				message={successMessage}
+				type={'success'}
+				className={'noti-alert success-request-alert'}
+				showIcon
+				icon={<CheckIcon className={'medium-icon text-notino-success'} />}
+			/>
 			<p className={'mb-0'}>{description}</p>
 			<Button onClick={onRequestAgain} type='primary' htmlType='button' className={'noti-btn'} icon={buttonIcon}>
 				{buttonText}

@@ -400,7 +400,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				<div className={'w-12/25'}>
 					<div className={'flex'}>
 						<h3 className={'mb-0 mt-0 flex items-center'}>
-							<BellIcon className={'text-notino-black mr-2 medium-icon'} />
+							<BellIcon className={'text-notino-black mr-2'} />
 							{t('loc:SMS a notifikácie')}
 						</h3>
 					</div>

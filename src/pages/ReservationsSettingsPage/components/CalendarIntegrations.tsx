@@ -23,7 +23,7 @@ import SalonIdsForm from './SalonIdsForm'
 import ConfirmModal from '../../../atoms/ConfirmModal'
 
 // assets
-import { ReactComponent as CheckIcon } from '../../../assets/icons/checkbox-checked-icon-24.svg'
+import { ReactComponent as CheckIcon } from '../../../assets/icons/check-icon.svg'
 import { ReactComponent as CopyableIcon } from '../../../assets/icons/copyable-icon.svg'
 import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-icon.svg'
 
@@ -247,7 +247,7 @@ const CalendarIntegrations = () => {
 			{modals}
 			{hasGoogleSync && (
 				<div className={'flex items-center mb-4'}>
-					<CheckIcon className={'text-notino-pink mr-2'} />
+					<CheckIcon className={'text-notino-pink mr-2 medium-icon'} />
 					<span>{t('loc:Synchronizácia s {{ calendarType }} kalendárom bola spustená.', { calendarType: 'Google' })}</span>
 					<Button
 						onClick={() => {
@@ -270,7 +270,7 @@ const CalendarIntegrations = () => {
 			)}
 			{hasMicrosoftSync && (
 				<div className={'flex items-center mb-4'}>
-					<CheckIcon className={'text-notino-pink mr-2'} />
+					<CheckIcon className={'text-notino-pink mr-2 medium-icon'} />
 					<span>{t('loc:Synchronizácia s {{ calendarType }} kalendárom bola spustená.', { calendarType: 'Microsoft' })}</span>
 					<Button
 						onClick={() => {
@@ -341,7 +341,7 @@ const CalendarIntegrations = () => {
 								text: httpsIcalUrl,
 								icon: [
 									<CopyableIcon width={24} height={24} className={'text-notino-pink hover:text-notino-pink'} />,
-									<CheckIcon width={24} height={24} className={'text-notino-pink hover:text-notino-pink'} />
+									<CheckIcon className={'text-notino-pink hover:text-notino-pink medium-icon'} />
 								]
 							}}
 						>

@@ -13,7 +13,7 @@ import { FormItemProps } from 'antd/lib/form/FormItem'
 
 // icons
 import { ReactComponent as ArrowIcon } from '../assets/icons/select-arrow-icon.svg'
-import { ReactComponent as CheckedIcon } from '../assets/icons/checkbox-checked-icon-24.svg'
+import { ReactComponent as CheckedIcon } from '../assets/icons/check-icon.svg'
 import { ReactComponent as CloseIconSmall } from '../assets/icons/close-icon-16.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
@@ -128,7 +128,7 @@ const renderMenuItemSelectedIcon = (
 	} else if (disableMenuItemSelectedIcon) {
 		icon = null
 	} else if ((mode === 'tags' || mode === 'multiple') && !disableMenuItemSelectedIcon) {
-		icon = <CheckedIcon /> || menuItemSelectedIcon
+		icon = <CheckedIcon className={'medium-icon'} /> || menuItemSelectedIcon
 	}
 	return icon
 }

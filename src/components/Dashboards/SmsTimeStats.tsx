@@ -9,7 +9,7 @@ import { Line } from 'react-chartjs-2'
 import { Columns, ILoadingAndFailure, TimeStats } from '../../types/interfaces'
 
 // utils
-import { MONTH_NAME_YEAR_FORMAT } from '../../utils/enums'
+import { MONTH_NAME_YEAR_FORMAT, SMS_TIME_STATS_DATE_PICKER_ID } from '../../utils/enums'
 import { lineOptions, SMS_SENT_STATS_COLOR, transformSmsDataToStatsData } from '../../pages/HomePage/components/dashboardUtils'
 
 // redux
@@ -67,6 +67,7 @@ const SmsTimeStats = (props: Props) => {
 				<div className={'flex items-center gap-4'}>
 					{countryPicker}
 					<DatePicker
+						id={SMS_TIME_STATS_DATE_PICKER_ID}
 						onChange={onPickerChange}
 						picker={'month'}
 						size={'middle'}

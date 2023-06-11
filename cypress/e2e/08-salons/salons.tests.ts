@@ -1,7 +1,7 @@
 import { loginViaApi } from '../../support/e2e'
 
 // enums
-import { FORM, SUBMIT_BUTTON_ID, FILTER_BUTTON_ID, IMPORT_BUTTON_ID } from '../../../src/utils/enums'
+import { FORM, SUBMIT_BUTTON_ID, FILTER_BUTTON_ID, IMPORT_BUTTON_ID, GENERATE_REPORT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
@@ -45,7 +45,8 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
-					cy.clickButton(FILTER_BUTTON_ID, FORM.SALONS_FILTER_ACITVE)
+					// cy.clickButton(FILTER_BUTTON_ID, FORM.SALONS_FILTER_ACITVE)
+					cy.get(`#${FORM.SALONS_FILTER_ACITVE}-${FILTER_BUTTON_ID}`).click({ force: true })
 					// wait for animation
 					cy.wait(1000)
 					cy.selectOptionDropdownCustom(FORM.SALONS_FILTER_ACITVE, 'statuses_published', undefined, true)
@@ -103,12 +104,48 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 			}
 		})
 
+		it('Generate reports', () => {
+			cy.intercept({
+				method: 'GET',
+				pathname: '/api/b2b/admin/salons'
+			}).as('getSalons')
+			cy.intercept({
+				method: 'GET',
+				pathname: '/api/b2b/admin/reports/salons'
+			}).as('generateReport')
+			cy.visit('/salons')
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+				cy.wait('@getSalons').then((interceptionGetSalons: any) => {
+					// check status code
+					expect(interceptionGetSalons.response.statusCode).to.equal(200)
+					cy.clickButton(GENERATE_REPORT_BUTTON_ID, FORM.SALONS_FILTER_ACITVE)
+					if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+						// wait for animation
+						cy.wait(2000)
+						cy.selectOptionDropdownCustom(FORM.SALONS_REPORT, 'countryCode', undefined, true)
+						cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALONS_REPORT)
+						cy.wait('@generateReport').then((interception: any) => {
+							// check status code
+							expect(interception.response.statusCode).to.equal(200)
+							// check conf toast message
+							cy.checkSuccessToastMessage()
+						})
+					} else {
+						cy.checkForbiddenModal()
+					}
+				})
+			} else {
+				// check redirect to 403 not allowed page
+				cy.location('pathname').should('eq', '/403')
+			}
+		})
+
 		it('Visit, filter and sort deleted salons', () => {
 			cy.intercept({
 				method: 'GET',
 				pathname: '/api/b2b/admin/salons*'
 			}).as('getSalons')
-			cy.visit('/salons?salonState=deleted')
+			cy.visit('/salons/deleted')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getSalons').then((interceptionGetSalons: any) => {
 					// check status code
@@ -145,7 +182,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 				method: 'GET',
 				pathname: '/api/b2b/admin/salons/rejected-suggestions*'
 			}).as('getRejectedSuggestions')
-			cy.visit('/salons?salonState=mistakes')
+			cy.visit('/salons/rejected')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getRejectedSuggestions').then((interceptionGetSalons: any) => {
 					// check status code
@@ -178,7 +215,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 				method: 'GET',
 				pathname: '/api/b2b/admin/salons/rejected-suggestions*'
 			}).as('getRejectedSuggestions')
-			cy.visit('/salons?salonState=mistakes')
+			cy.visit('/salons/rejected')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getRejectedSuggestions').then((interceptionGetRejectedSuggestions: any) => {
 					// check status code

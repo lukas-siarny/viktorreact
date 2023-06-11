@@ -201,7 +201,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					}
 					meta={{} as any}
 					onChange={(value) => setCalendarView(value)}
-					className={'p-0'}
+					className={'p-0 nc-view-select'}
 					options={calendarViewOptions}
 					popupMatchSelectWidth={false}
 				/>

@@ -10,7 +10,8 @@ export enum CYPRESS_CLASS_NAMES {
 	LOGOUT_BUTTON = 'noti-logout-button',
 	MY_ACCOUNT = 'noti-my-account',
 	MY_ACCOUNT_BUTTON = 'noti-my-account-button',
-	FORBIDDEN_MODAL = 'noti-forbidden-modal'
+	FORBIDDEN_MODAL = 'noti-forbidden-modal',
+	ASSIGN_SERVICES_BUTTON = 'noti-assign-services-button'
 }
 
 export enum KEYBOARD_KEY {
@@ -708,11 +709,37 @@ export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
 
 export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
 
-export const DOWNLOAD_BUTTON_ID = 'download-btn'
+export const GENERATE_REPORT_BUTTON_ID = 'generate-report-button'
 
 export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
 export const SMS_UNIT_PRICES_TABLE_ID = 'sms-unit-prices-table'
+
+export const SMS_TIME_STATS_COUNTRY_PICKER_ID = 'sms-time-stats-country-picker'
+
+export const SMS_TIME_STATS_DATE_PICKER_ID = 'sms-time-stats-date-picker'
+
+export const RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID = 'recharge-sms-credit-continue-button'
+
+export const RECHARGE_SMS_CREDIT_BUTTON_ID = 'recharge-sms-credit-button'
+
+export const DOWNLOAD_BUTTON_ID = 'download-button'
+
+export const PUBLISHED_PREMIUM_SALONS_BAR_ID = 'published-premium-salons-bar'
+
+export const SALON_STATS_MONTHLY_ID = 'salon-stats-monthly'
+
+export const SALON_STATS_ANNUAL_ID = 'salon-stats-annual'
+
+export const ENABLE_RS_BUTTON_ID = 'enable-rs-button'
+
+export const ENABLE_RS_BUTTON_FAKE_BUTTON_ID = 'enable-rs-fake-button'
+
+export const CHANGE_SERVICES_ORDER_BUTTON_ID = 'change-services-order-button'
+
+export const CHANGE_SERVICES_ORDER_SAVE_BUTTON_ID = 'change-services-order-save-button'
+
+export const CATEGORY_PARAMS_SWITCH_TYPE_ID = 'category-params-switch-type-id'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 
@@ -889,24 +916,6 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	{
 		key: EVERY_REPEAT.TWO_WEEKS,
 		label: i18next.t('loc:Druhý týždeň')
-	}
-]
-
-export const TEMPLATE_OPTIONS_CUSTOMERS = () => [
-	{
-		value: 'import_of_clients_template.csv',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
-	},
-	{
-		value: 'import_of_clients_template.xlsx',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
-	}
-]
-
-export const TEMPLATE_OPTIONS_RESERVATIONS = () => [
-	{
-		value: 'import_of_reservations_template.xlsx',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
 	}
 ]
 

@@ -1,11 +1,8 @@
 import { loginViaApi } from '../../support/e2e'
 
 // enums
-import { FORM, PERMISSION, SALON_ROLES, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { FORM, PERMISSION, SALON_ROLES } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS, SALON_ID } from '../../enums'
-
-// fixtures
-import salon from '../../fixtures/salon.json'
 
 const salonApprovalProcessTestSuite = (actions: CRUD_OPERATIONS[], role: SALON_ROLES | PERMISSION, email?: string, password?: string): void => {
 	before(() => {

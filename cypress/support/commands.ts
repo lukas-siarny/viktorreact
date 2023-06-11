@@ -94,9 +94,14 @@ Cypress.Commands.add('clickTab', (tabKey: string, tabsKey = '.ant-tabs-nav-list'
 	cy.get(tabsKey).find(`[data-node-key="${tabKey}"]`).click({ force })
 })
 
-Cypress.Commands.add('setDateInputValue', (form?: string, key?: string, value?: string) => {
+Cypress.Commands.add('setDateInputValue', (form?: string, key?: string, value?: string, selectNextYear?: boolean) => {
 	const elementId: string = form ? `#${form}-${key}` : `#${key}`
 	cy.get(elementId).click({ force: true })
+
+	if (selectNextYear) {
+		cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 }).should('be.visible').find('.ant-picker-header-super-next-btn').click({ force: true })
+	}
+
 	if (value) {
 		cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 }).should('be.visible').find(`.ant-picker-cell[title="${value}"]`).click({ force: true })
 	} else {

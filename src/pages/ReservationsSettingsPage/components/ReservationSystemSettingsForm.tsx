@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, submit } from 'redux-form'
+import { Field, FieldArray, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Divider, Form, Row, Select } from 'antd'
+import { Button, Divider, Form, Row } from 'antd'
 
 // atoms
 import SwitchField from '../../../atoms/SwitchField'
@@ -20,21 +20,11 @@ import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } fr
 import { RootState } from '../../../reducers'
 
 // utils
-import {
-	FORM,
-	NOTIFICATION_CHANNEL,
-	RS_NOTIFICATION,
-	STRINGS,
-	PERMISSION,
-	SUBMIT_BUTTON_ID,
-	REQUEST_STATUS,
-	TEMPLATE_OPTIONS_CUSTOMERS,
-	TEMPLATE_OPTIONS_RESERVATIONS
-} from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, IMPORT_BUTTON_ID, DOWNLOAD_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions, { checkPermissions } from '../../../utils/Permissions'
-import { postReq } from '../../../utils/request'
+import { getReq, postReq } from '../../../utils/request'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
@@ -43,6 +33,7 @@ import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 import { ReactComponent as CalendarSyncIcon } from '../../../assets/icons/sync-calendar.svg'
+import { Paths } from '../../../types/api'
 
 type Props = InjectedFormProps<IReservationSystemSettingsForm, ComponentProps> & ComponentProps
 
@@ -76,13 +67,18 @@ enum UPLOAD_TYPE {
 	CUSTOMER = 'customer'
 }
 
+type Template = Paths.GetApiB2BAdminConfig.Responses.$200[keyof Paths.GetApiB2BAdminConfig.Responses.$200]
+
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.wallet?.id)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
+	const isPartner = useMemo(
+		() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER], [PERMISSION.NOTINO, PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN]),
+		[authUser]
+	)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const disabled = !formValues?.enabledReservations
 
@@ -93,6 +89,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		data: { accept: string; label: string; title: string }
 	}>(UPLOAD_MODAL_INIT)
 
+	// const [templateValue, setTemplateValue] = useState<string | null>()
 	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 
 	const handleSubmitImport = async (values: IDataUploadForm) => {
@@ -123,6 +120,29 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			setTemplateValue(null)
 		}
 	}
+
+	const searchTemplates = useCallback(async () => {
+		try {
+			const { data } = await getReq('/api/b2b/admin/config/', undefined)
+			let entity: Template = {}
+
+			if (uploadModal.uploadType === UPLOAD_TYPE.CUSTOMER) {
+				entity = data.importOfClientsTemplates
+			} else if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
+				entity = data.importOfReservationsXlsxTemplate
+			}
+
+			const options: ISelectOptionItem[] = Object.entries(entity).map(([key, value]) => ({
+				key: value.id,
+				value: value.original,
+				label: t('loc:Stiahnuť šablónu {{ template }}', { template: key })
+			}))
+
+			return { data: options }
+		} catch (e) {
+			return { data: [] }
+		}
+	}, [uploadModal.uploadType, t])
 
 	return (
 		<Form layout='vertical' className='w-full'>
@@ -232,22 +252,28 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Časové intervaly medzi rezerváciami.')}</p>
 				</div>
 			</Row>
-			{/* Integrate RS calendar to: Google, Outlook, iCal */}
-			{isPartner && (
-				<>
-					<div className={'flex mt-10'}>
-						<h3 className={'mb-0 mt-0 flex items-center'}>
-							<CalendarSyncIcon className={'text-notino-black mr-2'} />
-							{t('loc:Synchronizácia kalendára')}
-						</h3>
-					</div>
-					<Divider className={'my-3'} />
-					<p className='x-regular text-notino-grayDark mb-4'>
-						{t('loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov.')}
-					</p>
-					<CalendarIntegrations />
-				</>
-			)}
+			<Row justify={'space-between'} className='mt-10'>
+				<div className={'w-12/25'}>
+					{/* Integrate RS calendar to: Google, Outlook, iCal */}
+					{isPartner && (
+						<>
+							<div className={'flex mt-10'}>
+								<h3 className={'mb-0 mt-0 flex items-center'}>
+									<CalendarSyncIcon className={'text-notino-black mr-2'} />
+									{t('loc:Synchronizácia kalendára')}
+								</h3>
+							</div>
+							<Divider className={'my-3'} />
+							<p className='x-regular text-notino-grayDark mb-4'>
+								{t(
+									'loc:Informácie o vašich udalostiach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Synchronizácia sa nevzťahuje na udalosti, ktoré prebehli v minulosti. Synchronizácia prebieha iba smerom z Notino Partner App do externých kalendárov, nie opačne. Zmeny, ktoré v rezerváciách vykonáte v externom kalendári sa neprenesú do Notino Partner aplikácie.'
+								)}
+							</p>
+							<CalendarIntegrations />
+						</>
+					)}
+				</div>
+			</Row>
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Imports */}
 				<div className={'flex'}>
@@ -258,55 +284,68 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 				<Divider className={'my-3'} />
 				<Row>
-					<ImportForm
-						accept={uploadModal.data.accept}
-						title={uploadModal.data.title}
-						label={uploadModal.data.label}
-						requestStatus={uploadModal.requestStatus}
-						setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
-						onSubmit={handleSubmitImport}
-						visible={uploadModal.visible}
-						extraContent={
-							<>
-								<Divider className={'mt-1 mb-3'} />
-								<div className={'flex items-center justify-between gap-1'}>
-									<div className={'ant-form-item w-full'}>
+					<Permissions
+						allowed={[PERMISSION.PARTNER_ADMIN]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<ImportForm
+								accept={uploadModal.data.accept}
+								title={uploadModal.data.title}
+								label={uploadModal.data.label}
+								requestStatus={uploadModal.requestStatus}
+								setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
+								onSubmit={(values: IDataUploadForm) => {
+									if (hasPermission) {
+										handleSubmitImport(values)
+									} else {
+										openForbiddenModal()
+									}
+								}}
+								visible={uploadModal.visible}
+								extraContent={
+									<>
+										<Divider className={'mt-1 mb-3'} />
 										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
 											{t('loc:Vzorové šablóny súborov')}
 										</label>
-										<Select
-											id={'noti-template-select'}
-											style={{ zIndex: 999 }}
-											className={'noti-select-input w-full mb-4'}
-											size={'large'}
-											labelInValue
-											options={uploadModal.uploadType === UPLOAD_TYPE.CUSTOMER ? TEMPLATE_OPTIONS_CUSTOMERS() : TEMPLATE_OPTIONS_RESERVATIONS()}
-											onChange={(val) => setTemplateValue(val)}
-											value={templateValue}
-											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-										/>
-									</div>
-
-									<Button
-										className={'noti-btn'}
-										href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
-										target='_blank'
-										rel='noopener noreferrer'
-										type={'default'}
-										disabled={!templateValue}
-										htmlType={'button'}
-										download
-									>
-										<div>{t('loc:Stiahnuť')}</div>
-									</Button>
-								</div>
-							</>
-						}
-						setVisible={() => {
-							setTemplateValue(null)
-							setUploadModal(UPLOAD_MODAL_INIT)
-						}}
+										<div className={'flex items-center justify-between gap-1 mb-4'}>
+											<SelectField
+												input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
+												meta={{} as any}
+												id={'noti-template-select'}
+												style={{ zIndex: 999 }}
+												className={'max-w-64 w-full pb-0'}
+												size={'large'}
+												filterOption={false}
+												allowInfinityScroll={false}
+												showSearch={false}
+												labelInValue
+												onSearch={searchTemplates}
+												popupMatchSelectWidth={false}
+												placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+												getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+											/>
+											<Button
+												id={DOWNLOAD_BUTTON_ID}
+												className={'noti-btn flex-shrink-0'}
+												href={templateValue?.value || undefined}
+												target='_blank'
+												rel='noopener noreferrer'
+												type={'default'}
+												disabled={!templateValue}
+												htmlType={'button'}
+												download
+											>
+												<div>{t('loc:Stiahnuť')}</div>
+											</Button>
+										</div>
+									</>
+								}
+								setVisible={() => {
+									setTemplateValue(null)
+									setUploadModal(UPLOAD_MODAL_INIT)
+								}}
+							/>
+						)}
 					/>
 					<Button
 						onClick={() => {
@@ -320,12 +359,14 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx' })
 								}
 							})
+							setTemplateValue(null)
 						}}
 						disabled={disabled}
 						type='primary'
 						htmlType='button'
 						className={'noti-btn mr-2'}
 						icon={<UploadIcon />}
+						id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, IMPORT_BUTTON_ID('reservations'))}
 					>
 						{t('loc:Importovať rezervácie')}
 					</Button>
@@ -341,12 +382,14 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
 								}
 							})
+							setTemplateValue(null)
 						}}
 						disabled={disabled}
 						type='primary'
 						htmlType='button'
 						className={'noti-btn'}
 						icon={<UploadIcon />}
+						id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, IMPORT_BUTTON_ID('customers'))}
 					>
 						{t('loc:Importovať zákazníkov')}
 					</Button>

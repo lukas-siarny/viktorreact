@@ -303,7 +303,6 @@ const AddressFields = (props: Props) => {
 														options={countries?.enumerationsOptions || []}
 														name={'country'}
 														size={'large'}
-														readOnly
 														disabled={disabled}
 														loading={countries?.isLoading}
 														required

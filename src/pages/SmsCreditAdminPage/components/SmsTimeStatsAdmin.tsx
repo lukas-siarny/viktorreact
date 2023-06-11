@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 // utils
-import { LANGUAGE } from '../../../utils/enums'
+import { LANGUAGE, SMS_TIME_STATS_COUNTRY_PICKER_ID } from '../../../utils/enums'
 import { optionRenderWithImage } from '../../../utils/helper'
 import { LOCALES } from '../../../components/LanguagePicker'
 
@@ -56,6 +56,7 @@ const SmsTimeStatsAdmin: FC<Props> = (props) => {
 			className={'mt-6 mb-16 py-0'}
 			countryPicker={
 				<SelectField
+					id={SMS_TIME_STATS_COUNTRY_PICKER_ID}
 					input={{ value: smsStatsCountryCode, onChange: (value: any) => setSmsStatsCountryCode(value) } as any}
 					meta={{} as any}
 					optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}

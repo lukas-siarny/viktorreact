@@ -6,7 +6,7 @@ import cx from 'classnames'
 import { useDispatch } from 'react-redux'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID, PERMISSION } from '../../../utils/enums'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID, PERMISSION } from '../../../utils/enums'
 import { showErrorNotification, checkUploadingBeforeSubmit, formFieldID, validationRequired } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 
@@ -66,7 +66,7 @@ const CosmeticForm: FC<Props> = (props) => {
 					component={ImgUploadField}
 					name={'image'}
 					label={t('loc:Logo')}
-					signUrl={URL_UPLOAD_IMAGES}
+					signUrl={URL_UPLOAD_FILE}
 					category={UPLOAD_IMG_CATEGORIES.COSMETIC}
 					multiple={false}
 					maxCount={1}

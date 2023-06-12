@@ -97,7 +97,7 @@ const SalonsReportModal: FC<Props> = (props) => {
 							disabled={countries?.isLoading}
 						/>
 						<Button
-							id={formFieldID(FORM.IMPORT_FORM, SUBMIT_BUTTON_ID)}
+							id={formFieldID(FORM.SALONS_REPORT, SUBMIT_BUTTON_ID)}
 							className='noti-btn'
 							block
 							size='large'

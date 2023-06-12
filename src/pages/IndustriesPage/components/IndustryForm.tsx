@@ -1,14 +1,14 @@
-import React, { FC } from 'react'
-import { Field, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import React, { FC, useEffect, useState } from 'react'
+import { Field, InjectedFormProps, reduxForm, submit, getFormValues, change } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Form, Row } from 'antd'
-import { DataNode } from 'antd/lib/tree'
+import { Button, Collapse, Form, Row } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // components
-import CheckboxGroupNestedField from './CheckboxGroupNestedField'
+import CheckboxGroupField from '../../../atoms/CheckboxGroupField'
 
 // utils
 import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -19,21 +19,126 @@ import Permissions from '../../../utils/Permissions'
 // schema
 import { IIndustryForm, validationIndustryFn } from '../../../schemas/industry'
 
+// types
+import { IServicesSelectionData } from '../../../types/interfaces'
+import { RootState } from '../../../reducers'
+
+const { Panel } = Collapse
+
 type ComponentProps = {
-	dataTree?: DataNode[] | null
 	disabledForm?: boolean
-	isLoadingTree?: boolean
+	servicesSelectionData: IServicesSelectionData | null
+	loadingData?: boolean
 }
 
 type Props = InjectedFormProps<IIndustryForm, ComponentProps> & ComponentProps
 
+type ExtraProps = {
+	options: IServicesSelectionData[keyof IServicesSelectionData]['options']
+	categoryID: string
+	formValues?: IIndustryForm
+	onSelect: () => void
+}
+
+const Extra: FC<ExtraProps> = React.memo((props) => {
+	const [t] = useTranslation()
+	const dispatch = useDispatch()
+
+	const { options, categoryID, formValues, onSelect } = props
+
+	const selectedValues = formValues?.categoryIDs[categoryID].serviceCategoryIDs || []
+	const visibleSelectedOptions = selectedValues?.filter((value) => options.find((option) => option.value === value))
+	const areAllVisibleOptionsSelected = visibleSelectedOptions?.length === options.length
+	const label = areAllVisibleOptionsSelected ? t('loc:Odznačiť všetko') : t('loc:Označiť všetko')
+
+	const handleChange = () => {
+		let newServiceCategoryIDs: string[] = []
+		if (areAllVisibleOptionsSelected) {
+			newServiceCategoryIDs = selectedValues?.filter((value) => !options.find((option) => option.value === value))
+		} else {
+			newServiceCategoryIDs = Array.from(new Set([...selectedValues, ...options.map((o) => o.value as string)]))
+		}
+		dispatch(change(FORM.INDUSTRY, `categoryIDs.${categoryID}.serviceCategoryIDs`, newServiceCategoryIDs))
+	}
+
+	return (
+		<Button
+			type={'ghost'}
+			onClick={(e) => {
+				e.stopPropagation()
+				handleChange()
+				onSelect()
+			}}
+			onKeyPress={(e) => e.stopPropagation()}
+			className={'text-notino-pink'}
+		>
+			{label}
+		</Button>
+	)
+})
+
 const IndustryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, pristine, dataTree, disabledForm, isLoadingTree } = props
+	const { handleSubmit, submitting, pristine, servicesSelectionData, loadingData } = props
+
+	const [collapseActiveKeys, setCollapseActiveKeys] = useState<string[]>([])
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.INDUSTRY)(state)) as IIndustryForm
+
+	useEffect(() => {
+		setCollapseActiveKeys(Object.keys(servicesSelectionData || {}))
+	}, [servicesSelectionData])
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
-			{!isLoadingTree && <Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={dataTree} disabled={disabledForm} />}
+			<Collapse
+				className={'collapse-list noti-collapse-industry'}
+				bordered={false}
+				activeKey={collapseActiveKeys}
+				onChange={(key) => {
+					if (typeof key === 'string') {
+						setCollapseActiveKeys([key])
+					} else {
+						setCollapseActiveKeys(key)
+					}
+				}}
+			>
+				{Object.entries(servicesSelectionData || {})
+					.sort((a, b) => a[1].orderIndex - b[1].orderIndex)
+					.map(([categoryID, categoryData]) => {
+						return (
+							<Panel
+								header={
+									<div className={'flex align-center'}>
+										<div className={'list-title leading-7'}>{categoryData.title}</div>
+									</div>
+								}
+								key={categoryID}
+								forceRender
+								showArrow
+								extra={
+									<Extra
+										categoryID={categoryID}
+										options={categoryData.options}
+										formValues={formValues}
+										onSelect={() => {
+											if (!collapseActiveKeys.includes(categoryID)) {
+												setCollapseActiveKeys([...collapseActiveKeys, categoryID])
+											}
+										}}
+									/>
+								}
+							>
+								<Field
+									className={'p-0 m-0 noti-checkbox-group-services'}
+									component={CheckboxGroupField}
+									name={`categoryIDs[${categoryID}]serviceCategoryIDs`}
+									options={categoryData.options}
+									disabled={loadingData}
+								/>
+							</Panel>
+						)
+					})}
+			</Collapse>
 			<div className={'content-footer'}>
 				<Row justify='center'>
 					<Permissions
@@ -47,7 +152,7 @@ const IndustryForm: FC<Props> = (props) => {
 								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								icon={<EditIcon />}
 								disabled={submitting || pristine}
-								loading={submitting || isLoadingTree}
+								loading={submitting}
 								onClick={(e) => {
 									if (hasPermission) {
 										submit(FORM.INDUSTRY)
@@ -76,4 +181,4 @@ const form = reduxForm<IIndustryForm, ComponentProps>({
 	onSubmitFail: showErrorNotification
 })(withPromptUnsavedChanges(IndustryForm))
 
-export default form
+export default React.memo(form)

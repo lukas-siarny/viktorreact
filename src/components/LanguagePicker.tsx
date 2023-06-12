@@ -110,7 +110,7 @@ export const handleLanguageChange = (value: any, dispatch: any, reloadPageAfterC
 	i18next.changeLanguage(value)
 }
 
-const options = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: LOCALES[value].icon }))
+export const languageOptions = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: <FlagIcon countryCode={value} />, key: value }))
 
 export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterChange = true): ItemType => {
 	let currentLanguage: LANGUAGE
@@ -148,9 +148,9 @@ export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterCha
 		label: get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase(),
 		icon: <FlagIcon countryCode={currentLanguage} />,
 		popupOffset: [0, -75],
-		children: options?.map((option: any, index: number) => ({
+		children: languageOptions?.map((option: any, index: number) => ({
 			key: index,
-			icon: <FlagIcon countryCode={option.value} />,
+			icon: option.icon,
 			label: option.label,
 			onClick: () => handleLanguageChange(option.value, dispatch, reloadPageAfterChange)
 		}))
@@ -170,7 +170,7 @@ const LanguagePicker: FC<Props> = (props) => {
 				className={'noti-select-input'}
 				popupClassName={'noti-select-dropdown'}
 			>
-				{options?.map((option: any, index: number) => (
+				{languageOptions?.map((option: any, index: number) => (
 					<Option value={option.value} key={index}>
 						<Row className={cx('items-center', { 'justify-center': isSmallDevice })}>
 							<FlagIcon countryCode={option.value} />

@@ -36,9 +36,9 @@ const FlagIcon = ({ countryCode, className }: Props) => {
 			icon = <BgFlag />
 			break
 		default:
-			return <SkFlag />
+			icon = <SkFlag />
 	}
-	return <span className={cx(className, 'flag-icon')}>{icon}</span>
+	return <div className={cx(className, 'flag-icon')}>{icon}</div>
 }
 
 export default FlagIcon

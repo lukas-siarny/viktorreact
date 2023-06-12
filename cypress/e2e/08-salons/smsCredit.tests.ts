@@ -26,7 +26,7 @@ const smsCreditTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				pathname: '/admin/wallets/transactions'
 			}).as('createTransaction')
 			cy.visit(`/salons/${salonID}/sms-credit`)
-			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.get('main.ant-layout-content').then(($body) => {
 					if (!$body.find('#sms-credit-no-wallet-id').length) {
 						cy.wait('@getWallet').then((interceptionGetWallet: any) => {

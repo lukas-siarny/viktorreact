@@ -4583,6 +4583,7 @@ declare namespace Paths {
                     };
                     qrCodes: {
                         name: string;
+                        description: string;
                         link: string;
                     }[];
                     createdAt: string; // date-time
@@ -6198,14 +6199,16 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Ext = "png" | "svg";
+            export type Ext = "png";
             export type SalonID = string; // uuid
-            export type Type = "raw";
+            export type T = string;
+            export type Type = "digi";
         }
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
         }
         export interface QueryParameters {
+            t?: Parameters.T;
             ext: Parameters.Ext;
             type: Parameters.Type;
         }
@@ -10023,6 +10026,7 @@ declare namespace Paths {
                     };
                     qrCodes: {
                         name: string;
+                        description: string;
                         link: string;
                     }[];
                     createdAt?: string; // date-time
@@ -11094,14 +11098,16 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Ext = "png" | "svg";
+            export type Ext = "png";
             export type SalonID = string; // uuid
-            export type Type = "raw";
+            export type T = string;
+            export type Type = "digi";
         }
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
         }
         export interface QueryParameters {
+            t?: Parameters.T;
             ext: Parameters.Ext;
             type: Parameters.Type;
         }
@@ -51507,6 +51513,7 @@ declare namespace Paths {
                     };
                     qrCodes: {
                         name: string;
+                        description: string;
                         link: string;
                     }[];
                     createdAt?: string; // date-time
@@ -52768,6 +52775,7 @@ declare namespace Paths {
                     };
                     qrCodes: {
                         name: string;
+                        description: string;
                         link: string;
                     }[];
                     createdAt?: string; // date-time
@@ -62805,19 +62813,16 @@ declare namespace Paths {
         }
         export interface RequestBody {
             /**
-             * Authorization code of appropriate google calendar
+             * OAuth code of for getting access and refresh tokens
              */
             authCode?: string;
-            /**
-             * Refresh token of appropriate microsoft calendar
-             */
-            refreshToken?: string;
             /**
              * Enum defining type of calendar
              * example:
              * GOOGLE
              */
             calendarType: "GOOGLE" | "MICROSOFT";
+            redirectURI?: string;
             salonIDs: [
                 string,
                 ...string[]
@@ -71340,6 +71345,7 @@ declare namespace Paths {
                     };
                     qrCodes: {
                         name: string;
+                        description: string;
                         link: string;
                     }[];
                     createdAt?: string; // date-time

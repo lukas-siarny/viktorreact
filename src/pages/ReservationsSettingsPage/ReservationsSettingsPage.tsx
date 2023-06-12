@@ -135,6 +135,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const dispatch = useDispatch()
 	const { parentPath, salonID } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -224,7 +225,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Spin spinning={salon.isLoading || submitting}>
+						<Spin spinning={salon.isLoading || authUser.isLoading || submitting}>
 							<ReservationSystemSettingsForm
 								onSubmit={handleSubmitSettings}
 								salonID={salonID}

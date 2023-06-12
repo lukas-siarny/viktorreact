@@ -42,9 +42,15 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				method: 'GET',
 				pathname: `/api/b2b/admin/salons/${salonID}`
 			}).as('getSalon')
+			cy.intercept({
+				method: 'GET',
+				pathname: `/api/b2b/admin/users/*`
+			}).as('getUser')
 			cy.visit(`/salons/${salonID}/reservations-settings`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-				cy.wait('@getSalon').then(() => {
+				cy.wait(['@getUser', '@getSalon']).then(([interceptionGetUser, interceptionGetSalon]: any[]) => {
+					expect(interceptionGetUser.response.statusCode).to.equal(200)
+					expect(interceptionGetSalon.response.statusCode).to.equal(200)
 					// wait for animations
 					cy.wait(2000)
 					cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-enabledReservations > button`).then(($element) => {

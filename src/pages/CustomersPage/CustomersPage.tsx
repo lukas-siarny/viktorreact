@@ -16,7 +16,7 @@ import ImportForm from '../../components/ImportForm'
 import SelectField from '../../atoms/SelectField'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, DOWNLOAD_BUTTON_ID } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getReq, postReq } from '../../utils/request'
@@ -154,7 +154,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		setRequestStatus(REQUEST_STATUS.SUBMITTING)
 
 		const formData = new FormData()
-		formData.append('file', values?.file)
+		formData.append('file', values?.file[0])
 
 		try {
 			await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
@@ -182,57 +182,69 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		} catch (e) {
 			return { data: [] }
 		}
-	}, [])
+	}, [t])
 
 	return (
 		<>
-			<ImportForm
-				setRequestStatus={setRequestStatus}
-				requestStatus={uploadStatus}
-				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })}
-				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv'}
-				title={t('loc:Importovať zákazníkov')}
-				visible={customersImportVisible}
-				setVisible={setCustomersImportVisible}
-				onSubmit={clientImportsSubmit}
-				extraContent={
-					<>
-						<Divider className={'mt-1 mb-3'} />
-						<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
-							{t('loc:Vzorové šablóny súborov')}
-						</label>
-						<div className={'flex items-center justify-between gap-1'}>
-							<SelectField
-								input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
-								meta={{} as any}
-								id={'noti-customer-template-select'}
-								style={{ zIndex: 999 }}
-								className={'max-w-64 w-full pb-0'}
-								size={'large'}
-								filterOption={false}
-								allowInfinityScroll={false}
-								showSearch={false}
-								labelInValue
-								onSearch={searchTemplates}
-								popupMatchSelectWidth={false}
-								placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-								getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-							/>
-							<Button
-								className={'noti-btn flex-shrink-0'}
-								href={templateValue?.value || undefined}
-								target='_blank'
-								rel='noopener noreferrer'
-								type={'default'}
-								disabled={!templateValue}
-								htmlType={'button'}
-								download
-							>
-								<div>{t('loc:Stiahnuť')}</div>
-							</Button>
-						</div>
-					</>
-				}
+			<Permissions
+				allowed={[PERMISSION.PARTNER_ADMIN]}
+				render={(hasPermission, { openForbiddenModal }) => (
+					<ImportForm
+						setRequestStatus={setRequestStatus}
+						requestStatus={uploadStatus}
+						label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })}
+						accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv'}
+						title={t('loc:Importovať zákazníkov')}
+						visible={customersImportVisible}
+						setVisible={setCustomersImportVisible}
+						onSubmit={(values: IDataUploadForm) => {
+							if (hasPermission) {
+								clientImportsSubmit(values)
+							} else {
+								openForbiddenModal()
+							}
+						}}
+						extraContent={
+							<>
+								<Divider className={'mt-1 mb-3'} />
+								<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+									{t('loc:Vzorové šablóny súborov')}
+								</label>
+								<div className={'flex items-center justify-between gap-1'}>
+									<SelectField
+										input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
+										meta={{} as any}
+										id={'noti-customer-template-select'}
+										style={{ zIndex: 999 }}
+										className={'max-w-64 w-full pb-0'}
+										size={'large'}
+										filterOption={false}
+										allowInfinityScroll={false}
+										showSearch={false}
+										labelInValue
+										onSearch={searchTemplates}
+										popupMatchSelectWidth={false}
+										placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+										getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+									/>
+									<Button
+										id={DOWNLOAD_BUTTON_ID}
+										className={'noti-btn flex-shrink-0'}
+										href={templateValue?.value || undefined}
+										target='_blank'
+										rel='noopener noreferrer'
+										type={'default'}
+										disabled={!templateValue}
+										htmlType={'button'}
+										download
+									>
+										<div>{t('loc:Stiahnuť')}</div>
+									</Button>
+								</div>
+							</>
+						}
+					/>
+				)}
 			/>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />

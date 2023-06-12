@@ -34,14 +34,31 @@ type Props = WrappedFieldArrayProps & {
 	emptyValue?: any
 	// custom delete ak sa vyzaduje aj BE delete na onConfirm nie len odstranenie na FE cez remove index
 	handleDelete?: (id: any, removeIndex: (index: number) => void, index: number) => any
+	buttonID?: string
 }
 
 const InputsArrayField = (props: Props) => {
-	const { fields, disabled, handleDelete, required, entityName, label, style, maxCount = 5, nestedFieldName, inputSize = 'large', placeholder, type = 'text', emptyValue } = props
+	const {
+		fields,
+		buttonID,
+		disabled,
+		handleDelete,
+		required,
+		entityName,
+		label,
+		style,
+		maxCount = 5,
+		nestedFieldName,
+		inputSize = 'large',
+		placeholder,
+		type = 'text',
+		emptyValue
+	} = props
 	const [t] = useTranslation()
 
 	const buttonAdd = (
 		<Button
+			id={buttonID}
 			onClick={() => fields.push(emptyValue ?? '')}
 			icon={<PlusIcon className={'text-notino-black'} />}
 			className={'noti-btn mt-2'}

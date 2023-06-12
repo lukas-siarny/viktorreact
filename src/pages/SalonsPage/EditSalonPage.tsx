@@ -555,33 +555,22 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 		}
 	}
 
-	const onSubmitVoucher = async (values?: IVoucherForm) => {
-		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: values?.code || null })
-			setVisibleVoucherModal(false)
-			await dispatch(selectSalon(salonID))
-			dispatch(initialize(FORM.VOUCHER_FORM, { code: b2bVoucher }))
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
-		}
-	}
-
-	const deleteVoucher = async () => {
-		if (isRemoving) {
+	const onUpdateVoucher = async (values?: IVoucherForm) => {
+		const voucher = values?.code || null
+		if (isSubmittingData) {
 			return
 		}
-		setIsRemoving(true)
+		setSubmitting(true)
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: null })
-			dispatch(selectSalon(salonID))
-			dispatch(reset(FORM.VOUCHER_FORM))
+			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: voucher })
+			await dispatch(selectSalon(salonID))
+			setVisibleVoucherModal(false)
+			dispatch(initialize(FORM.VOUCHER_FORM, { code: voucher }))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
-		} finally {
-			setIsRemoving(false)
 		}
+		setSubmitting(false)
 	}
 
 	return (
@@ -678,33 +667,37 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 											<h4>{t('loc:Kód kupónu pre salón')}</h4>
 											<i className='block mb-2 text-base'>{b2bVoucher}</i>
 										</div>
+										<Permissions allowed={[PERMISSION.NOTINO]}>
+											<Button
+												type={'primary'}
+												size={'middle'}
+												className={'noti-btn m-regular mt-2'}
+												onClick={() => {
+													setVisibleVoucherModal(true)
+													dispatch(initialize(FORM.VOUCHER_FORM, { code: b2bVoucher }))
+												}}
+												disabled={disabledForm}
+											>
+												{STRINGS(t).edit(t('loc:kupón'))}
+											</Button>
+											<DeleteButton className={'mt-2'} onConfirm={() => onUpdateVoucher()} entityName={t('loc:kupón')} disabled={isDeletedSalon} />
+										</Permissions>
+									</>
+								) : (
+									<Permissions allowed={[PERMISSION.NOTINO]}>
 										<Button
 											type={'primary'}
 											size={'middle'}
 											className={'noti-btn m-regular mt-2'}
 											onClick={() => {
 												setVisibleVoucherModal(true)
-												dispatch(initialize(FORM.VOUCHER_FORM, { code: b2bVoucher }))
+												dispatch(initialize(FORM.VOUCHER_FORM, {}))
 											}}
 											disabled={disabledForm}
 										>
-											{STRINGS(t).edit(t('loc:kupón'))}
+											{STRINGS(t).addRecord(t('loc:kupón'))}
 										</Button>
-										<DeleteButton className={'mt-2'} onConfirm={deleteVoucher} entityName={t('loc:kupón')} disabled={isDeletedSalon} />
-									</>
-								) : (
-									<Button
-										type={'primary'}
-										size={'middle'}
-										className={'noti-btn m-regular mt-2'}
-										onClick={() => {
-											setVisibleVoucherModal(true)
-											dispatch(initialize(FORM.VOUCHER_FORM, {}))
-										}}
-										disabled={disabledForm}
-									>
-										{STRINGS(t).addRecord(t('loc:kupón'))}
-									</Button>
+									</Permissions>
 								)}
 							</Row>
 						}
@@ -748,7 +741,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 				footer={null}
 				closeIcon={<CloseIcon />}
 			>
-				<VoucherForm onSubmit={onSubmitVoucher} />
+				<VoucherForm onSubmit={onUpdateVoucher} />
 			</Modal>
 			<Modal
 				title={t('loc:Priradiť Notino používateľa')}

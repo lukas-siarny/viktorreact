@@ -155,7 +155,7 @@ const CategoriesTree = () => {
 				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1, !!get(child, 'deletedAt')) : null,
 				nameLocalizations: get(child, 'nameLocalizations'),
 				categoryParameterID: get(child, 'categoryParameter'),
-				className: get(child, 'id'),
+				className: cx(get(child, 'id'), `noti-tree-node-level-${level}`),
 				level,
 				index,
 				image: get(child, 'image'),
@@ -180,7 +180,7 @@ const CategoriesTree = () => {
 				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[], 1, !!get(category, 'deletedAt')) : null,
 				nameLocalizations: get(category, 'nameLocalizations'),
 				categoryParameterID: get(category, 'categoryParameter'),
-				className: get(category, 'id'),
+				className: cx(get(category, 'id'), `noti-tree-node-level-${level}`),
 				level,
 				index,
 				image: get(category, 'image'),
@@ -314,7 +314,8 @@ const CategoriesTree = () => {
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? null,
 				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? null,
-				categoryParameterID: formData.categoryParameterID?.value ?? null
+				categoryParameterID: formData.categoryParameterID?.value ?? null,
+				descriptionLocalizations
 			}
 
 			if (formData.id) {

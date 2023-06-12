@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Col, Divider, Empty, Modal, Row, Spin } from 'antd'
+import { Button, Divider, Empty, Modal, Row, Spin } from 'antd'
 import { compose } from 'redux'
 import { getFormValues, initialize, isSubmitting, reset } from 'redux-form'
-import { DataNode } from 'antd/lib/tree'
-import { isEmpty, map } from 'lodash'
-import i18next from 'i18next'
+import { isEmpty } from 'lodash'
 import { useNavigate, useParams } from 'react-router-dom'
 
 // reducers
@@ -17,22 +15,21 @@ import { getServices, setServicesActiveKeys } from '../../reducers/services/serv
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import IndustryForm from './components/IndustryForm'
-import { NestedMultiselectDataItem } from './components/CheckboxGroupNestedField'
 import RequestNewServiceForm from './components/RequestNewServiceForm'
+import IndustryFilter from './components/IndustryFilter'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT, FORM, PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
+import { FORM, PERMISSION, NOTIFICATION_TYPE, STRINGS } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { patchReq, postReq } from '../../utils/request'
-import { flattenTree } from '../../utils/helper'
+import { flattenTree, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // types
-import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IIndustryFilter, IServicesSelectionData, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // assets
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
-import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 
@@ -42,33 +39,6 @@ import { IRequestNewServiceForm } from '../../schemas/service'
 
 type Props = SalonSubPageProps
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
-
-// create category keys
-//  keys with prefix level2 are service keys
-const getCategoryKey = (id: string, level: number) => `level${level}_${id}`
-
-// parse serviceIDs from category keys
-export const getServiceIdsFromFormValues = (values: IIndustryForm) => {
-	return values?.categoryIDs.reduce((categoryKeys, key) => {
-		if (key.startsWith('level2')) {
-			const split = key.split('_')
-			categoryKeys.push(split[1])
-		}
-		return categoryKeys
-	}, [] as string[])
-}
-
-export const getServicesCategoryKeys = (array: any[], levelOfDepth = 0) => {
-	let output: any[] = []
-
-	array.forEach((item: any) => {
-		if (levelOfDepth === 2) {
-			output.push(getCategoryKey(item?.category?.id, levelOfDepth))
-		}
-		output = output.concat(getServicesCategoryKeys(item.category.children || [], levelOfDepth + 1))
-	})
-	return output
-}
 
 const getCategoryById = (category: any, serviceCategoryID: string) => {
 	let result = null
@@ -82,29 +52,20 @@ const getCategoryById = (category: any, serviceCategoryID: string) => {
 	return result
 }
 
-const mapCategoriesForDataTree = (parentId: string | null, children: any[] | undefined, level = 0) => {
-	const childs: NestedMultiselectDataItem[] & any = children
-	const items: DataNode[] = map(childs, (child, index) => {
-		return {
-			className: `noti-tree-node-${level}`,
-			switcherIcon: (props) => {
-				if (level !== 1) {
-					return undefined
-				}
-				return props?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
-			},
-			id: child.id,
-			title: level === 0 ? i18next.t('loc:Vybrať všetky služby odevetvia') : child.name,
-			key: getCategoryKey(child.id, level),
-			disabled: false,
-			parentId,
-			children: child.children ? mapCategoriesForDataTree(child.id, child.children, level + 1) : undefined,
-			level,
-			index
+export const getServicesCategoryKeys = (array: any[]) => {
+	let output: any[] = []
+
+	array.forEach((item: any) => {
+		if (item?.service?.id) {
+			output.push(item?.category?.id)
 		}
+		output = output.concat(getServicesCategoryKeys(item.category.children || []))
 	})
-	return items
+	return output
 }
+
+const getServiceCategoryIdsFromFormValues = (values?: IIndustryForm) =>
+	Object.values(values?.categoryIDs || {}).reduce((acc, cv) => [...acc, ...cv.serviceCategoryIDs], [] as string[])
 
 const IndustryPage = (props: Props) => {
 	const [t] = useTranslation()
@@ -120,52 +81,100 @@ const IndustryPage = (props: Props) => {
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.INDUSTRY)(state)) as IIndustryForm
 
 	const rootCategory = categories.data?.find((category) => category.id === industryID)
-	const rootUserCategory = services?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
-
-	// https://ant.design/components/tree/#Note - nastava problem, ze pokial nie je vygenerovany strom, tak sa vyrendruje collapsnuty, aj ked je nastavena propa defaultExpandAll
-	// preto sa strom setuje cez state az po tom, co sa vytvoria data pre strom (vid useEffect nizzsie)
-	// cize pokial je null, znamena ze strom este nebol vygenerovany a zobrazuje sa loading state
-	const [dataTree, setDataTree] = useState<DataNode[] | null>(null)
-	const isLoadingTree = dataTree === null
+	const rootCategorySalonData = services?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
 
 	const [isVisible, setIsVisible] = useState<boolean>(false)
+	const [servicesSelectionData, setServicesSelectionData] = useState<IServicesSelectionData | null>(null)
+
+	const [query, setQuery] = useState<IIndustryFilter>({
+		search: ''
+	})
+
+	const servicesLength = rootCategory ? flattenTree([rootCategory], (item, level) => ({ ...item, level })).filter((category) => category.level === 2).length : 0
+	const selectedServiceCategoryIDs = getServiceCategoryIdsFromFormValues(formValues)
+
+	const areThereAnyServiceCategories = rootCategory?.children.some((secondLevelCategory) => secondLevelCategory.children?.length)
+
+	const loading = categories.isLoading || services.isLoading
 
 	useEffect(() => {
-		;(async () => {
-			const categoriesData = await dispatch(getCategories())
-			const root = categoriesData?.data?.find((category) => category.id === industryID)
-
-			if (!root) {
-				navigate('/404')
-			} else {
-				setDataTree(mapCategoriesForDataTree(null, [root]))
-			}
-		})()
-	}, [dispatch, industryID, navigate])
-
-	useEffect(() => {
+		dispatch(getCategories())
 		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
 	useEffect(() => {
-		const initialValues = {
-			categoryIDs: getServicesCategoryKeys(rootUserCategory ? [rootUserCategory] : [])
+		if (!rootCategory) {
+			navigate('/404')
+		} else {
+			let formInitialValues: IIndustryForm = { categoryIDs: {} }
+
+			rootCategory.children.forEach((category) => {
+				const serviceCategoryIDs: string[] = []
+				const categoryDataForm = {
+					serviceCategoryIDs,
+					orderIndex: category.orderIndex
+				}
+
+				category.children.forEach((serviceCategory) => {
+					const servicesDataUser = getCategoryById(rootCategorySalonData, serviceCategory.id)
+					if (servicesDataUser?.category?.id) {
+						serviceCategoryIDs.push(servicesDataUser.category.id)
+					}
+				})
+
+				formInitialValues = {
+					...formInitialValues,
+					categoryIDs: {
+						...formInitialValues.categoryIDs,
+						[category.id]: categoryDataForm
+					}
+				}
+			})
+
+			dispatch(initialize(FORM.INDUSTRY, formInitialValues))
 		}
+	}, [dispatch, navigate, rootCategory, rootCategorySalonData])
 
-		dispatch(initialize(FORM.INDUSTRY, initialValues))
-	}, [dispatch, rootUserCategory])
+	useEffect(() => {
+		if (rootCategory) {
+			const searchValue = transformToLowerCaseWithoutAccent(query.search || undefined)
 
-	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Zoznam odvetví a služieb'),
-				link: parentPath + t('paths:industries-and-services')
-			},
-			{
-				name: t('loc:Priradiť služby'),
-				titleName: rootCategory?.name
-			}
-		]
+			const dataServicesSelection: IServicesSelectionData = rootCategory.children.reduce((categoriesAcc, category) => {
+				const options = category.children.reduce((optionsAcc, serviceCategory) => {
+					if ((searchValue && transformToLowerCaseWithoutAccent(serviceCategory.name)?.includes(searchValue)) || !searchValue) {
+						return [
+							...optionsAcc,
+							{
+								value: serviceCategory.id,
+								label: serviceCategory.name
+							}
+						]
+					}
+					return optionsAcc
+				}, [] as IServicesSelectionData[keyof IServicesSelectionData]['options'])
+
+				if (options.length) {
+					const categoryDataServiceSelection: IServicesSelectionData[keyof IServicesSelectionData] = {
+						options,
+						title: category.name || '-',
+						orderIndex: category.orderIndex
+					}
+
+					return {
+						...categoriesAcc,
+						[category.id]: categoryDataServiceSelection
+					}
+				}
+
+				return categoriesAcc
+			}, {} as IServicesSelectionData)
+			setServicesSelectionData(dataServicesSelection)
+		}
+		dispatch(initialize(FORM.INDUSTRY_FILTER, { search: query.search }))
+	}, [query.search, rootCategory, dispatch])
+
+	const handleSubmitFilter = (values: IIndustryFilter) => {
+		setQuery({ ...query, search: values.search })
 	}
 
 	const handleSubmitRequestNewService = async (data: IRequestNewServiceForm) => {
@@ -184,12 +193,11 @@ const IndustryPage = (props: Props) => {
 		}
 	}
 
-	const handleSubmit = async (values: IIndustryForm) => {
-		const categoryIDs = getServiceIdsFromFormValues(values)
+	const handleSubmit = async () => {
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID }, {
 				rootCategoryID: industryID,
-				categoryIDs
+				categoryIDs: selectedServiceCategoryIDs
 			} as CategoriesPatch)
 			const updatedServicesData = await dispatch(getServices({ salonID }))
 			// clear selected keys for serivce settings table
@@ -197,11 +205,11 @@ const IndustryPage = (props: Props) => {
 			// redirect to service detail edit page in case it's first selected service in salon
 			const servicesKeys = getServicesCategoryKeys(services.data?.groupedServicesByCategory || [])
 			// check if there were any services saved before (servicesKeys) and if there are any new services to be saved (categoryIDs)
-			if (isEmpty(servicesKeys) && !isEmpty(categoryIDs)) {
+			if (isEmpty(servicesKeys) && !isEmpty(selectedServiceCategoryIDs)) {
 				// find rootCategory from updated service data
 				const updatedUserRootCategory = updatedServicesData.data?.groupedServicesByCategory.find((category) => category.category?.id === industryID)
 				// find service id in a rootCategory tree based on first selected service ID
-				const serviceID = getCategoryById(updatedUserRootCategory, categoryIDs[0])?.service?.id
+				const serviceID = getCategoryById(updatedUserRootCategory, selectedServiceCategoryIDs[0])?.service?.id
 				// redirect
 				if (serviceID) {
 					navigate(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID }))
@@ -209,70 +217,77 @@ const IndustryPage = (props: Props) => {
 			}
 		} catch (e) {
 			// eslint-disable-next-line no-console
-			console.log(e)
+			console.error(e)
 		}
 	}
 
-	const servicesLength = rootCategory ? flattenTree([rootCategory], (item, level) => ({ ...item, level })).filter((category) => category.level === 2).length : 0
-	const selectedServicesLength = getServiceIdsFromFormValues(formValues)?.length || 0
-
-	const areThereAnyServiceCategories = rootCategory?.children.some((secondLevelCategory) => secondLevelCategory.children?.length)
-
-	const loading = categories.isLoading || services.isLoading || isLoadingTree
+	const breadcrumbs: IBreadcrumbs = {
+		items: [
+			{
+				name: t('loc:Zoznam odvetví a služieb'),
+				link: parentPath + t('paths:industries-and-services')
+			},
+			{
+				name: STRINGS(t).assign(t('loc:služby')),
+				titleName: rootCategory?.name
+			}
+		]
+	}
 
 	return (
 		<>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:industries-and-services')} />
 			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body small'>
-						<Spin spinning={loading || submitting}>
-							<Row justify='space-between'>
-								<h3 className={'mb-0 mt-0 flex items-center pr-4'}>
-									<ServiceIcon className={'text-notino-black mr-2'} />
-									{t('loc:Priradiť služby')}
-								</h3>
-								<Permissions
-									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}
-									render={(hasPermission, { openForbiddenModal }) => (
-										<Button
-											onClick={() => {
-												if (hasPermission) {
-													setIsVisible(true)
-												} else {
-													openForbiddenModal()
-												}
-											}}
-											type='primary'
-											htmlType='button'
-											className={'noti-btn'}
-											icon={<PlusIcon />}
-										>
-											{t('loc:Požiadať o novú službu')}
-										</Button>
-									)}
-								/>
-							</Row>
-							<Divider className={'mb-3 mt-3'} />
 
-							<header className={'category-select-header mb-4'}>
-								<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.resizedImages?.small}")` }} />
-								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
-								<span className={'label'}>{rootCategory?.name}</span>
-							</header>
-							{!loading && !areThereAnyServiceCategories ? (
-								<div className='h-100 w-full flex items-center justify-center'>
-									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:V tomto odvetví nie sú dostupné na výber žiadne služby')} />
-								</div>
-							) : (
-								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
+			<div className='content-body small'>
+				<Spin spinning={loading || submitting}>
+					<Row justify='space-between'>
+						<h3 className={'mb-0 mt-0 flex items-center pr-4'}>
+							<ServiceIcon className={'text-notino-black mr-2'} />
+							{STRINGS(t).assign(t('loc:služby'))}
+						</h3>
+						<Permissions
+							allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									onClick={() => {
+										if (hasPermission) {
+											setIsVisible(true)
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									type='primary'
+									htmlType='button'
+									className={'noti-btn'}
+									icon={<PlusIcon />}
+								>
+									{t('loc:Požiadať o novú službu')}
+								</Button>
 							)}
-						</Spin>
-					</div>
-				</Col>
-			</Row>
+						/>
+					</Row>
+					<Divider className={'mb-3 mt-3'} />
+
+					<header className={'category-select-header mb-4'}>
+						<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.resizedImages?.small}")` }} />
+						<div className={'count'}>{`${selectedServiceCategoryIDs.length} ${t('loc:z')} ${servicesLength}`}</div>
+						<span className={'label'}>{rootCategory?.name}</span>
+					</header>
+					{!loading && !areThereAnyServiceCategories ? (
+						<div className='h-100 w-full flex items-center justify-center'>
+							<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:V tomto odvetví nie sú dostupné na výber žiadne služby')} />
+						</div>
+					) : (
+						<>
+							<IndustryFilter onSubmit={handleSubmitFilter} />
+							<IndustryForm onSubmit={handleSubmit} servicesSelectionData={servicesSelectionData} loadingData={loading} />
+						</>
+					)}
+				</Spin>
+			</div>
+
 			<Modal
 				key={'requestNewServiceModal'}
 				title={t('loc:Žiadosť o novú službu')}

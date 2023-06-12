@@ -135,6 +135,8 @@ services:
       - FULLCALENDAR_LICENSE_KEY=testKey
       - REACT_APP_SENTRY_ENV=e2e
       - REACT_APP_SENTRY_DSN=https://123@sentry.dev/1
+      - REACT_APP_GOOGLE_OAUTH_CLIENT_ID=841411372013-83m99dm3baeqpc5lcokfv153jbp52kbr.apps.googleusercontent.com
+      - REACT_APP_MS_OAUTH_CLIENT_ID=5a15a7fb-6773-43a9-aaec-b8ecd91862fa
     build:
       context: .
       dockerfile: ./docker/CI/Dockerfile

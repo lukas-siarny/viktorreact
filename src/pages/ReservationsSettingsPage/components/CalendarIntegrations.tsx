@@ -133,7 +133,7 @@ const CalendarIntegrations = () => {
 		 * After successfull login to Microsoft account in login popup window, user is redirected to /ms-oauth2 URL, which renders MSRedirectPage.tsx component
 		 * Communication between login popup window and window that triggered the popup is handled via browser postMessage API
 		 */
-		const messageLisnter = (event: MessageEvent<MSRedirectMessage>) => {
+		const messageListener = (event: MessageEvent<MSRedirectMessage>) => {
 			// Important! Check the origin of the data!! (only messages from our host are allowed)
 			if (event.origin === `${window.location.protocol}//${window.location.host}` && event.data.key === MS_REDIRECT_MESSAGE_KEY && popupRef.current) {
 				if (event.data.status === 'success') {
@@ -149,9 +149,9 @@ const CalendarIntegrations = () => {
 			}
 		}
 
-		window.addEventListener('message', messageLisnter)
+		window.addEventListener('message', messageListener)
 
-		return () => window.addEventListener('message', messageLisnter)
+		return () => window.removeEventListener('message', messageListener)
 	}, [dispatch])
 
 	const handleSubmitSalons = async (values: ISalonIdsForm) => {
@@ -214,7 +214,7 @@ const CalendarIntegrations = () => {
 	return (
 		<>
 			{modals}
-			{hasGoogleSync && (
+			{/* hasGoogleSync && (
 				<div className={'flex items-center mb-4'}>
 					<CheckIcon className={'text-notino-pink mr-2'} />
 					<span>{t('loc:Synchronizácia s {{ calendarType }} kalendárom bola spustená.', { calendarType: 'Google' })}</span>
@@ -236,7 +236,7 @@ const CalendarIntegrations = () => {
 						{t('loc:Zrušiť')}
 					</Button>
 				</div>
-			)}
+			) */}
 			{hasMicrosoftSync && (
 				<div className={'flex items-center mb-4'}>
 					<CheckIcon className={'text-notino-pink mr-2'} />
@@ -260,7 +260,7 @@ const CalendarIntegrations = () => {
 					</Button>
 				</div>
 			)}
-			<button
+			{/* <button
 				className={'sync-button google mr-2'}
 				onClick={() => {
 					if (partnerInOneSalon) {
@@ -279,7 +279,7 @@ const CalendarIntegrations = () => {
 				type='button'
 			>
 				{'Google'}
-			</button>
+			</button> */}
 			<button
 				className={'sync-button microsoft mr-2'}
 				onClick={() => {

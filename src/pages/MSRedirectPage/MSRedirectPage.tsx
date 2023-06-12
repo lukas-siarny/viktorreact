@@ -75,7 +75,7 @@ const MSRedirectPage: FC<Props> = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	// redirect to index page when required parameters for sync request are missing
+	// redirect to index page when required parameters for sync request are missing or when user opens URL in the browser manually
 	if (!query.code || !salonIDs.length || !openInsidePopup) {
 		return <Navigate to={t('paths:index')} />
 	}

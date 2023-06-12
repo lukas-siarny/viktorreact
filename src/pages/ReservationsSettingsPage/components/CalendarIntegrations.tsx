@@ -11,9 +11,12 @@ import { getFormValues, initialize, submit } from 'redux-form'
 import { deleteReq, postReq } from '../../../utils/request'
 import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, FORM, MS_REDIRECT_MESSAGE_KEY, NOTIFICATION_TYPE } from '../../../utils/enums'
 import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
+import showNotifications from '../../../utils/tsxHelpers'
 
 // types
 import { RootState } from '../../../reducers'
+import { MSRedirectMessage } from '../../../types/interfaces'
+import { ISalonIdsForm } from '../../../schemas/reservation'
 
 // components
 import SalonIdsForm from './SalonIdsForm'
@@ -26,11 +29,6 @@ import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-i
 
 // redux
 import { getCurrentUser } from '../../../reducers/users/userActions'
-
-// schemas
-import { ISalonIdsForm } from '../../../schemas/reservation'
-import { MSRedirectMessage } from '../../../types/interfaces'
-import showNotifications from '../../../utils/tsxHelpers'
 
 enum REQUEST_MODAL_TYPE {
 	DELETE = 'DELETE',
@@ -50,7 +48,7 @@ const CalendarIntegrations = () => {
 	const salonIdsValues: Partial<{ salonIDs: string[] }> = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
 	const partnerInOneSalon = authUser?.data?.salons.length === 1 && authUser.data.salons[0].id === salonID
 	const signedSalon = authUser?.data?.salons.find((salon) => salon.id === salonID)
-	const hasGoogleSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`)
+	// const hasGoogleSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`)
 	const hasMicrosoftSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`)
 	const googleSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`))
 	const microsoftSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`))

@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
-import { useMsal } from '@azure/msal-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { find, get } from 'lodash'
@@ -10,11 +9,14 @@ import { getFormValues, initialize, submit } from 'redux-form'
 
 // utils
 import { deleteReq, postReq } from '../../../utils/request'
-import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, FORM, NOTIFICATION_TYPE } from '../../../utils/enums'
+import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, FORM, MS_REDIRECT_MESSAGE_KEY, NOTIFICATION_TYPE } from '../../../utils/enums'
 import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
+import showNotifications from '../../../utils/tsxHelpers'
 
 // types
 import { RootState } from '../../../reducers'
+import { MSRedirectMessage } from '../../../types/interfaces'
+import { ISalonIdsForm } from '../../../schemas/reservation'
 
 // components
 import SalonIdsForm from './SalonIdsForm'
@@ -27,9 +29,6 @@ import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-i
 
 // redux
 import { getCurrentUser } from '../../../reducers/users/userActions'
-
-// schemas
-import { ISalonIdsForm } from '../../../schemas/reservation'
 
 enum REQUEST_MODAL_TYPE {
 	DELETE = 'DELETE',
@@ -49,11 +48,13 @@ const CalendarIntegrations = () => {
 	const salonIdsValues: Partial<{ salonIDs: string[] }> = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
 	const partnerInOneSalon = authUser?.data?.salons.length === 1 && authUser.data.salons[0].id === salonID
 	const signedSalon = authUser?.data?.salons.find((salon) => salon.id === salonID)
-	const hasGoogleSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`)
+	// const hasGoogleSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`)
 	const hasMicrosoftSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`)
 	const googleSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`))
 	const microsoftSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`))
 	const httpsIcalUrl = icalUrl.replace(/^webcal:/i, 'https:')
+
+	const popupRef = useRef<Window | null>(null)
 
 	const getOptionsData = () => {
 		if (visibleModal?.requestType === REQUEST_MODAL_TYPE.DELETE) {
@@ -88,25 +89,68 @@ const CalendarIntegrations = () => {
 		onError: (errorResponse) => console.error(errorResponse)
 	})
 
-	const handleMSLogin = async (salonsIDs: (string | undefined)[]) => {
-		const msLoginQueryParams = formatObjToQuery({
-			// eslint-disable-next-line no-underscore-dangle
-			client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
-			redirect_uri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri,
-			response_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_type,
-			response_mode: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_mode,
-			scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scope,
-			prompt: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].prompt,
-			state: authUser?.data?.salons && partnerInOneSalon ? authUser.data.salons[0].id : salonsIDs.join(',')
-		})
+	const handleMSLogin = useCallback(
+		async (salonsIDs: (string | undefined)[]) => {
+			const msLoginQueryParams = formatObjToQuery({
+				// eslint-disable-next-line no-underscore-dangle
+				client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
+				redirect_uri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri,
+				response_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_type,
+				response_mode: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].response_mode,
+				scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scope,
+				prompt: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].prompt,
+				state: authUser?.data?.salons && partnerInOneSalon ? authUser.data.salons[0].id : salonsIDs.join(',')
+			})
 
-		try {
-			window.open(`${EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].authorize_url}${msLoginQueryParams}`, '_self')
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
+			const width = 500
+			const height = 600
+
+			try {
+				popupRef.current = window.open(
+					`${EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].authorize_url}${msLoginQueryParams}`,
+					'_blank',
+					`
+					popup
+					scrollbars,
+					width=${width},
+					height=${height},
+					left=${(window.screen.width - width) / 2},
+					top=${(window.screen.height - height) / 2}
+				  	`
+				)
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			}
+		},
+		[authUser?.data?.salons, partnerInOneSalon]
+	)
+
+	useEffect(() => {
+		/**
+		 * After successfull login to Microsoft account in login popup window, user is redirected to /ms-oauth2 URL, which renders MSRedirectPage.tsx component
+		 * Communication between login popup window and window that triggered the popup is handled via browser postMessage API
+		 */
+		const messageListener = (event: MessageEvent<MSRedirectMessage>) => {
+			// Important! Check the origin of the data!! (only messages from our host are allowed)
+			if (event.origin === `${window.location.protocol}//${window.location.host}` && event.data.key === MS_REDIRECT_MESSAGE_KEY && popupRef.current) {
+				if (event.data.status === 'success') {
+					dispatch(getCurrentUser())
+					if (event.data.messages?.length) {
+						showNotifications(event.data.messages, NOTIFICATION_TYPE.NOTIFICATION)
+					}
+					popupRef.current.close()
+				} else if (event.data.status === 'error') {
+					showNotifications(event.data.messages || [], NOTIFICATION_TYPE.NOTIFICATION)
+					popupRef.current.close()
+				}
+			}
 		}
-	}
+
+		window.addEventListener('message', messageListener)
+
+		return () => window.removeEventListener('message', messageListener)
+	}, [dispatch])
 
 	const handleSubmitSalons = async (values: ISalonIdsForm) => {
 		setVisibleModal(undefined)
@@ -168,7 +212,7 @@ const CalendarIntegrations = () => {
 	return (
 		<>
 			{modals}
-			{hasGoogleSync && (
+			{/* hasGoogleSync && (
 				<div className={'flex items-center mb-4'}>
 					<CheckIcon className={'text-notino-pink mr-2'} />
 					<span>{t('loc:Synchronizácia s {{ calendarType }} kalendárom bola spustená.', { calendarType: 'Google' })}</span>
@@ -190,7 +234,7 @@ const CalendarIntegrations = () => {
 						{t('loc:Zrušiť')}
 					</Button>
 				</div>
-			)}
+			) */}
 			{hasMicrosoftSync && (
 				<div className={'flex items-center mb-4'}>
 					<CheckIcon className={'text-notino-pink mr-2'} />
@@ -214,7 +258,7 @@ const CalendarIntegrations = () => {
 					</Button>
 				</div>
 			)}
-			<button
+			{/* <button
 				className={'sync-button google mr-2'}
 				onClick={() => {
 					if (partnerInOneSalon) {
@@ -233,7 +277,7 @@ const CalendarIntegrations = () => {
 				type='button'
 			>
 				{'Google'}
-			</button>
+			</button> */}
 			<button
 				className={'sync-button microsoft mr-2'}
 				onClick={() => {

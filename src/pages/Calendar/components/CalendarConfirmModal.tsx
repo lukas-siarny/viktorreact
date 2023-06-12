@@ -91,8 +91,6 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 		const eventId = (values?.updateFromCalendar ? values?.eventId : queryEventId) || undefined
 		const onlyReservationNoteChanged = isOnlyReservationNoteChanged(initialFormValues, values)
 
-		console.log({ onlyReservationNoteChanged })
-
 		if (eventId) {
 			setConfirmModal({
 				open: true,

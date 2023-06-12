@@ -19,16 +19,14 @@ const QrCode = (props: Props) => {
 
 	return (
 		<div className={'flex items-center'}>
-			<img src={qrTemplateSmall} alt='qr code' className='block' />
+			<img style={{ height: 180 }} className={'mr-2 block'} src={`${link}&t=${getAccessToken()}`} alt='qr code' crossOrigin={'anonymous'} />
 			<div className={'flex flex-col'}>
 				<h4>{t('loc:Digitálny QR kód')}</h4>
 				<span className={'mb-4 text-notino-grayDark'}>{description}</span>
 				<Button
 					className={'noti-btn w-min'}
 					href={`${link}&t=${getAccessToken()}`}
-					// href={'#'}
 					onClick={(e) => handleAuthorizedDownload(e, link, name)}
-					rel='noopener noreferrer'
 					type={'primary'}
 					htmlType={'button'}
 					title='Download file'

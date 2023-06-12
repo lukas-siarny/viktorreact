@@ -40,6 +40,8 @@ import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/es/notification/interface'
 import UAParser from 'ua-parser-js'
 import cx from 'classnames'
+
+// helpers
 import showNotifications from './tsxHelpers'
 import {
 	BROWSER_TYPE,
@@ -73,9 +75,10 @@ import {
 import { LOCALES } from '../components/LanguagePicker'
 import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress, NameLocalizationsItem } from '../types/interfaces'
 import { phoneRegEx } from './regex'
-
 import { Paths } from '../types/api'
+import { getAccessToken } from './auth'
 
+// Assets
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
 import { ReactComponent as NotRealizedIcon } from '../assets/icons/alert-circle.svg'
@@ -85,7 +88,6 @@ import { ReactComponent as WalletIcon } from '../assets/icons/wallet.svg'
 import { ReactComponent as DollarIcon } from '../assets/icons/dollar.svg'
 import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
 import { ReactComponent as ChevronDown } from '../assets/icons/chevron-down.svg'
-import { getAccessToken } from './auth'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 

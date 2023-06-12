@@ -9,6 +9,8 @@ import i18next from 'i18next'
 // components
 import OpeningHours from '../../../../components/OpeningHours/OpeningHours'
 import AddressFields from '../../../../components/AddressFields'
+import QrCode from '../../../../components/QrCode'
+import NewBadge from '../../../../components/NewBadge'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
@@ -54,8 +56,6 @@ import { ReactComponent as QrCodeIcon } from '../../../../assets/icons/qr-code-i
 
 // schema
 import { ISalonForm, validationSalonFn } from '../../../../schemas/salon'
-import QrCode from '../../../../components/QrCode'
-import NewBadge from '../../../../components/NewBadge'
 
 type ComponentProps = {
 	disabledForm?: boolean

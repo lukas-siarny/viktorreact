@@ -47,10 +47,10 @@ import { getSupportContact } from '../../reducers/supportContacts/supportContact
 // components
 import { getLanguagePickerAsSubmenuItem } from '../LanguagePicker'
 import AvatarComponents from '../AvatarComponents'
+import NewBadge from '../NewBadge'
 
 // types
 import { setIsSiderCollapsed } from '../../reducers/helperSettings/helperSettingsActions'
-import NewBadge from '../NewBadge'
 
 const { Sider } = Layout
 

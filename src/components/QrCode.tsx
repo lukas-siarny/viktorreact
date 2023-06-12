@@ -2,7 +2,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from 'antd'
 
+// assets
 import { ReactComponent as DownloadIcon } from '../assets/icons/download-icon.svg'
+
+// utils
 import { handleAuthorizedDownload } from '../utils/helper'
 import { getAccessToken } from '../utils/auth'
 
@@ -28,7 +31,7 @@ const QrCode = (props: Props) => {
 					onClick={(e) => handleAuthorizedDownload(e, link, name)}
 					type={'primary'}
 					htmlType={'button'}
-					title='Download file'
+					title={t('loc:Stiahnuť qr kód')}
 					icon={<DownloadIcon width={24} />}
 					download
 				>

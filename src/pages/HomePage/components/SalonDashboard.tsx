@@ -16,6 +16,7 @@ import { getPendingReservationsCount } from '../../../reducers/calendar/calendar
 // utils
 import { PERMISSION, RESERVATION_STATE, RESERVATIONS_STATE, SALON_STATES } from '../../../utils/enums'
 import Permissions, { checkPermissions } from '../../../utils/Permissions'
+import { handleAuthorizedDownload } from '../../../utils/helper'
 
 // components
 import Alert from '../../../components/Dashboards/Alert'
@@ -37,7 +38,6 @@ import { ISalonReservationsPageURLQueryParams } from '../../../schemas/queryPara
 
 // hooks
 import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
-import { handleAuthorizedDownload } from '../../../utils/helper'
 
 const SMS_TIME_STATS_PERMISSIONS = [PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]
 
@@ -67,7 +67,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const basePath = t('paths:salons/{{salonID}}', { salonID: selectedSalon?.data?.id })
 
 	const [smsStatsDate, setSmsStatsDate] = useState(dayjs())
-	const [visible, setVisible] = useState(false)
+	const [visibleQrCode, setVisibleQrCode] = useState(false)
 
 	const getPath = useCallback((pathSuffix: string) => `${basePath}${pathSuffix}`, [basePath])
 
@@ -110,17 +110,17 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 				title={
 					<div className={'flex items-center'}>
 						<QrCodeIcon width={24} height={24} className={'text-notino-black mr-2'} />
-						{t('loc:QR kód nájdete v Detaile salónu ')}
+						{t('loc:QR kód nájdete v Detaile salónu')}
 					</div>
 				}
 				centered
-				open={visible}
+				open={visibleQrCode}
 				footer={
-					<Button onClick={() => setVisible(false)} className={'noti-btn w-full'} type={'primary'} htmlType={'button'} download>
+					<Button onClick={() => setVisibleQrCode(false)} className={'noti-btn w-full'} type={'primary'} htmlType={'button'} download>
 						{t('loc:Rozumiem')}
 					</Button>
 				}
-				onCancel={() => setVisible(false)}
+				onCancel={() => setVisibleQrCode(false)}
 				closeIcon={<CloseIcon />}
 			>
 				<p>{t('loc:Kedykoľvek sa budete chcieť vrátiť k svojmu QR kódu, nájdete ho v sekcii Detail salónu pod fotogalériou.')}</p>
@@ -151,27 +151,19 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 					)}
 
-					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative h-full overflow-hidden'} style={{ height: 420 }}>
+					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative h-[420px] overflow-hidden'}>
 						<div
-							style={{
-								backgroundImage: `url(${qrCodeTemplate})`,
-								backgroundSize: 'contain',
-								backgroundRepeat: 'no-repeat',
-								position: 'absolute',
-								top: 0,
-								right: 0,
-								height: '100%',
-								width: 920
-							}}
+							className='hidden absolute top-0 right-0 h-full lg:block w-[700px] 2xl:w-[920px] bg-contain bg-no-repeat bg-bottom'
+							style={{ backgroundImage: `url(${qrCodeTemplate})` }}
 						/>
-						<div className={'w-1/2'}>
+						<div className={'w-full lg:w-1/2'}>
 							<h1>{t('loc:Naskenuj a rezervuj!')}</h1>
 							<h4 className={'text-notino-grayDarker mb-4'}>
 								{t('loc:Stiahnite si QR kód špeciálne vytvorený pre váš salón, a zdieľajte ho na svojich sociálnych sieťach alebo webe.')}
 							</h4>
 							<p className={'mb-6'}>
 								{t(
-									'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín rýchlejšie a pohodlnejšie.'
+									'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín ešte rýchlejšie a pohodlnejšie.'
 								)}
 							</p>
 							{selectedSalon.data.qrCodes.map((item, index) => (
@@ -183,7 +175,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 										type={'primary'}
 										htmlType={'button'}
 										onClick={(e) => handleAuthorizedDownload(e, item.link, item.name)}
-										title='Download file'
+										title={t('loc:Stiahnuť qr kód')}
 										icon={<DownloadIcon width={24} />}
 										download
 									>
@@ -208,6 +200,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						</div>
 					)}
 					{/* Statistics */}
+					<h2 className='mt-10'>{t('loc:Štatistiky')}</h2>
 					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>
 						<Statistics
 							title={t('loc:Rezervácie čakajúce na schválenie')}

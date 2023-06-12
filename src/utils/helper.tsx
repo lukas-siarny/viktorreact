@@ -40,6 +40,8 @@ import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/es/notification/interface'
 import UAParser from 'ua-parser-js'
 import cx from 'classnames'
+
+// helpers
 import showNotifications from './tsxHelpers'
 import {
 	BROWSER_TYPE,
@@ -73,9 +75,10 @@ import {
 import { LOCALES } from '../components/LanguagePicker'
 import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress, NameLocalizationsItem } from '../types/interfaces'
 import { phoneRegEx } from './regex'
-
 import { Paths } from '../types/api'
+import { getAccessToken } from './auth'
 
+// Assets
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
 import { ReactComponent as NotRealizedIcon } from '../assets/icons/alert-circle.svg'
@@ -1210,3 +1213,29 @@ export const getExpandIcon = (isActive: boolean, iconSize = 24, color = '#000') 
 		style={{ transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 200ms ease-in-out', transformOrigin: 'center' }}
 	/>
 )
+// NOTE: for href download with token authorization use this function instead of <a href={downloadUrl} download={fileName} />
+// For cases if there is not query token authorizations for example href={`/api/v1/exports?fileName=${get(data, ‘zipFileName’)}&t=${getAccessToken()}`}
+export const handleAuthorizedDownload = (event: any, downloadUrl: string, fileName = i18next.t('loc:súbor')) => {
+	event.preventDefault()
+	fetch(downloadUrl, {
+		headers: {
+			Authorization: `Bearer ${getAccessToken()}`
+		}
+	})
+		.then((response) => response.blob())
+		.then((blob) => {
+			// Create a temporary URL for the blob
+			const url = URL.createObjectURL(blob)
+			// Create a temporary anchor element
+			const a = document.createElement('a')
+			a.href = url
+			a.download = fileName
+			a.click()
+			// Clean up the temporary URL and anchor element
+			URL.revokeObjectURL(url)
+		})
+		.catch((error) => {
+			// eslint-disable-next-line no-console
+			console.error(error)
+		})
+}

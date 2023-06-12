@@ -47,6 +47,7 @@ import { getSupportContact } from '../../reducers/supportContacts/supportContact
 // components
 import { getLanguagePickerAsSubmenuItem } from '../LanguagePicker'
 import AvatarComponents from '../AvatarComponents'
+import NewBadge from '../NewBadge'
 
 // types
 import { setIsSiderCollapsed } from '../../reducers/helperSettings/helperSettingsActions'
@@ -239,7 +240,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					mainGroupItems.push(
 						{
 							key: PAGE.SALONS,
-							label: t('loc:Detail salónu'),
+							className: 'text-black',
+							label: (
+								<div className={'flex items-center'}>
+									<span className={'ant-menu-title-content'}>{t('loc:Detail salónu')}</span>
+
+									<NewBadge showInMenu pageEnum={PAGE.SALONS} />
+								</div>
+							),
 							onClick: () => navigate(parentPath as string),
 							icon: <SalonIcon />,
 							id: PAGE.SALONS

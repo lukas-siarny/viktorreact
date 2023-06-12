@@ -368,7 +368,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 								rel='noopener noreferrer'
 								type={'link'}
 								htmlType={'button'}
-								title='Download file'
+								title={t('loc:Stiahnuť súbor')}
 								download
 							>
 								<span role='img' aria-label='download' className='w-full h-full flex items-center justify-center'>

@@ -17,7 +17,7 @@ import NotinoUserForm from './components/forms/NotinoUserForm'
 import VoucherForm from './components/forms/VoucherForm'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID, PAGE } from '../../utils/enums'
 
 // reducers
 import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
@@ -87,6 +87,12 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const dontUpdateFormData = useRef(false)
 
 	const disabledForm = isDeletedSalon || (isPendingPublication && !isNotinoUser)
+
+	useEffect(() => {
+		return () => {
+			localStorage.setItem(`hide-${PAGE.SALONS}-badge`, 'true')
+		}
+	}, [])
 
 	// init form
 	useEffect(() => {

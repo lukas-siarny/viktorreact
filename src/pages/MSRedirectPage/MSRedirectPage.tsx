@@ -6,7 +6,7 @@ import { AxiosError } from 'axios'
 // utils
 import { Spin } from 'antd'
 import { postReq } from '../../utils/request'
-import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, MS_REDIRECT_MESSAGE_KEY, NOTIFICATION_TYPE } from '../../utils/enums'
+import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, MS_REDIRECT_MESSAGE_KEY } from '../../utils/enums'
 
 // hooks
 import useQueryParams from '../../hooks/useQueryParamsZod'

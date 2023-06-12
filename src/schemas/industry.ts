@@ -7,7 +7,11 @@ export const industriesSchema = z.object({
 })
 
 export const industrySchema = z.object({
-	categoryIDs: z.string().array()
+	categoryIDs: z.record(
+		z.object({
+			serviceCategoryIDs: uuidConstraint.array()
+		})
+	)
 })
 
 export type IIndustriesForm = z.infer<typeof industriesSchema>

@@ -87,7 +87,7 @@ const NotinoReservationsPage = () => {
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
 				countryCode: query.countryCode || selectedCountry,
 				page: query.page,
-				order: 'startDate:ASC',
+				order: 'createdAt:ASC',
 				limit: query.limit,
 				search: query.search
 			})

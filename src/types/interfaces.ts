@@ -18,7 +18,8 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
 	SALON_TABS_KEYS,
-	CALENDAR_EVENT_DISPLAY_TYPE
+	CALENDAR_EVENT_DISPLAY_TYPE,
+	MS_REDIRECT_MESSAGE_KEY
 } from '../utils/enums'
 
 // types
@@ -36,6 +37,7 @@ import {
 	ISalonReservationsPageURLQueryParams,
 	IServicesPageURLQueryParams
 } from '../schemas/queryParams'
+import { AxiosError } from 'axios'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -684,4 +686,10 @@ export type IServicesSelectionData = {
 
 export interface IIndustryFilter {
 	search?: string
+}
+
+export type MSRedirectMessage = {
+	key: typeof MS_REDIRECT_MESSAGE_KEY,
+	status: 'idle' | 'success' | 'error' | 'loading'
+	messages?: IErrorMessage[]
 }

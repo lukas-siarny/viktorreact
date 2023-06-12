@@ -412,3 +412,13 @@ export type IDocumentsAssetTypesRequestQueryParams = z.infer<typeof documentsAss
 export const documentsAssetTypesPageURLQueryParamsSchema = documentsAssetTypesRequestQueryParams.omit({ assetType: true })
 
 export type IDocumentsAssetTypesPageURLQueryParams = z.infer<typeof documentsAssetTypesPageURLQueryParamsSchema>
+
+/**
+ * MSredirect
+ */
+export const msRedircetPageURLQueryParams = z.object({
+	code: z.string().nullish(),
+	state: z.string().default('').catch('')
+})
+
+export type IMsRedircetPageURLQueryParams = z.infer<typeof msRedircetPageURLQueryParams>

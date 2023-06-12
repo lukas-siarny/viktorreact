@@ -73,6 +73,9 @@ import DocumentsByAssetTypePage from '../pages/DocumentsPage/DocumentsByAssetTyp
 import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
 import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
 
+// MS redirect page
+import MSRedirectPage from '../pages/MSRedirectPage/MSRedirectPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403, Error pages
@@ -106,6 +109,8 @@ const AppRoutes: FC = () => {
 				<Route errorElement={<ErrorBoundary />} element={<CancelReservationRoute layout={PublicLayout} className={'noti-cancel-reservation-page'} />}>
 					<Route path={t('paths:cancel-reservation')} element={<CancelReservationPage />} />
 				</Route>
+				{/* // MS auth redirect route */}
+				<Route errorElement={<ErrorBoundary />} path={'/ms-oauth2'} element={<MSRedirectPage />} />
 				{/* // Private Routes */}
 				<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.HOME} />}>
 					<Route index element={<HomePage />} />

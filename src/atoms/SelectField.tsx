@@ -344,7 +344,7 @@ const SelectField = (props: Props) => {
 		menuItemSelectedIcon,
 		popupClassName,
 		dropdownStyle,
-		dropdownMatchSelectWidth = true,
+		popupMatchSelectWidth = true,
 		listHeight,
 		emptyText,
 		bordered,
@@ -369,7 +369,8 @@ const SelectField = (props: Props) => {
 		confirmModalExtraTitle,
 		onClear,
 		tooltipSelect,
-		initialOptions
+		initialOptions,
+		id
 	} = props
 	const warningShown = useRef(false)
 
@@ -593,7 +594,7 @@ const SelectField = (props: Props) => {
 			tagRender={tagRender}
 			mode={mode}
 			{...input}
-			id={formFieldID(meta.form, input.name)}
+			id={id || formFieldID(meta.form, input.name)}
 			onFocus={onFocus}
 			onChange={onChange}
 			size={size || 'middle'}
@@ -624,9 +625,9 @@ const SelectField = (props: Props) => {
 			onSelect={onSelectWrap}
 			showArrow={showArrow}
 			menuItemSelectedIcon={renderMenuItemSelectedIcon(mode, menuItemSelectedIcon, disableMenuItemSelectedIcon)}
-			popupClassName={cx(`noti-select-dropdown ${popupClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
+			popupClassName={cx(`noti-select-dropdown ${popupClassName}`, { 'dropdown-match-select-width': popupMatchSelectWidth })}
 			dropdownStyle={dropdownStyle}
-			dropdownMatchSelectWidth={dropdownMatchSelectWidth}
+			popupMatchSelectWidth={popupMatchSelectWidth}
 			listHeight={listHeight}
 			autoClearSearchValue={autoClearSearchValue}
 			maxTagTextLength={maxTagTextLength}

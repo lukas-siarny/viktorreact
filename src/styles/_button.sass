@@ -27,6 +27,8 @@
 	&.noti-admin-back-button
 		&:not(:disabled):focus-visible
 			@include focusOutlineStyle($textColor-notino-pink)
+		&>.ant-btn-icon
+			flex: none
 	&.noti-close-form-btn
 		width: 32px
 		height: 32px
@@ -54,7 +56,7 @@
 	box-shadow: none
 	display: inline-flex
 	align-items: center
-	> span:not(.ant-btn-loading-icon)
+	> span:not(.ant-btn-loading-icon):not(.ant-btn-icon)
 		flex: 1
 		display: inline-block
 		white-space: nowrap
@@ -76,28 +78,34 @@
 		// line-height: 0
 		&.ant-btn-circle
 			min-width: 24px
-		>svg:first-of-type
-			left: 11px // same as button padding
-		>svg:first-of-type+span
-			padding-left: 20px // 16px icon + 4px text padding
+		.ant-btn-icon
+			&:not(.anticon-loading)
+				svg
+					left: 11px // same as button padding
+			& + span
+				padding-left: 20px // 16px icon + 4px text padding
 	// Large
 	&.ant-btn-lg
 		height: 52px
 		font-size: 14px
 		padding: 0 28px
-		>svg:first-of-type
-			left: 24px // same as button padding
-		>svg:first-of-type+span
-			padding-left: 28px // 24px icon + 4px text padding
+		.ant-btn-icon
+			&:not(.anticon-loading)
+				svg
+					left: 24px // same as button padding
+			& + span
+				padding-left: 28px // 24px icon + 4px text padding
 	&[ant-click-animating-without-extra-node]:after
 		animation: 0s !important // Vypni ant animaciu okolo buttonu
-	>svg:first-of-type
-		position: absolute
-		top: 50%
-		transform: translateY(-50%)
-		left: 16px // same as button padding
-	>svg:first-of-type+span
-		padding-left: 28px // 24px icon + 4px text padding
+	.ant-btn-icon
+		&:not(.anticon-loading)
+			svg
+				position: absolute
+				top: 50%
+				transform: translateY(-50%)
+				left: 16px // same as button padding
+		& + span
+			padding-left: 28px // 24px icon + 4px text padding
 	// &.ant-btn-icon-only > svg:first-child
 	//left: 4px
 	// NOTE: 	svg ikona nesmie mať filter: grayscale(100%) pre možnosť nastavenia farby z vrchu
@@ -148,8 +156,8 @@
 			top: 50%
 			transform: translateY(-50%)
 			left: 16px
-		svg:first-of-type + span
-			// padding-left: 0
+		.ant-btn-icon + span
+			padding-left: 24px
 		&:disabled
 			color: $textColor-gray-900
 			border-color: $borderColor-gray-400
@@ -237,10 +245,12 @@
 		&.ant-btn-sm
 			height: 24px
 			width: 24px
+			.ant-btn-icon
+				svg
+					left: calc((24px - 16px) / 2)
+		.ant-btn-icon
 			svg
-				left: calc((24px - 16px) / 2)
-		svg
-			left: 8px
+				left: 8px
 	// Filter btn v tabulke
 	&.filter-btn
 		height: 22px
@@ -372,7 +382,8 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 	&.google
 		font-size: 15px
 		color: rgba(0, 0, 0, 0.54)
-		padding-left: 52px
+		padding-left: 50px
+		padding-right: 18px
 		border: 1px solid #fff
 		&:disabled
 			background: $backgroundColor-notino-grayLight
@@ -389,13 +400,14 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 			position: absolute
 			top: 0
 			bottom: 0
-			left: 12px
+			left: 8px
 			right: 0
 
 	&.microsoft
 		font-size: 15px
 		color: #5E5E5E
 		padding-left: 45px
+		padding-right: 21px
 		border-radius: 0
 		border: 1px solid #8C8C8C
 		box-shadow: none
@@ -416,18 +428,18 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 			left: 12px
 			right: 0
 	&.apple
-		padding-left: 40px
+		padding-left: 48px
 		display: inline-block
 		height: 40px
 		line-height: 40px
-		padding-right: 10px
+		padding-right: 20px
 		&:after
 			content: ''
-			background: url('../assets/icons/download-icon.svg') left no-repeat
+			background: url('../assets/icons/ical-icon.svg') left no-repeat
 			position: absolute
 			top: 0
 			bottom: 0
-			left: 12px
+			left: 20px
 			right: 0
 	&.disabled
 		cursor: not-allowed

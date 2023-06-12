@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { RootState } from '../../reducers'
-import { getServices } from '../../reducers/services/serviceActions'
+import { getServices, setServicesActiveKeys } from '../../reducers/services/serviceActions'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -19,7 +19,7 @@ import RequestNewServiceForm from './components/RequestNewServiceForm'
 import IndustryFilter from './components/IndustryFilter'
 
 // utils
-import { FORM, PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
+import { FORM, PERMISSION, NOTIFICATION_TYPE, STRINGS } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { patchReq, postReq } from '../../utils/request'
 import { flattenTree, transformToLowerCaseWithoutAccent } from '../../utils/helper'
@@ -200,7 +200,8 @@ const IndustryPage = (props: Props) => {
 				categoryIDs: selectedServiceCategoryIDs
 			} as CategoriesPatch)
 			const updatedServicesData = await dispatch(getServices({ salonID }))
-
+			// clear selected keys for serivce settings table
+			dispatch(setServicesActiveKeys())
 			// redirect to service detail edit page in case it's first selected service in salon
 			const servicesKeys = getServicesCategoryKeys(services.data?.groupedServicesByCategory || [])
 			// check if there were any services saved before (servicesKeys) and if there are any new services to be saved (categoryIDs)
@@ -227,7 +228,7 @@ const IndustryPage = (props: Props) => {
 				link: parentPath + t('paths:industries-and-services')
 			},
 			{
-				name: t('loc:Priradiť služby'),
+				name: STRINGS(t).assign(t('loc:služby')),
 				titleName: rootCategory?.name
 			}
 		]
@@ -244,7 +245,7 @@ const IndustryPage = (props: Props) => {
 					<Row justify='space-between'>
 						<h3 className={'mb-0 mt-0 flex items-center pr-4'}>
 							<ServiceIcon className={'text-notino-black mr-2'} />
-							{t('loc:Priradiť služby')}
+							{STRINGS(t).assign(t('loc:služby'))}
 						</h3>
 						<Permissions
 							allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}

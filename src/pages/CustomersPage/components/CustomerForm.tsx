@@ -1,13 +1,14 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, FormProps, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, GENDER, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, GENDER, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
+import { checkPermissions } from '../../../utils/Permissions'
 
 // types
 import { ISelectOptionItem } from '../../../types/interfaces'
@@ -44,6 +45,13 @@ const CustomerForm: FC<Props> = (props) => {
 		{ label: `${t('loc:Žena')}`, value: GENDER.FEMALE, key: GENDER.FEMALE }
 	]
 
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+
+	const hasRawPermissions = useMemo(
+		() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO]),
+		[authUserPermissions]
+	)
+
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			{inModal ? (
@@ -54,7 +62,7 @@ const CustomerForm: FC<Props> = (props) => {
 							component={ImgUploadField}
 							name={'avatar'}
 							label={t('loc:Avatar')}
-							signUrl={URL_UPLOAD_IMAGES}
+							signUrl={URL_UPLOAD_FILE}
 							multiple={false}
 							maxCount={1}
 							disabled={disabled}
@@ -115,7 +123,7 @@ const CustomerForm: FC<Props> = (props) => {
 								component={ImgUploadField}
 								name={'avatar'}
 								label={t('loc:Avatar')}
-								signUrl={URL_UPLOAD_IMAGES}
+								signUrl={URL_UPLOAD_FILE}
 								multiple={false}
 								maxCount={1}
 								category={UPLOAD_IMG_CATEGORIES.CUSTOMER}
@@ -150,8 +158,9 @@ const CustomerForm: FC<Props> = (props) => {
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'gallery'}
+							hasRawPermissions={hasRawPermissions}
 							label={t('loc:Fotogaléria')}
-							signUrl={URL_UPLOAD_IMAGES}
+							signUrl={URL_UPLOAD_FILE}
 							multiple
 							maxCount={10}
 							category={UPLOAD_IMG_CATEGORIES.CUSTOMER}

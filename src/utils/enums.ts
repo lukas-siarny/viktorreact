@@ -10,7 +10,8 @@ export enum CYPRESS_CLASS_NAMES {
 	LOGOUT_BUTTON = 'noti-logout-button',
 	MY_ACCOUNT = 'noti-my-account',
 	MY_ACCOUNT_BUTTON = 'noti-my-account-button',
-	FORBIDDEN_MODAL = 'noti-forbidden-modal'
+	FORBIDDEN_MODAL = 'noti-forbidden-modal',
+	ASSIGN_SERVICES_BUTTON = 'noti-assign-services-button'
 }
 
 export enum KEYBOARD_KEY {
@@ -44,6 +45,18 @@ export enum BROWSER_TYPE {
 	UNKNOWN = 'unknown',
 	SUPPORTED = 'supported',
 	UNSUPPORTED = 'unsupported'
+}
+
+export enum IMPORT_TYPE {
+	IMPORT = 'IMPORT',
+	UPLOAD = 'UPLOAD'
+}
+
+export enum ASSET_TYPE {
+	B2C_PRIVACY_POLICY = 'B2C_PRIVACY_POLICY',
+	B2C_RESERVATIONS_TERMS = 'B2C_RESERVATIONS_TERMS',
+	B2B_PRIVACY_POLICY = 'B2B_PRIVACY_POLICY',
+	B2B_APP_TERMS_CONDITIONS = 'B2B_APP_TERMS_CONDITIONS'
 }
 
 export const MIN_SUPPORTED_BROWSER_VERSION = (browserName?: string) => {
@@ -169,6 +182,7 @@ export enum FORM {
 	REGISTRATION = 'REGISTRATION',
 	USER_PROFILE = 'USER_PROFILE',
 	ADMIN_USERS_FILTER = 'ADMIN_USERS_FILTER',
+	DOCUMENTS_FILTER = 'DOCUMENTS_FILTER',
 	EMPLOYEES_FILTER = 'EMPLOYEES_FILTER',
 	RESERVATIONS_FILTER = 'RESERVATIONS_FILTER',
 	NOTINO_RESERVATIONS_FILTER = 'NOTINO_RESERVATIONS_FILTER',
@@ -216,7 +230,8 @@ export enum FORM {
 	RECHARGE_SMS_CREDIT_FILTER = 'RECHARGE_SMS_CREDIT_FILTER',
 	SALONS_REPORT = 'SALONS_REPORT',
 	INDUSTRY_FILTER = 'INDUSTRY_FILTER',
-	SALON_IDS_FORM = 'SALON_IDS_FORM'
+	SALON_IDS_FORM = 'SALON_IDS_FORM',
+	DOCUMENTS_FORM = 'DOCUMENTS_FORM'
 }
 
 export enum PERMISSION {
@@ -345,7 +360,8 @@ export enum PAGE {
 	NOTINO_RESERVATIONS = 'NOTINO_RESERVATIONS',
 	REVIEWS = 'REVIEWS',
 	SMS_CREDIT = 'SMS_CREDIT',
-	SMS_CREDITS = 'SMS_CREDITS'
+	SMS_CREDITS = 'SMS_CREDITS',
+	DOCUMENTS = 'DOCUMENTS'
 }
 
 export enum PARAMETER_TYPE {
@@ -414,6 +430,7 @@ export const QUERY_LIMIT = {
 
 export const UPLOAD = {
 	MAX_FILE_SIZE: 20,
+	MAX_COUNT: 100,
 	MAX_SIZE: 100000000, // 100MB
 	INSURANCE_COMPANIES_LOGO: {
 		maxFileSize: 2 * 10 ** 6 // 2MB
@@ -651,7 +668,8 @@ export enum UPLOAD_IMG_CATEGORIES {
 	CATEGORY_ICON = 'CATEGORY_ICON',
 	COSMETIC = 'COSMETIC_IMAGE',
 	CUSTOMER = 'CUSTOMER_IMAGE',
-	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE'
+	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE',
+	ASSET_DOC_TYPE = 'ASSET_DOC_TYPE'
 }
 
 export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
@@ -669,7 +687,7 @@ export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
 	borderRadius: 2
 }
 
-export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
+export const URL_UPLOAD_FILE = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const GENDERS = Object.keys(GENDER) as GENDER[]
 export const DAYS = Object.keys(DAY) as DAY[]
@@ -680,7 +698,7 @@ export enum ACCOUNT_STATE {
 	PAIRED = 'PAIRED'
 }
 
-export const IMAGE_UPLOADING_PROP = 'imageUploading'
+export const UPLOAD_IN_PROGRESS_PROP = 'uploadInProgress'
 
 export const DELETE_BUTTON_ID = 'delete-btn'
 
@@ -708,11 +726,37 @@ export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
 
 export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
 
-export const DOWNLOAD_BUTTON_ID = 'download-btn'
+export const GENERATE_REPORT_BUTTON_ID = 'generate-report-button'
 
 export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
 export const SMS_UNIT_PRICES_TABLE_ID = 'sms-unit-prices-table'
+
+export const SMS_TIME_STATS_COUNTRY_PICKER_ID = 'sms-time-stats-country-picker'
+
+export const SMS_TIME_STATS_DATE_PICKER_ID = 'sms-time-stats-date-picker'
+
+export const RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID = 'recharge-sms-credit-continue-button'
+
+export const RECHARGE_SMS_CREDIT_BUTTON_ID = 'recharge-sms-credit-button'
+
+export const DOWNLOAD_BUTTON_ID = 'download-button'
+
+export const PUBLISHED_PREMIUM_SALONS_BAR_ID = 'published-premium-salons-bar'
+
+export const SALON_STATS_MONTHLY_ID = 'salon-stats-monthly'
+
+export const SALON_STATS_ANNUAL_ID = 'salon-stats-annual'
+
+export const ENABLE_RS_BUTTON_ID = 'enable-rs-button'
+
+export const ENABLE_RS_BUTTON_FAKE_BUTTON_ID = 'enable-rs-fake-button'
+
+export const CHANGE_SERVICES_ORDER_BUTTON_ID = 'change-services-order-button'
+
+export const CHANGE_SERVICES_ORDER_SAVE_BUTTON_ID = 'change-services-order-save-button'
+
+export const CATEGORY_PARAMS_SWITCH_TYPE_ID = 'category-params-switch-type-id'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 
@@ -889,24 +933,6 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	{
 		key: EVERY_REPEAT.TWO_WEEKS,
 		label: i18next.t('loc:Druhý týždeň')
-	}
-]
-
-export const TEMPLATE_OPTIONS_CUSTOMERS = () => [
-	{
-		value: 'import_of_clients_template.csv',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
-	},
-	{
-		value: 'import_of_clients_template.xlsx',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
-	}
-]
-
-export const TEMPLATE_OPTIONS_RESERVATIONS = () => [
-	{
-		value: 'import_of_reservations_template.xlsx',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
 	}
 ]
 
@@ -1205,7 +1231,7 @@ export const EXTERNAL_CALENDAR_CONFIG = {
 		redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
 		scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
 		url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-		grand_type: 'authorization_code',
+		grant_type: 'authorization_code',
 		prompt: 'select_account'
 	},
 	[EXTERNAL_CALENDAR_TYPE.GOOGLE]: {

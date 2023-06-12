@@ -24,7 +24,7 @@ import PopConfirmComponent from '../../../components/PopConfirmComponent'
 
 // utils
 import { validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -52,7 +52,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm, pristine } = props
 
-	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
+	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 	const categoriesParameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const category = useSelector((state: RootState) => state.categories.category)
 	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))
@@ -201,7 +201,7 @@ const CategoryForm: FC<Props> = (props) => {
 									name='image'
 									label={t('loc:Obrázok')}
 									maxCount={1}
-									signUrl={URL_UPLOAD_IMAGES}
+									signUrl={URL_UPLOAD_FILE}
 									category={UPLOAD_IMG_CATEGORIES.CATEGORY_IMAGE}
 									required
 								/>
@@ -210,7 +210,7 @@ const CategoryForm: FC<Props> = (props) => {
 									name='icon'
 									label={t('loc:Ikona')}
 									maxCount={1}
-									signUrl={URL_UPLOAD_IMAGES}
+									signUrl={URL_UPLOAD_FILE}
 									category={UPLOAD_IMG_CATEGORIES.CATEGORY_ICON}
 									required
 								/>

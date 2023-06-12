@@ -1,9 +1,9 @@
 import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
-import { WrappedFieldProps, change, autofill } from 'redux-form'
-import { isEmpty, get, map } from 'lodash'
+import { autofill, change, WrappedFieldProps } from 'redux-form'
+import { get, isEmpty, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Form, Upload, UploadProps, Image, Popconfirm, Button, Checkbox } from 'antd'
+import { Button, Checkbox, Form, Image, Popconfirm, Upload, UploadProps } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
@@ -14,10 +14,10 @@ import update from 'immutability-helper'
 import cx from 'classnames'
 
 // utils
-import { uploadImage } from '../utils/request'
-import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
+import { uploadFiles } from '../utils/request'
+import { formFieldID, formatFileFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP, STRINGS } from '../utils/enums'
+import { UPLOAD_IN_PROGRESS_PROP, MSG_TYPE, NOTIFICATION_TYPE, STRINGS, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
@@ -42,6 +42,7 @@ type Props = WrappedFieldProps &
 		uploaderClassName?: string
 		draggable?: boolean
 		selectable?: boolean
+		hasRawPermissions?: boolean
 	}
 
 interface IPreviewFile {
@@ -78,7 +79,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 		uploaderClassName = '',
 		draggable = false,
 		selectable = false,
-		tooltip
+		tooltip,
+		hasRawPermissions = false
 	} = props
 
 	const [t] = useTranslation()
@@ -88,7 +90,6 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 	const [images, setImages] = useState<any[]>([])
 	const [selectedValue, setSelectedValue] = useState<string>('')
 	const [previewImgIndex, setPreviewImgIndex] = useState<number>(0)
-
 	useEffect(() => {
 		if (!isEmpty(input.value)) {
 			// filter application/pdf file
@@ -112,12 +113,11 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			values.pop()
 			input.onChange(values)
 
-			// uploading process finished -> remove IMAGE_UPLOADING_PROP from bodyForm
-			dispatch(autofill(form, IMAGE_UPLOADING_PROP, undefined))
+			// uploading finished with error -> remove UPLOAD_IN_PROGRESS_PROP from bodyForm
+			dispatch(autofill(form, UPLOAD_IN_PROGRESS_PROP, undefined))
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
-			const values = getImagesFormValues(info.fileList, imagesUrls.current)
-
+			const values = formatFileFormValues(info.fileList, imagesUrls.current)
 			// order application/['pdf'] file type to end of array
 			const splitted = splitArrayByCondition(values, (item: any) => item.type !== 'application/pdf')
 			const sorted = [...splitted[0], ...splitted[1]]
@@ -125,8 +125,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			setImages(splitted[0])
 			input.onChange(sorted)
 
-			// uploading process finished -> remove IMAGE_UPLOADING_PROP from bodyForm
-			dispatch(autofill(form, IMAGE_UPLOADING_PROP, undefined))
+			// uploading process finished -> remove UPLOAD_IN_PROGRESS_PROP from bodyForm
+			dispatch(autofill(form, UPLOAD_IN_PROGRESS_PROP, undefined))
 		}
 		if (info.file.status === 'uploading') {
 			input.onChange(info.fileList)
@@ -134,6 +134,19 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 		if (isEmpty(info.fileList)) {
 			input.onChange(multiple ? [] : null)
 		}
+	}
+
+	const transformDownloadUrl = () => {
+		const originalUrl = images[previewImgIndex]?.url
+		if (hasRawPermissions) {
+			// Extract the file name and file extension from the original URL
+			const fileName = originalUrl?.substring(originalUrl.lastIndexOf('/') + 1)
+			const fileExtension = fileName?.substring(fileName.lastIndexOf('.') + 1)
+			// Append 'raw' to the file name before the file extension
+			const transformedUrl = originalUrl?.replace(`.${fileExtension}`, `-raw.${fileExtension}`)
+			return transformedUrl
+		}
+		return originalUrl
 	}
 
 	const showUploadList = useMemo(
@@ -295,8 +308,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 				listType='picture-card'
 				multiple={multiple}
 				customRequest={(options: any) => {
-					dispatch(change(form, IMAGE_UPLOADING_PROP, true))
-					uploadImage(options, signUrl, category, imagesUrls)
+					dispatch(change(form, UPLOAD_IN_PROGRESS_PROP, true))
+					uploadFiles(options, signUrl, category, imagesUrls)
 				}}
 				itemRender={(originNode, file, currFileList, actions) =>
 					draggable ? DragableUploadListItem(originNode, file, currFileList, actions, moveRow, !!disabled) : renderGalleryImage(originNode, file, currFileList, actions)
@@ -350,7 +363,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 						<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
 							<Button
 								className={'w-full h-full m-0 p-0'}
-								href={`${images[previewImgIndex]?.url}?response-content-disposition=attachment`}
+								href={`${transformDownloadUrl()}?response-content-disposition=attachment`}
 								target='_blank'
 								rel='noopener noreferrer'
 								type={'link'}

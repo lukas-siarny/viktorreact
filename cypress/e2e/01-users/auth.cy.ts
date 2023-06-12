@@ -25,7 +25,7 @@ context('Auth', () => {
 		cy.setInputValue(FORM.REGISTRATION, 'email', userEmail)
 		cy.setInputValue(FORM.REGISTRATION, 'password', user.create.password)
 		cy.setInputValue(FORM.REGISTRATION, 'phone', user.create.phone)
-		cy.clickButton('gdpr', FORM.REGISTRATION, true)
+		cy.clickButton('agreeGDPR', FORM.REGISTRATION, true)
 		cy.clickButton('marketing', FORM.REGISTRATION, true)
 		cy.clickButton(SUBMIT_BUTTON_ID, FORM.REGISTRATION)
 		cy.wait('@registration').then((interception: any) => {

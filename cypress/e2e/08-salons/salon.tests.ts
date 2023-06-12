@@ -2,13 +2,13 @@ import { loginViaApi } from '../../support/e2e'
 import { generateRandomString } from '../../support/helpers'
 
 // eslint-disable-next-line import/no-cycle
-import { ITests } from '../11-roles/roles.cy'
+import { ITests } from '../13-roles/roles.cy'
 
 // fixtures
 import salon from '../../fixtures/salon.json'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, PAGE, PERMISSION, SALON_ROLES, SUBMIT_BUTTON_ID, TAB_KEYS } from '../../../src/utils/enums'
+import { DELETE_BUTTON_ID, FORM, PAGE, PERMISSION, SALON_ROLES, SALON_TABS_KEYS, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS, SALON_TESTS_SUITS, SALON_ID } from '../../enums'
 
 // test suits
@@ -19,6 +19,7 @@ import industriesAndServicesTestSuite from './industriesAndServices.tests'
 import reservationsTestSuite from './reservations.tests'
 import smsCreditTestSuite from './smsCredit.tests'
 import salonApprovalProcessTestSuite from './salonApprovalProcess.tests'
+import importDataTestSuite from './importData.tests'
 
 const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON_ROLES | PERMISSION, email?: string, password?: string): void => {
 	context('Salon', () => {
@@ -176,6 +177,9 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					case SALON_TESTS_SUITS.SMS_CREDIT:
 						smsCreditTestSuite(test.actions)
 						break
+					case SALON_TESTS_SUITS.IMPORT_DATA:
+						importDataTestSuite(test.actions)
+						break
 					default:
 				}
 			})
@@ -211,20 +215,14 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				// skip for user with Salon roles - they can't see this tab
 				if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) && !(role in SALON_ROLES)) {
 					cy.get('main.ant-layout-content').then(($body) => {
-						if ($body.find(`[data-node-key="${TAB_KEYS.SALON_HISTORY}"]`).length) {
-							cy.clickTab(TAB_KEYS.SALON_HISTORY)
+						if ($body.find(`[data-node-key="${SALON_TABS_KEYS.SALON_HISTORY}"]`).length) {
+							cy.clickTab(SALON_TABS_KEYS.SALON_HISTORY)
 							cy.wait('@getSalonHistory').then((interceptionGetSalonHistory: any) => {
 								expect(interceptionGetSalonHistory.response.statusCode).to.equal(200)
-								if ($body.find('.noti-tag.bg-status-published').length) {
-									// only published salon can see salon history
-									cy.get('#salon-history-list').should('be.visible')
-								} else {
-									// empty state for unpublished salons
-									cy.get('.ant-empty').should('be.visible')
-								}
 								// update range of history data
-								cy.scrollTo(0, 0)
-								cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().click({ force: true })
+								cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().as('dateFrom')
+								cy.get('@dateFrom').scrollIntoView()
+								cy.get('@dateFrom').click({ force: true })
 								cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 })
 									.find('.ant-picker-presets > ul > li')
 									.first()

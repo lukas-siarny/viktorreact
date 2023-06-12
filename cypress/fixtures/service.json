@@ -10,5 +10,9 @@
 	"employeeService": {
 		"durationFrom": "200",
 		"priceFrom": "300"
+	},
+	"descriptionLocalizations": {
+		"default": "Default language service description",
+		"en": "English langauge service description"
 	}
 }

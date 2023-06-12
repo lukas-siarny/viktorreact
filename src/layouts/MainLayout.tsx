@@ -1,5 +1,5 @@
-import React, { ReactNode, FC, useEffect } from 'react'
-import { Layout, Row, Button, Dropdown } from 'antd'
+import React, { FC, ReactNode, useEffect } from 'react'
+import { Button, Dropdown, Layout, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
@@ -192,7 +192,7 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.NOTINO]}
 					render={(hasPermission) =>
 						hasPermission &&
-						page === PAGE.HOME &&
+						(page === PAGE.HOME || page === PAGE.SMS_CREDITS) &&
 						!salonID && (
 							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
 								<Row className={'justify-end min-w-0 w-full'} wrap={false}>

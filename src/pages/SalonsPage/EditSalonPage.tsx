@@ -69,7 +69,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 	const [visibleNotinoUserModal, setVisibleNotinoUserModal] = useState(false)
 	const [visibleVoucherModal, setVisibleVoucherModal] = useState(false)
-	const hasVoucher = salon.data?.b2bVoucher
+	const b2bVoucher = salon.data?.b2bVoucher
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
 	const isSubmittingData = submitting || isRemoving || isSendingConfRequest
@@ -555,31 +555,22 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 		}
 	}
 
-	const onSubmitVoucher = async (values?: IVoucherForm) => {
-		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: values?.code || null })
-			setVisibleVoucherModal(false)
-			dispatch(selectSalon(salonID))
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
-		}
-	}
-
-	const deleteVoucher = async () => {
-		if (isRemoving) {
+	const onUpdateVoucher = async (values?: IVoucherForm) => {
+		const voucher = values?.code || null
+		if (isSubmittingData) {
 			return
 		}
-		setIsRemoving(true)
+		setSubmitting(true)
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: null })
-			dispatch(selectSalon(salonID))
+			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: voucher })
+			await dispatch(selectSalon(salonID))
+			setVisibleVoucherModal(false)
+			dispatch(initialize(FORM.VOUCHER_FORM, { code: voucher }))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
-		} finally {
-			setIsRemoving(false)
 		}
+		setSubmitting(false)
 	}
 
 	return (
@@ -670,33 +661,43 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 						}
 						voucherModalControlButtons={
 							<Row className={'flex justify-start w-full mt-4 gap-2'}>
-								{hasVoucher ? (
+								{b2bVoucher ? (
 									<>
 										<div className='w-full'>
 											<h4>{t('loc:Kód kupónu pre salón')}</h4>
-											<i className='block mb-2 text-base'>{hasVoucher}</i>
+											<i className='block mb-2 text-base'>{b2bVoucher}</i>
 										</div>
+										<Permissions allowed={[PERMISSION.NOTINO]}>
+											<Button
+												type={'primary'}
+												size={'middle'}
+												className={'noti-btn m-regular mt-2'}
+												onClick={() => {
+													setVisibleVoucherModal(true)
+													dispatch(initialize(FORM.VOUCHER_FORM, { code: b2bVoucher }))
+												}}
+												disabled={disabledForm}
+											>
+												{STRINGS(t).edit(t('loc:kupón'))}
+											</Button>
+											<DeleteButton className={'mt-2'} onConfirm={() => onUpdateVoucher()} entityName={t('loc:kupón')} disabled={isDeletedSalon} />
+										</Permissions>
+									</>
+								) : (
+									<Permissions allowed={[PERMISSION.NOTINO]}>
 										<Button
 											type={'primary'}
 											size={'middle'}
 											className={'noti-btn m-regular mt-2'}
-											onClick={() => setVisibleVoucherModal(true)}
+											onClick={() => {
+												setVisibleVoucherModal(true)
+												dispatch(initialize(FORM.VOUCHER_FORM, {}))
+											}}
 											disabled={disabledForm}
 										>
-											{STRINGS(t).edit(t('loc:kupón'))}
+											{STRINGS(t).addRecord(t('loc:kupón'))}
 										</Button>
-										<DeleteButton className={'mt-2'} onConfirm={deleteVoucher} entityName={t('loc:kupón')} disabled={isDeletedSalon} />
-									</>
-								) : (
-									<Button
-										type={'primary'}
-										size={'middle'}
-										className={'noti-btn m-regular mt-2'}
-										onClick={() => setVisibleVoucherModal(true)}
-										disabled={disabledForm}
-									>
-										{STRINGS(t).addRecord(t('loc:kupón'))}
-									</Button>
+									</Permissions>
 								)}
 							</Row>
 						}
@@ -728,8 +729,19 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
 			</Modal>
-			<Modal title={t('loc:Kupón pre salón')} open={visibleVoucherModal} onCancel={() => setVisibleVoucherModal(false)} footer={null} closeIcon={<CloseIcon />}>
-				<VoucherForm onSubmit={onSubmitVoucher} />
+			<Modal
+				title={t('loc:Kupón pre salón')}
+				open={visibleVoucherModal}
+				onCancel={() => {
+					setVisibleVoucherModal(false)
+					if (!b2bVoucher) {
+						dispatch(reset(FORM.VOUCHER_FORM))
+					}
+				}}
+				footer={null}
+				closeIcon={<CloseIcon />}
+			>
+				<VoucherForm onSubmit={onUpdateVoucher} />
 			</Modal>
 			<Modal
 				title={t('loc:Priradiť Notino používateľa')}

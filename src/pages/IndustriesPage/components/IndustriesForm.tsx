@@ -9,7 +9,7 @@ import i18next from 'i18next'
 import CheckboxGroupImageField from './CheckboxGroupImageField'
 
 // utils
-import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -53,7 +53,7 @@ const IndustriesForm: FC<Props> = (props) => {
 			disabled: disabledForm,
 			extraAction: {
 				action: () => onClickExtraLabel(category.id),
-				label: `${t('loc:Priradiť služby')} (${selectedServices})`,
+				label: `${STRINGS(t).assign(t('loc:služby'))} (${selectedServices})`,
 				popconfirm: !pristine,
 				icon: <ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
 			}

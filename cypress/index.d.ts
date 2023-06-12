@@ -19,7 +19,7 @@ declare namespace Cypress {
 		): Chainable<Element>
 		clickDropdownItem(triggerId: string, dropdownItemId?: string, force?: boolean): Chainable<Element>
 		clickTab(tabKey: string, tabsKey?: string, force?: boolean): Chainable<Element>
-		setDateInputValue(form?: string, key?: string, value?: string): Chainable<Element>
+		setDateInputValue(form?: string, key?: string, value?: string, selectNextYear?: boolean): Chainable<Element>
 		sortTable(key: string, tableKey?: string): Chainable<Element>
 		changePagination(limit: 25 | 50 | 100 = 25, tableKey?: string, useCustomPagination?: boolean)
 	}

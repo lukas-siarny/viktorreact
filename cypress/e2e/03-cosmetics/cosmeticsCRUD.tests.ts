@@ -23,21 +23,25 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 
 	it('Create cosmetics', () => {
 		cy.visit('/cosmetics')
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.intercept({
 				method: 'POST',
 				url: '/api/b2b/admin/enums/cosmetics/'
 			}).as('createCosmetics')
 			cy.clickButton(CREATE_BUTTON_ID, FORM.COSMETIC)
-			cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.create.name)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
-			cy.wait('@createCosmetics').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				Cypress.env(COSMETICS_ID, interception.response.body.cosmetic.id)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+				cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.create.name)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
+				cy.wait('@createCosmetics').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					Cypress.env(COSMETICS_ID, interception.response.body.cosmetic.id)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
+			} else {
+				cy.checkForbiddenModal()
+			}
 		} else {
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
@@ -48,7 +52,7 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 		// get cosmeticsID from env
 		const cosmeticsID = Cypress.env(COSMETICS_ID)
 		cy.visit('/cosmetics')
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.intercept({
 				method: 'PATCH',
 				url: `/api/b2b/admin/enums/cosmetics/${cosmeticsID}`
@@ -62,20 +66,38 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 					search: cosmetics.create.name
 				}
 			}).as('getCosmetics')
-			cy.setInputValue(FORM.COSMETICS_FILTER, 'search', cosmetics.create.name)
-			cy.wait('@getCosmetics').then((getInterception: any) => {
-				// check status code
-				expect(getInterception.response.statusCode).to.equal(200)
-				cy.get(`[data-row-key="${cosmeticsID}"]`).click()
-				cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.update.name, false, true)
-				cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
-				cy.wait('@updateCosmetics').then((interception: any) => {
-					// check status code of login request
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
+
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+				cy.setInputValue(FORM.COSMETICS_FILTER, 'search', cosmetics.create.name)
+				cy.wait('@getCosmetics').then((getInterception: any) => {
+					// check status code
+					expect(getInterception.response.statusCode).to.equal(200)
+					cy.get(`[data-row-key="${cosmeticsID}"]`).click()
+					cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.update.name, false, true)
+					cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
+					cy.wait('@updateCosmetics').then((interception: any) => {
+						// check status code of login request
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+					})
 				})
-			})
+			} else {
+				cy.wait('@getCosmetics').then((getInterception: any) => {
+					// check status code
+					expect(getInterception.response.statusCode).to.equal(200)
+
+					// open first cosmetics from table
+					cy.get('main.ant-layout-content').then(($body) => {
+						if ($body.find('.ant-table .ant-table-row:first').length) {
+							cy.get('.ant-table .ant-table-row:first').click()
+							cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.update.name, false, true)
+							cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
+							cy.checkForbiddenModal()
+						}
+					})
+				})
+			}
 		} else {
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
@@ -86,7 +108,7 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 		// get cosmeticsID from env
 		const cosmeticsID = Cypress.env(COSMETICS_ID)
 		cy.visit('/cosmetics')
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.intercept({
 				method: 'DELETE',
 				url: `/api/b2b/admin/enums/cosmetics/${cosmeticsID}`
@@ -100,20 +122,36 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 					search: cosmetics.update.name
 				}
 			}).as('getCosmetics')
-			cy.setInputValue(FORM.COSMETICS_FILTER, 'search', cosmetics.update.name, false, true)
-			cy.wait('@getCosmetics').then((getInterception: any) => {
-				// check status code
-				expect(getInterception.response.statusCode).to.equal(200)
-				cy.get('.ant-table-row > :nth-child(1)').click()
-				cy.clickDeleteButtonWithConfCustom(FORM.COSMETIC)
-				cy.wait('@deleteCosmetics').then((interception: any) => {
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+				cy.setInputValue(FORM.COSMETICS_FILTER, 'search', cosmetics.update.name, false, true)
+				cy.wait('@getCosmetics').then((getInterception: any) => {
 					// check status code
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-					cy.location('pathname').should('eq', '/cosmetics')
+					expect(getInterception.response.statusCode).to.equal(200)
+					cy.get('.ant-table-row > :nth-child(1)').click()
+					cy.clickDeleteButtonWithConfCustom(FORM.COSMETIC)
+					cy.wait('@deleteCosmetics').then((interception: any) => {
+						// check status code
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+						cy.location('pathname').should('eq', '/cosmetics')
+					})
 				})
-			})
+			} else {
+				cy.wait('@getCosmetics').then((getInterception: any) => {
+					// check status code
+					expect(getInterception.response.statusCode).to.equal(200)
+
+					// open first cosmetics from table
+					cy.get('main.ant-layout-content').then(($body) => {
+						if ($body.find('.ant-table .ant-table-row:first').length) {
+							cy.get('.ant-table .ant-table-row:first').click()
+							cy.get(`#${FORM.COSMETIC}-delete-btn`).click()
+							cy.checkForbiddenModal()
+						}
+					})
+				})
+			}
 		} else {
 			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')

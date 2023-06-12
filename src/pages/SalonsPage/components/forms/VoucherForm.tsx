@@ -50,7 +50,7 @@ const VoucherForm: FC<Props> = (props) => {
 				disabled={submitting}
 				loading={submitting}
 			>
-				{t('loc:Odoslať')}
+				{t('loc:Uložiť')}
 			</Button>
 		</Form>
 	)

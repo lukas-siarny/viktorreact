@@ -9,7 +9,7 @@ export const industriesSchema = z.object({
 export const industrySchema = z.object({
 	categoryIDs: z.record(
 		z.object({
-			serviceCategoryIDs: z.string().array()
+			serviceCategoryIDs: uuidConstraint.array()
 		})
 	)
 })

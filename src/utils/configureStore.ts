@@ -5,7 +5,7 @@ import { createLogger } from 'redux-logger'
 import { persistStore } from 'redux-persist'
 
 import i18next from 'i18next'
-import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, CALENDAR_INIT_TIME } from './enums'
+import { UPLOAD_IN_PROGRESS_PROP, MSG_TYPE, NOTIFICATION_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, CALENDAR_INIT_TIME } from './enums'
 // eslint-disable-next-line import/no-cycle
 import showNotifications from './tsxHelpers'
 import { addOrUpdateEvent } from '../reducers/virtualEvent/virtualEventActions'
@@ -13,9 +13,9 @@ import { addOrUpdateEvent } from '../reducers/virtualEvent/virtualEventActions'
 const RELEVANT_CALENDAR_ACTIONS = Object.keys(HANDLE_CALENDAR_ACTIONS)
 
 /**
- * OnSubmit validate if IMAGE_UPLOADING_PROP is true -> indicates uploading
+ * OnSubmit validate if UPLOAD_IN_PROGRESS_PROP is true -> indicates uploading
  * During upload will be submit action deniedw
- * IMAGE_UPLOADING_PROP must be set outside e.g. ImgUploadField
+ * UPLOAD_IN_PROGRESS_PROP must be set outside e.g. ImgUploadField
  */
 const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: any) => {
 	if (action?.type === '@@redux-form/SUBMIT') {
@@ -25,7 +25,7 @@ const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: an
 		if (submittedForm) {
 			const { values } = submittedForm
 
-			if (values && values[IMAGE_UPLOADING_PROP]) {
+			if (values && values[UPLOAD_IN_PROGRESS_PROP]) {
 				const error = i18next.t('loc:Prebieha nahrávanie')
 				showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
 				return

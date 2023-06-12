@@ -8,7 +8,7 @@ type Props = {
 	className?: string
 }
 
-const ToggleField = (props: Props) => {
+const Ellipsis = (props: Props) => {
 	const { text, maxLength = 100, className } = props
 	const [t] = useTranslation()
 
@@ -31,4 +31,4 @@ const ToggleField = (props: Props) => {
 	)
 }
 
-export default ToggleField
+export default Ellipsis

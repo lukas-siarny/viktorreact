@@ -29,7 +29,7 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 import { ICalendarEventForm } from '../schemas/event'
 import { ICalendarReservationForm } from '../schemas/reservation'
 import {
-	ICalendarPageURLQueryParams,
+	ICalendarPageURLQueryParams, IDocumentsPageURLQueryParams,
 	INotinoReservationsPageURLQueryParams,
 	IRechargeSmsCreditAdminPageURLQueryParams,
 	IReviewsPageURLQueryParams,
@@ -269,7 +269,7 @@ export interface INoteModal {
 }
 
 export interface IDataUploadForm {
-	file: string | Blob
+	file: File[]
 }
 
 export interface ISalonsReportForm {
@@ -655,6 +655,8 @@ export interface ICalendarDayEventsMap {
 export type ISalonReservationsFilter = Omit<ISalonReservationsPageURLQueryParams, 'state' | 'page' | 'limit'>
 
 export type INotinoReservationsFilter = Omit<INotinoReservationsPageURLQueryParams, 'state' | 'page' | 'limit'>
+
+export type IDocumentsFilter = Omit<IDocumentsPageURLQueryParams, 'order' | 'page' | 'limit'>
 
 export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
 

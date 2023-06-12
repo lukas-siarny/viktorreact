@@ -14,7 +14,7 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // utils
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
-import { ENUMERATIONS_KEYS, FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE } from '../../../utils/enums'
 
 // assets
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
@@ -50,7 +50,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							component={ImgUploadField}
 							name={'avatar'}
 							label={t('loc:Avatar')}
-							signUrl={URL_UPLOAD_IMAGES}
+							signUrl={URL_UPLOAD_FILE}
 							multiple={false}
 							maxCount={1}
 							category={UPLOAD_IMG_CATEGORIES.USER}

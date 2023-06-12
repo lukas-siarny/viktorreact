@@ -6,7 +6,7 @@ import { AxiosError } from 'axios'
 // utils
 import { Spin } from 'antd'
 import { postReq } from '../../utils/request'
-import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, MS_REDIRECT_MESSAGE_KEY } from '../../utils/enums'
+import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, MS_REDIRECT_MESSAGE_KEY, NOTIFICATION_TYPE } from '../../utils/enums'
 
 // hooks
 import useQueryParams from '../../hooks/useQueryParamsZod'
@@ -19,7 +19,11 @@ import { IErrorMessage, MSRedirectMessage } from '../../types/interfaces'
 
 type Props = {}
 
-const postMessage = (msg: MSRedirectMessage) => window.opener.postMessage(msg, `${window.location.protocol}//${window.location.host}`)
+const postMessage = (msg: MSRedirectMessage) => {
+	if (window.opener) {
+		window.opener.postMessage(msg, `${window.location.protocol}//${window.location.host}`)
+	}
+}
 /**
  * This page is rendered inside a popup window that handles Microsoft login (popup is triggered in '/salons/{salonID}/reservations-settings' (CalendarIntegration.tsx))
  * After successfull login to Microsoft account, user is redirected to /ms-oauth2 URL, which renders this component
@@ -29,6 +33,7 @@ const postMessage = (msg: MSRedirectMessage) => window.opener.postMessage(msg, `
 const MSRedirectPage: FC<Props> = () => {
 	const [query] = useQueryParams(msRedircetPageURLQueryParams)
 	const salonIDs = query.state.split(',')
+	const openInsidePopup = !!window.opener
 
 	const [t] = useTranslation()
 
@@ -38,7 +43,7 @@ const MSRedirectPage: FC<Props> = () => {
 				key: MS_REDIRECT_MESSAGE_KEY,
 				status: 'idle'
 			}
-			if (query.code && salonIDs.length) {
+			if (query.code && salonIDs.length && openInsidePopup) {
 				postMessage({ ...msg, status: 'loading' })
 				try {
 					const { data } = await postReq(
@@ -71,7 +76,7 @@ const MSRedirectPage: FC<Props> = () => {
 	}, [])
 
 	// redirect to index page when required parameters for sync request are missing
-	if (!query.code || !salonIDs.length) {
+	if (!query.code || !salonIDs.length || !openInsidePopup) {
 		return <Navigate to={t('paths:index')} />
 	}
 

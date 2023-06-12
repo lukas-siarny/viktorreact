@@ -7,7 +7,7 @@ import { startsWith } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../../utils/enums'
 import { getAssignedUserLabel } from '../../../../utils/helper'
 
 // assets

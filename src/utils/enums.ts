@@ -47,6 +47,18 @@ export enum BROWSER_TYPE {
 	UNSUPPORTED = 'unsupported'
 }
 
+export enum IMPORT_TYPE {
+	IMPORT = 'IMPORT',
+	UPLOAD = 'UPLOAD'
+}
+
+export enum ASSET_TYPE {
+	B2C_PRIVACY_POLICY = 'B2C_PRIVACY_POLICY',
+	B2C_RESERVATIONS_TERMS = 'B2C_RESERVATIONS_TERMS',
+	B2B_PRIVACY_POLICY = 'B2B_PRIVACY_POLICY',
+	B2B_APP_TERMS_CONDITIONS = 'B2B_APP_TERMS_CONDITIONS'
+}
+
 export const MIN_SUPPORTED_BROWSER_VERSION = (browserName?: string) => {
 	switch (browserName) {
 		case BROWSERS.CHROME:
@@ -170,6 +182,7 @@ export enum FORM {
 	REGISTRATION = 'REGISTRATION',
 	USER_PROFILE = 'USER_PROFILE',
 	ADMIN_USERS_FILTER = 'ADMIN_USERS_FILTER',
+	DOCUMENTS_FILTER = 'DOCUMENTS_FILTER',
 	EMPLOYEES_FILTER = 'EMPLOYEES_FILTER',
 	RESERVATIONS_FILTER = 'RESERVATIONS_FILTER',
 	NOTINO_RESERVATIONS_FILTER = 'NOTINO_RESERVATIONS_FILTER',
@@ -216,7 +229,9 @@ export enum FORM {
 	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
 	RECHARGE_SMS_CREDIT_FILTER = 'RECHARGE_SMS_CREDIT_FILTER',
 	SALONS_REPORT = 'SALONS_REPORT',
-	SALON_IDS_FORM = 'SALON_IDS_FORM'
+	INDUSTRY_FILTER = 'INDUSTRY_FILTER',
+	SALON_IDS_FORM = 'SALON_IDS_FORM',
+	DOCUMENTS_FORM = 'DOCUMENTS_FORM'
 }
 
 export enum PERMISSION {
@@ -346,7 +361,8 @@ export enum PAGE {
 	REVIEWS = 'REVIEWS',
 	SMS_CREDIT = 'SMS_CREDIT',
 	SMS_CREDITS = 'SMS_CREDITS',
-	AFFILIATE_PROGRAM = 'AFFILIATE_PROGRAM'
+	AFFILIATE_PROGRAM = 'AFFILIATE_PROGRAM',
+	DOCUMENTS = 'DOCUMENTS'
 }
 
 export enum PARAMETER_TYPE {
@@ -415,6 +431,7 @@ export const QUERY_LIMIT = {
 
 export const UPLOAD = {
 	MAX_FILE_SIZE: 20,
+	MAX_COUNT: 100,
 	MAX_SIZE: 100000000, // 100MB
 	INSURANCE_COMPANIES_LOGO: {
 		maxFileSize: 2 * 10 ** 6 // 2MB
@@ -652,7 +669,8 @@ export enum UPLOAD_IMG_CATEGORIES {
 	CATEGORY_ICON = 'CATEGORY_ICON',
 	COSMETIC = 'COSMETIC_IMAGE',
 	CUSTOMER = 'CUSTOMER_IMAGE',
-	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE'
+	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE',
+	ASSET_DOC_TYPE = 'ASSET_DOC_TYPE'
 }
 
 export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
@@ -670,7 +688,7 @@ export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
 	borderRadius: 2
 }
 
-export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
+export const URL_UPLOAD_FILE = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const GENDERS = Object.keys(GENDER) as GENDER[]
 export const DAYS = Object.keys(DAY) as DAY[]
@@ -681,7 +699,7 @@ export enum ACCOUNT_STATE {
 	PAIRED = 'PAIRED'
 }
 
-export const IMAGE_UPLOADING_PROP = 'imageUploading'
+export const UPLOAD_IN_PROGRESS_PROP = 'uploadInProgress'
 
 export const DELETE_BUTTON_ID = 'delete-btn'
 
@@ -1212,9 +1230,10 @@ export enum EXTERNAL_CALENDAR_TYPE {
 export const EXTERNAL_CALENDAR_CONFIG = {
 	[EXTERNAL_CALENDAR_TYPE.MICROSOFT]: {
 		redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
-		scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
-		url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-		grant_type: 'authorization_code',
+		scope: 'offline_access user.read Calendars.ReadWrite Calendars.Read',
+		authorize_url: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+		response_mode: 'query',
+		response_type: 'code',
 		prompt: 'select_account'
 	},
 	[EXTERNAL_CALENDAR_TYPE.GOOGLE]: {
@@ -1239,3 +1258,5 @@ export enum SERVICE_DESCRIPTION_LNG {
 	DEFAULT = 'DEFAULT',
 	EN = 'en'
 }
+
+export const MS_REDIRECT_MESSAGE_KEY = 'MS_REDIRECT_MESSAGE_KEY'

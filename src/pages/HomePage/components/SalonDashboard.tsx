@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useCallback, PropsWithChildren, useState } from 'react'
-import { Spin } from 'antd'
+import { Button, Modal, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -16,6 +16,7 @@ import { getPendingReservationsCount } from '../../../reducers/calendar/calendar
 // utils
 import { PERMISSION, RESERVATION_STATE, RESERVATIONS_STATE, SALON_STATES } from '../../../utils/enums'
 import Permissions, { checkPermissions } from '../../../utils/Permissions'
+import { handleAuthorizedDownload } from '../../../utils/helper'
 
 // components
 import Alert from '../../../components/Dashboards/Alert'
@@ -27,6 +28,10 @@ import Voucher from './Voucher'
 // assets
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
+import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ReactComponent as QrCodeIcon } from '../../../assets/icons/qr-code-icon.svg'
+import qrCodeTemplate from '../../../assets/images/qrcode-big-template.png'
 
 // schema
 import { ISalonReservationsPageURLQueryParams } from '../../../schemas/queryParams'
@@ -58,11 +63,11 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const salonPermission = selectedSalon?.data?.uniqPermissions
 	const salonID = selectedSalon.data?.id
 	const walletID = selectedSalon.data?.wallet?.id
-
 	const loading = selectedSalon?.isLoading || services?.isLoading || activeEmployees?.isLoading || customers?.isLoading || pendingReservationsCount.isLoading
 	const basePath = t('paths:salons/{{salonID}}', { salonID: selectedSalon?.data?.id })
 
 	const [smsStatsDate, setSmsStatsDate] = useState(dayjs())
+	const [visibleQrCode, setVisibleQrCode] = useState(false)
 
 	const getPath = useCallback((pathSuffix: string) => `${basePath}${pathSuffix}`, [basePath])
 
@@ -75,6 +80,19 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 		}
 	}, [dispatch, selectedSalon?.data?.id])
 
+	// NOTE: docasne zakomentovane mozno sa v budcnosti prida tlacidlo na zatvaranie
+	// const [showQrCode, setShowQrCode] = useState(true)
+
+	// useEffect(() => {
+	// 	const localStorageValue = localStorage.getItem('showQrCode')
+	// 	setShowQrCode(localStorageValue !== 'false')
+	// }, [])
+
+	// const handleDivClose = () => {
+	// 	localStorage.setItem('showQrCode', 'false')
+	// 	setShowQrCode(false)
+	// 	setVisible(true)
+	// }
 	useEffect(() => {
 		if (walletID && salonID && checkPermissions([...authUserPermissions, ...(salonPermission || [])], SMS_TIME_STATS_PERMISSIONS)) {
 			dispatch(getSmsTimeStatsForSalon(salonID, smsStatsDate.year(), smsStatsDate.month() + 1))
@@ -87,6 +105,26 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 		</div>
 	) : (
 		<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto'>
+			<Modal
+				className='rounded-fields'
+				title={
+					<div className={'flex items-center'}>
+						<QrCodeIcon width={24} height={24} className={'text-notino-black mr-2'} />
+						{t('loc:QR kód nájdete v Detaile salónu')}
+					</div>
+				}
+				centered
+				open={visibleQrCode}
+				footer={
+					<Button onClick={() => setVisibleQrCode(false)} className={'noti-btn w-full'} type={'primary'} htmlType={'button'} download>
+						{t('loc:Rozumiem')}
+					</Button>
+				}
+				onCancel={() => setVisibleQrCode(false)}
+				closeIcon={<CloseIcon />}
+			>
+				<p>{t('loc:Kedykoľvek sa budete chcieť vrátiť k svojmu QR kódu, nájdete ho v sekcii Detail salónu pod fotogalériou.')}</p>
+			</Modal>
 			{selectedSalon?.data && salonID ? (
 				<div>
 					{/* hidden salon */}
@@ -112,6 +150,47 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							onActionItemClick={() => navigate(basePath)}
 						/>
 					)}
+
+					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative h-[420px] overflow-hidden'}>
+						<div
+							className='hidden absolute top-0 right-0 h-full lg:block w-[700px] 2xl:w-[920px] bg-contain bg-no-repeat bg-bottom'
+							style={{ backgroundImage: `url(${qrCodeTemplate})` }}
+						/>
+						<div className={'w-full lg:w-1/2'}>
+							<h1>{t('loc:Naskenuj a rezervuj!')}</h1>
+							<h4 className={'text-notino-grayDarker mb-4'}>
+								{t('loc:Stiahnite si QR kód špeciálne vytvorený pre váš salón, a zdieľajte ho na svojich sociálnych sieťach alebo webe.')}
+							</h4>
+							<p className={'mb-6'}>
+								{t(
+									'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín ešte rýchlejšie a pohodlnejšie.'
+								)}
+							</p>
+							{selectedSalon.data.qrCodes.map((item, index) => (
+								<div className={'flex mr-2 flex-wrap'} key={index}>
+									<Button
+										className={'noti-btn w-min mr-2 mb-2'}
+										href={'#'}
+										rel='noopener noreferrer'
+										type={'primary'}
+										htmlType={'button'}
+										onClick={(e) => handleAuthorizedDownload(e, item.link, item.name)}
+										title={t('loc:Stiahnuť qr kód')}
+										icon={<DownloadIcon width={24} />}
+										download
+									>
+										{t('loc:Stiahnuť QR kód na tlač')}
+									</Button>
+								</div>
+							))}
+						</div>
+						{/* // NOTE: docasne zakomentovane mozno sa v budcnosti prida tlacidlo na zatvaranie */}
+						{/* <Button type={'link'} htmlType={'button'} className={'absolute top-6 right-6'} onClick={handleDivClose}> */}
+						{/*	<span role='img'> */}
+						{/*		<CloseIcon className={'text-black'} width={24} /> */}
+						{/*	</span> */}
+						{/* </Button> */}
+					</div>
 					{/* Voucher */}
 					{selectedSalon.data.b2bVoucher && (
 						<div className={'mb-14'}>
@@ -120,9 +199,9 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							<Voucher code={selectedSalon.data.b2bVoucher} />
 						</div>
 					)}
-					{/* Statisctics */}
-					<h2>{t('loc:Štatistiky')}</h2>
-					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6 mb-14'>
+					{/* Statistics */}
+					<h2 className='mt-10'>{t('loc:Štatistiky')}</h2>
+					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>
 						<Statistics
 							title={t('loc:Rezervácie čakajúce na schválenie')}
 							count={pendingReservationsCount.count}
@@ -166,7 +245,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						) : (
 							<>
 								{/* wallet */}
-								<h2>{t('loc:SMS kredit')}</h2>
+								<h2 className='mt-10'>{t('loc:SMS kredit')}</h2>
 								<div className={'grid lg:grid-cols-2 gap-4 3xl:gap-8 empty:mt-0'}>
 									<Wallet salonID={salonID} parentPath={basePath} className={'!w-auto'} walletID={walletID} />
 								</div>

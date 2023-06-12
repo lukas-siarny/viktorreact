@@ -114,58 +114,57 @@
 						padding-left: 0
 						display: block
 						width: 100%
-
-// checkboxgroup with image
-@keyframes opacityAnimation
-	0%
-		opacity: 0
-	100%
-		opacity: 1
-
-.checkbox-group-image-fieldset
-	.label-error-wrapper
-		position: relative
-		padding-bottom: 24px
-		legend
-			border-bottom: none
-			color: $textColor-trueGray-700
-			margin-bottom: 0
-			&.required
-				&::before
-					display: inline-block
-					margin-right: 4px
-					color: #ff4d4f // interna antd farba ktora sa nenachadza v nasej palete
-					font-size: 14px
-					font-family: SimSun,sans-serif
-					line-height: 1
-					content: "*"
-
-		.error-msg
-			animation: opacityAnimation 200ms ease-in-out
-			bottom: 6px
-			position: absolute
-			font-size: 14px
-			font-size: 12px
-	&.required
-		.label-error-wrapper
-			.error-msg
-				margin-left: 12px
-
-
-.checkbox-group-image-wrapper
-	width: 100%
-	margin: 0 auto
-	display: grid
-	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr))
-	grid-gap: 16px
-	border-radius: 12px
-	outline: 1px solid transparent
-	outline-offset: 4px
-	transition: outline-color 300ms ease-in-out
-
-	&.error
-		outline-color: $backgroundColor-notino-red
-
+	&.noti-checkbox-group-services
+		.ant-checkbox-group
+			background-color: $backgroundColor-notino-grayLighter
+			border-radius: 8px
+			gap: 0
+			overflow: hidden
+			.ant-checkbox-wrapper
+				padding: 8px 16px
+				display: flex
+				justify-content: space-between
+				flex-direction: row-reverse
+				transition: background-color 150ms ease-in-out
+				&:not(:last-of-type)
+					border-bottom: 1px solid $borderColor-notino-white
+				&::after
+					display: none
+				.ant-checkbox
+					display: flex
+					flex-direction: column
+					justify-content: center
+					margin-right: 0
+					.ant-checkbox-inner
+						border-radius: 50%
+						width: 20px
+						height: 20px
+						background: $backgroundColor-notino-white
+						border: 1px solid $borderColor-notino-gray
+					&.ant-checkbox-checked
+						.ant-checkbox-inner
+							border-radius: 50%
+							width: 20px
+							height: 20px
+							background: $backgroundColor-notino-pink
+							border: 1px solid $borderColor-notino-pink
+							&::after
+								left: 5px
+						&::after
+							border: none
+						&:hover
+							outline: none
+						&.ant-checkbox-disabled
+							.ant-checkbox-inner
+								background: $backgroundColor-notino-pink
+								opacity: 0.6
+				&:not(.ant-checkbox-wrapper-disabled)
+					&:hover,
+					&:focus-visible
+						background-color: $backgroundColor-notino-grayLight
+						.ant-checkbox
+							.ant-checkbox-inner
+								border-color: $backgroundColor-notino-pink
 
 // checkboxgroup with image
 @keyframes opacityAnimation

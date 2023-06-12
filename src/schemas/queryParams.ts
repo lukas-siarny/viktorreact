@@ -21,8 +21,8 @@ import {
 	REVIEW_VERIFICATION_STATUS,
 	REVIEWS_TAB_KEYS,
 	DEFAULT_DATE_INIT_FORMAT,
-	RESERVATION_FROM_IMPORT,
-	CALENDAR_EVENT_TYPE_REQUEST
+	CALENDAR_EVENT_TYPE_REQUEST,
+	ASSET_TYPE
 } from '../utils/enums'
 import { dateConstraint, twoCharsConstraint, uuidConstraint } from './baseSchema'
 
@@ -384,3 +384,41 @@ export const specialistContactsPageURLQueryParams = z.object({
 })
 
 export type ISpecialistContactsPageURLQueryParams = z.infer<typeof specialistContactsPageURLQueryParams>
+
+/**
+ * Documents
+ */
+
+export const documentsPageQueryParams = paginationSchema
+export const documentsPageURLQueryParamsSchema = documentsPageQueryParams.extend({
+	languageCode: twoCharsConstraint.optional(),
+	assetType: z.nativeEnum(ASSET_TYPE).optional()
+})
+
+export type IDocumentsPageQueryParams = z.infer<typeof documentsPageQueryParams>
+
+export type IDocumentsPageURLQueryParams = z.infer<typeof documentsPageURLQueryParamsSchema>
+
+/**
+ * Documents by asset types
+ */
+
+export const documentsAssetTypesRequestQueryParams = paginationSchema.extend({
+	languageCode: twoCharsConstraint,
+	assetType: z.nativeEnum(ASSET_TYPE)
+})
+
+export type IDocumentsAssetTypesRequestQueryParams = z.infer<typeof documentsAssetTypesRequestQueryParams>
+export const documentsAssetTypesPageURLQueryParamsSchema = documentsAssetTypesRequestQueryParams.omit({ assetType: true })
+
+export type IDocumentsAssetTypesPageURLQueryParams = z.infer<typeof documentsAssetTypesPageURLQueryParamsSchema>
+
+/**
+ * MSredirect
+ */
+export const msRedircetPageURLQueryParams = z.object({
+	code: z.string().nullish(),
+	state: z.string().default('').catch('')
+})
+
+export type IMsRedircetPageURLQueryParams = z.infer<typeof msRedircetPageURLQueryParams>

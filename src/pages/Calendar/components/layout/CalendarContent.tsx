@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
-import { isEmpty, startsWith } from 'lodash'
+import { startsWith } from 'lodash'
 
 // fullcalendar
 import FullCalendar, { DateSpanApi, EventDropArg } from '@fullcalendar/react'

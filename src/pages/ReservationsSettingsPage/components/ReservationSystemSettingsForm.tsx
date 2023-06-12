@@ -100,7 +100,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			'Content-Type': 'multipart/form-data'
 		}
 		const formData = new FormData()
-		formData.append('file', values?.file)
+		formData.append('file', values?.file[0])
 
 		try {
 			if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
@@ -253,11 +253,11 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>
-				<div className={'w-12/25'}>
-					{/* Integrate RS calendar to: Google, Outlook, iCal */}
-					{isPartner && (
+				{/* Integrate RS calendar to: Google, Outlook, iCal */}
+				{isPartner && (
+					<div className={'w-12/25'}>
 						<>
-							<div className={'flex mt-10'}>
+							<div className={'flex'}>
 								<h3 className={'mb-0 mt-0 flex items-center'}>
 									<CalendarSyncIcon className={'text-notino-black mr-2'} />
 									{t('loc:Synchronizácia kalendára')}
@@ -271,129 +271,115 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							</p>
 							<CalendarIntegrations />
 						</>
-					)}
-				</div>
-			</Row>
-			<Row justify={'space-between'} className='mt-10'>
+					</div>
+				)}
 				{/* Imports */}
-				<div className={'flex'}>
-					<h3 className={'mb-0 mt-0 flex items-center'}>
-						<UploadIcon className={'text-notino-black mr-2'} />
-						{t('loc:Importovať dáta z externých rezervačných systémov')}
-					</h3>
-				</div>
-				<Divider className={'my-3'} />
-				<Row>
-					<Permissions
-						allowed={[PERMISSION.PARTNER_ADMIN]}
-						render={(hasPermission, { openForbiddenModal }) => (
-							<ImportForm
-								accept={uploadModal.data.accept}
-								title={uploadModal.data.title}
-								label={uploadModal.data.label}
-								requestStatus={uploadModal.requestStatus}
-								setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
-								onSubmit={(values: IDataUploadForm) => {
-									if (hasPermission) {
-										handleSubmitImport(values)
-									} else {
-										openForbiddenModal()
+				<div className={'w-12/25'}>
+					<div className={'flex'}>
+						<h3 className={'mb-0 mt-0 flex items-center'}>
+							<UploadIcon className={'text-notino-black mr-2'} />
+							{t('loc:Importovať dáta z externých rezervačných systémov')}
+						</h3>
+					</div>
+					<Divider className={'my-3'} />
+					<Row>
+						<ImportForm
+							accept={uploadModal.data.accept}
+							title={uploadModal.data.title}
+							label={uploadModal.data.label}
+							requestStatus={uploadModal.requestStatus}
+							setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
+							onSubmit={handleSubmitImport}
+							visible={uploadModal.visible}
+							extraContent={
+								<>
+									<Divider className={'mt-1 mb-3'} />
+									<label htmlFor={'noti-template-select'} className={'block mb-2'}>
+										{t('loc:Vzorové šablóny súborov')}
+									</label>
+									<div className={'flex items-center justify-between gap-1 mb-4'}>
+										<SelectField
+											input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
+											meta={{} as any}
+											id={'noti-template-select'}
+											style={{ zIndex: 999 }}
+											className={'max-w-64 w-full pb-0'}
+											size={'large'}
+											filterOption={false}
+											allowInfinityScroll={false}
+											showSearch={false}
+											labelInValue
+											onSearch={searchTemplates}
+											popupMatchSelectWidth={false}
+											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+										/>
+										<Button
+											className={'noti-btn flex-shrink-0'}
+											href={templateValue?.value || undefined}
+											target='_blank'
+											rel='noopener noreferrer'
+											type={'default'}
+											disabled={!templateValue}
+											htmlType={'button'}
+											download
+										>
+											<div>{t('loc:Stiahnuť')}</div>
+										</Button>
+									</div>
+								</>
+							}
+							setVisible={() => {
+								setTemplateValue(null)
+								setUploadModal(UPLOAD_MODAL_INIT)
+							}}
+						/>
+						<Button
+							onClick={() => {
+								setUploadModal({
+									...uploadModal,
+									visible: true,
+									uploadType: UPLOAD_TYPE.RESERVATION,
+									data: {
+										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel',
+										title: t('loc:Importovať rezervácie'),
+										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx' })
 									}
-								}}
-								visible={uploadModal.visible}
-								extraContent={
-									<>
-										<Divider className={'mt-1 mb-3'} />
-										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
-											{t('loc:Vzorové šablóny súborov')}
-										</label>
-										<div className={'flex items-center justify-between gap-1 mb-4'}>
-											<SelectField
-												input={{ value: templateValue, onChange: (value: any) => setTemplateValue(value) } as any}
-												meta={{} as any}
-												id={'noti-template-select'}
-												style={{ zIndex: 999 }}
-												className={'max-w-64 w-full pb-0'}
-												size={'large'}
-												filterOption={false}
-												allowInfinityScroll={false}
-												showSearch={false}
-												labelInValue
-												onSearch={searchTemplates}
-												popupMatchSelectWidth={false}
-												placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-												getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-											/>
-											<Button
-												id={DOWNLOAD_BUTTON_ID}
-												className={'noti-btn flex-shrink-0'}
-												href={templateValue?.value || undefined}
-												target='_blank'
-												rel='noopener noreferrer'
-												type={'default'}
-												disabled={!templateValue}
-												htmlType={'button'}
-												download
-											>
-												<div>{t('loc:Stiahnuť')}</div>
-											</Button>
-										</div>
-									</>
-								}
-								setVisible={() => {
-									setTemplateValue(null)
-									setUploadModal(UPLOAD_MODAL_INIT)
-								}}
-							/>
-						)}
-					/>
-					<Button
-						onClick={() => {
-							setUploadModal({
-								...uploadModal,
-								visible: true,
-								uploadType: UPLOAD_TYPE.RESERVATION,
-								data: {
-									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel',
-									title: t('loc:Importovať rezervácie'),
-									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx' })
-								}
-							})
-							setTemplateValue(null)
-						}}
-						disabled={disabled}
-						type='primary'
-						htmlType='button'
-						className={'noti-btn mr-2'}
-						icon={<UploadIcon />}
-						id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, IMPORT_BUTTON_ID('reservations'))}
-					>
-						{t('loc:Importovať rezervácie')}
-					</Button>
-					<Button
-						onClick={() => {
-							setUploadModal({
-								...uploadModal,
-								visible: true,
-								uploadType: UPLOAD_TYPE.CUSTOMER,
-								data: {
-									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv',
-									title: t('loc:Importovať zákazníkov'),
-									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
-								}
-							})
-							setTemplateValue(null)
-						}}
-						disabled={disabled}
-						type='primary'
-						htmlType='button'
-						className={'noti-btn'}
-						icon={<UploadIcon />}
-						id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, IMPORT_BUTTON_ID('customers'))}
-					>
-						{t('loc:Importovať zákazníkov')}
-					</Button>
-				</Row>
+								})
+								setTemplateValue(null)
+							}}
+							disabled={disabled}
+							type='primary'
+							htmlType='button'
+							className={'noti-btn mr-2'}
+							icon={<UploadIcon />}
+						>
+							{t('loc:Importovať rezervácie')}
+						</Button>
+						<Button
+							onClick={() => {
+								setUploadModal({
+									...uploadModal,
+									visible: true,
+									uploadType: UPLOAD_TYPE.CUSTOMER,
+									data: {
+										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv',
+										title: t('loc:Importovať zákazníkov'),
+										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
+									}
+								})
+								setTemplateValue(null)
+							}}
+							disabled={disabled}
+							type='primary'
+							htmlType='button'
+							className={'noti-btn'}
+							icon={<UploadIcon />}
+						>
+							{t('loc:Importovať zákazníkov')}
+						</Button>
+					</Row>
+				</div>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Notifications */}

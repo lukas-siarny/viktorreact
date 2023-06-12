@@ -31,6 +31,7 @@ import calendarEmployeesReducer from './calendarEmployees/calendarEmployeesReduc
 import smsUnitPricesReducer from './smsUnitPrices/smsUnitPricesReducer'
 import walletReducer from './wallet/walletReducer'
 import smsReducer from './sms/smsReducer'
+import documentReducer from './documents/documentReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -57,7 +58,8 @@ export const REDUCER_KEYS = {
 	SMS_UNIT_PRICES: 'SMS_UNIT_PRICES',
 	WALLET: 'WALLET',
 	SMS: 'SMS',
-	CALENDAR_EMPLOYEES: 'CALENDAR_EMPLOYEES'
+	CALENDAR_EMPLOYEES: 'CALENDAR_EMPLOYEES',
+	DOCUMENTS: 'DOCUMENTS'
 }
 
 const rootReducer = combineReducers({
@@ -236,6 +238,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		smsReducer
+	),
+	documents: persistReducer(
+		{
+			key: REDUCER_KEYS.DOCUMENTS,
+			storage: storageSession
+		},
+		documentReducer
 	)
 })
 

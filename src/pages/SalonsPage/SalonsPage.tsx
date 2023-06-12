@@ -217,7 +217,7 @@ const SalonsPage = (props: Props) => {
 		setRequestStatusImport(REQUEST_STATUS.SUBMITTING)
 
 		const formData = new FormData()
-		formData.append('file', values?.file)
+		formData.append('file', values?.file[0])
 
 		try {
 			await postReq('/api/b2b/admin/imports/salons', undefined, formData, {

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 
 // utils
 import { formFieldID, showErrorNotification, validationRequired } from '../utils/helper'
-import { FORM, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../utils/enums'
+import { FORM, IMPORT_TYPE, REQUEST_STATUS, SUBMIT_BUTTON_ID } from '../utils/enums'
 
 // types
 import { IDataUploadForm } from '../types/interfaces'
@@ -18,7 +18,7 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close-icon-modal.sv
 
 type ComponentProps = {
 	visible: boolean
-	setVisible: React.Dispatch<React.SetStateAction<boolean>>
+	setVisible: React.Dispatch<React.SetStateAction<any>>
 	setRequestStatus: (status?: REQUEST_STATUS) => void
 	requestStatus: REQUEST_STATUS | undefined
 	title: string
@@ -26,7 +26,7 @@ type ComponentProps = {
 	label: string
 	accept: string
 	disabledForm?: boolean
-	inModal?: boolean
+	type?: IMPORT_TYPE
 }
 
 type Props = InjectedFormProps<IDataUploadForm, ComponentProps> & ComponentProps
@@ -34,7 +34,21 @@ type Props = InjectedFormProps<IDataUploadForm, ComponentProps> & ComponentProps
 const ImportForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, submitting, disabledForm, pristine, inModal = true, visible, setVisible, setRequestStatus, requestStatus, title, label, accept, extraContent } = props
+	const {
+		handleSubmit,
+		submitting,
+		disabledForm,
+		pristine,
+		visible,
+		setVisible,
+		setRequestStatus,
+		requestStatus,
+		title,
+		label,
+		accept,
+		extraContent,
+		type = IMPORT_TYPE.IMPORT
+	} = props
 	const resetUploadForm = () => {
 		setRequestStatus(undefined)
 		dispatch(reset(FORM.IMPORT_FORM))
@@ -47,7 +61,7 @@ const ImportForm: FC<Props> = (props) => {
 				name={'file'}
 				label={label}
 				accept={accept}
-				maxCount={1}
+				maxCount={100}
 				type={'file'}
 				disabled={submitting}
 				handleUploadOutside
@@ -65,12 +79,12 @@ const ImportForm: FC<Props> = (props) => {
 				disabled={disabledForm || submitting || pristine}
 				loading={submitting}
 			>
-				{t('loc:Importovať')}
+				{type === IMPORT_TYPE.IMPORT ? t('loc:Importovať') : t('loc:Nahrať')}
 			</Button>
 		</Form>
 	)
 
-	return inModal ? (
+	return (
 		<Modal
 			className='rounded-fields'
 			title={title}
@@ -88,11 +102,9 @@ const ImportForm: FC<Props> = (props) => {
 			keyboard={false}
 		>
 			<Spin spinning={requestStatus === REQUEST_STATUS.SUBMITTING}>
-				{requestStatus === REQUEST_STATUS.SUCCESS ? <UploadSuccess onRequestAgain={resetUploadForm} /> : <>{importForm}</>}
+				{requestStatus === REQUEST_STATUS.SUCCESS && type === IMPORT_TYPE.IMPORT ? <UploadSuccess onRequestAgain={resetUploadForm} /> : <>{importForm}</>}
 			</Spin>
 		</Modal>
-	) : (
-		<>{importForm}</>
 	)
 }
 

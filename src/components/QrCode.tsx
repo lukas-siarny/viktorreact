@@ -2,7 +2,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from 'antd'
 
-import qrTemplateSmall from '../assets/images/qrcode-small-template.png'
 import { ReactComponent as DownloadIcon } from '../assets/icons/download-icon.svg'
 import { handleAuthorizedDownload } from '../utils/helper'
 import { getAccessToken } from '../utils/auth'

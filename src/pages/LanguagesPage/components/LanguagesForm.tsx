@@ -6,7 +6,7 @@ import cx from 'classnames'
 import { useDispatch } from 'react-redux'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH, PERMISSION } from '../../../utils/enums'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH, PERMISSION } from '../../../utils/enums'
 import { showErrorNotification, validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -77,7 +77,7 @@ const LanguagesForm: FC<Props> = (props) => {
 						/>
 					}
 				/>
-				<Field component={ImgUploadField} name='image' label={t('loc:Vlajka')} maxCount={1} signUrl={URL_UPLOAD_IMAGES} category={UPLOAD_IMG_CATEGORIES.LANGUAGE_IMAGE} />
+				<Field component={ImgUploadField} name='image' label={t('loc:Vlajka')} maxCount={1} signUrl={URL_UPLOAD_FILE} category={UPLOAD_IMG_CATEGORIES.LANGUAGE_IMAGE} />
 
 				<div className={cx('flex w-full mt-6 gap-2 flex-wrap', { 'justify-between': languageID, 'justify-center': !languageID })}>
 					{languageID && (

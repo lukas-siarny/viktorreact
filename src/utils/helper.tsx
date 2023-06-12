@@ -42,6 +42,8 @@ import UAParser from 'ua-parser-js'
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
+	BROWSER_TYPE,
+	BROWSERS,
 	BYTE_MULTIPLIER,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
@@ -55,20 +57,18 @@ import {
 	EN_DATE_WITH_TIME_FORMAT,
 	EN_DATE_WITHOUT_TIME_FORMAT,
 	FORM,
-	IMAGE_UPLOADING_PROP,
+	UPLOAD_IN_PROGRESS_PROP,
 	INVALID_DATE_FORMAT,
 	LANGUAGE,
+	MIN_SUPPORTED_BROWSER_VERSION,
 	MONDAY_TO_FRIDAY,
 	MSG_TYPE,
 	NOTIFICATION_TYPE,
-	QUERY_LIMIT,
-	RESERVATION_STATE,
 	PERMISSION,
+	QUERY_LIMIT,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE,
-	MIN_SUPPORTED_BROWSER_VERSION,
-	BROWSERS,
-	BROWSER_TYPE
+	RESERVATION_STATE
 } from './enums'
 import { LOCALES } from '../components/LanguagePicker'
 import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress, NameLocalizationsItem } from '../types/interfaces'
@@ -680,37 +680,36 @@ export const getMaxSizeNotifMessage = (maxFileSize: any) => {
 type ImgUploadData = { uid: string; path: string } & Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['files'][0]
 export type ImgUploadParam = { [key: string]: ImgUploadData }
 
-export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) => {
-	const values = map(fileList, (file) => {
-		const fileData = filesData[get(file, 'uid')]
+export const formatFileFormValues = (fileList: any, filesData: ImgUploadParam) => {
+	return map(fileList, (fileListItem) => {
+		const fileData = filesData[get(fileListItem, 'uid')]
 
-		let img = {
-			...file,
-			url: get(file, 'url') || fileData?.path
+		let file = {
+			...fileListItem,
+			url: get(fileListItem, 'url') || fileData?.path
 		}
 
-		if (get(file, 'resizedImages')) {
-			img = {
-				...img,
+		if (get(fileListItem, 'resizedImages')) {
+			file = {
+				...file,
 				thumbUrl: fileData?.resizedImages?.thumbnail
 			}
 		}
 
-		if (get(file, 'id') || fileData?.id) {
-			img = {
-				...img,
-				id: get(file, 'id') || fileData?.id
+		if (get(fileListItem, 'id') || fileData?.id) {
+			file = {
+				...file,
+				id: get(fileListItem, 'id') || fileData?.id
 			}
 		}
 		if (fileData?.signedUrl) {
-			img = {
-				...img,
+			file = {
+				...file,
 				signedUrl: fileData?.signedUrl
 			}
 		}
-		return img
+		return file
 	})
-	return values
 }
 
 export const getServiceRange = (from: number | undefined | null, to: number | undefined | null, unit = '') => {
@@ -784,7 +783,7 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		const errorKeys = Object.keys(errors)
 
 		// Error invoked during image uploading has custom notification
-		if (errorKeys.length === 1 && errorKeys[0] === IMAGE_UPLOADING_PROP) {
+		if (errorKeys.length === 1 && errorKeys[0] === UPLOAD_IN_PROGRESS_PROP) {
 			return undefined
 		}
 
@@ -917,7 +916,7 @@ export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNo
 	const style = { width: imageWidth, height: imageHeight }
 	return (
 		<div className='flex items-center'>
-			<div style={style} className={'mr-2 flex items-center'}>
+			<div style={style} className={'mr-4 flex items-center'}>
 				{icon || fallbackIcon}
 			</div>
 			<span className='truncate inline-block'>{label}</span>
@@ -978,11 +977,11 @@ export const formatLongQueryString = (search: string, limit?: number) => {
 export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
 	const { form } = props
 
-	if (values && values[IMAGE_UPLOADING_PROP]) {
+	if (values && values[UPLOAD_IN_PROGRESS_PROP]) {
 		const error = i18next.t('loc:Prebieha nahrávanie')
 		showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
 		throw new SubmissionError({
-			[IMAGE_UPLOADING_PROP]: error
+			[UPLOAD_IN_PROGRESS_PROP]: error
 		})
 	} else {
 		dispatch(submit(form))

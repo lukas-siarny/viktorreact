@@ -63,18 +63,22 @@ import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 // SMS Credits
 import SmsCreditAdminPage from '../pages/SmsCreditAdminPage/SmsCreditAdminPage'
 import SmsUnitPricesDetailPage from '../pages/SmsCreditAdminPage/SmsUnitPricesDetailPage'
+import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
 
-// Cancel reservation page
+// Documents
+import DocumentsPage from '../pages/DocumentsPage/DocumentsPage'
+import DocumentsByAssetTypePage from '../pages/DocumentsPage/DocumentsByAssetTypePage'
+
+// Reservations
 import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
+import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
 
 import AppInit from '../components/AppInit'
 
-// 404, 403
+// 404, 403, Error pages
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
-import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
-import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
@@ -151,6 +155,10 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
 					<Route index element={<ReviewsPage />} />
+				</Route>
+				<Route path={t('paths:documents')} element={<AuthRoute layout={MainLayout} page={PAGE.DOCUMENTS} />}>
+					<Route index element={<DocumentsPage />} />
+					<Route path={':assetType'} element={<DocumentsByAssetTypePage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:reservations')} element={<AuthRoute layout={MainLayout} page={PAGE.NOTINO_RESERVATIONS} />}>
 					<Route index element={<NotinoReservationsPage />} />

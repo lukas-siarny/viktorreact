@@ -62,6 +62,7 @@ const CheckboxGroupField = (props: Props) => {
 			</Checkbox>
 		)
 	})
+
 	return (
 		<Item
 			label={label}

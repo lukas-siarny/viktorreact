@@ -24,6 +24,7 @@ import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE, EXTERNAL_CAL
 import ScrollToTop from './components/ScrollToTop'
 import { LOCALES } from './components/LanguagePicker'
 import AppRoutes from './routes/AppRoutes'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const { store, persistor } = configureStore(rootReducer)
 
@@ -44,6 +45,7 @@ const App = () => {
 		createRoutesFromElements(
 			<Route
 				path={'*'}
+				errorElement={<ErrorBoundary />}
 				element={
 					<ScrollToTop>
 						<AppRoutes />

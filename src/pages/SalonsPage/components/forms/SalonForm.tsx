@@ -169,7 +169,7 @@ const SalonForm: FC<Props> = (props) => {
 					<Col span={24}>
 						<Row justify={'space-between'}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
-								<InfoIcon className={'text-notino-black mr-2'} />
+								<InfoIcon className={'text-notino-black medium-icon mr-2'} />
 								{t('loc:Základné údaje')}
 							</h3>
 							<Row className={'py-2'} wrap={false}>
@@ -336,7 +336,7 @@ const SalonForm: FC<Props> = (props) => {
 				<Row>
 					<Col span={24}>
 						<h3 className={'mb-0 flex items-center'}>
-							<LocationIcon width={20} height={20} className={'text-notino-black mr-2'} />
+							<LocationIcon className={'text-notino-black mr-2 medium-icon'} />
 							{t('loc:Adresa')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />

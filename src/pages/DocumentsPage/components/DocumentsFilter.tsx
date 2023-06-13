@@ -13,7 +13,7 @@ import { optionRenderWithIcon } from '../../../utils/helper'
 import SelectField from '../../../atoms/SelectField'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // reducers

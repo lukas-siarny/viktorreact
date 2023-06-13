@@ -18,7 +18,7 @@ import TextareaField from '../../../atoms/TextareaField'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 
 // reducers
 import { RootState } from '../../../reducers'

@@ -15,7 +15,7 @@ import i18n from '../../utils/i18n'
 import { LOCALES } from '../../components/LanguagePicker'
 
 // assets
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
+import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../assets/icons/clock-icon.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-icon.svg'
@@ -160,7 +160,7 @@ const ContactPage: FC<Props> = () => {
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>
-											<PhoneIcon width={20} height={20} className={'mr-2 text-notino-pink'} />
+											<PhoneIcon className={'mr-2 text-notino-pink medium-icon'} />
 											{t('loc:Kontaktné údaje')}
 										</h3>
 									}

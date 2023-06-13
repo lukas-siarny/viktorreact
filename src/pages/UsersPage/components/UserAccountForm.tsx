@@ -41,7 +41,7 @@ const UserAccountForm: FC<Props> = (props) => {
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 flex items-center'}>
-						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
+						<InfoIcon className={'text-notino-black mr-2 medium-icon'} /> {t('loc:Osobné údaje')}
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>

@@ -40,7 +40,7 @@ const PhoneArrayField = (props: Props) => {
 	const buttonAdd = (
 		<Button
 			onClick={() => fields.push({ phonePrefixCountryCode })}
-			icon={<PlusIcon className={'text-notino-black'} />}
+			icon={<PlusIcon className={'text-notino-black small-icon'} />}
 			className={'noti-btn mt-2'}
 			type={'default'}
 			size={'small'}

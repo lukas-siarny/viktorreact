@@ -52,7 +52,7 @@ const EmployeeForm: FC<Props> = (props) => {
 					<div>
 						<div className={'flex justify-between'}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
-								<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
+								<InfoIcon className={'text-notino-black mr-2 medium-icon'} /> {t('loc:Osobné údaje')}
 							</h3>
 							{disabled && (
 								<Tag className={'noti-tag danger'}>

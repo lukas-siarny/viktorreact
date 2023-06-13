@@ -258,7 +258,7 @@ const ReviewsPage = () => {
 												{
 													key: 'visible_in_b2c',
 													label: showReviewText,
-													icon: <EyeIcon width={16} height={16} />,
+													icon: <EyeIcon />,
 													className: cx(dropdownItemClassName, {
 														'moderate-accept-message': record?.verificationStatus === REVIEW_VERIFICATION_STATUS.NOT_VERIFIED,
 														'moderate-publish-message': record?.verificationStatus !== REVIEW_VERIFICATION_STATUS.NOT_VERIFIED

@@ -11,7 +11,7 @@ import { FormItemProps } from 'antd/lib/form/FormItem'
 
 // icons
 import { ReactComponent as ArrowIcon } from '../assets/icons/select-arrow-icon.svg'
-import { ReactComponent as CloseIconSmall } from '../assets/icons/close-icon-16.svg'
+import { ReactComponent as CloseIconSmall } from '../assets/icons/close-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
 

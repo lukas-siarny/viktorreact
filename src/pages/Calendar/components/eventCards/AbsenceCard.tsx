@@ -10,8 +10,8 @@ import { parseTimeFromMinutes } from '../../calendarHelpers'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
-import { ReactComponent as RepeatIcon } from '../../../../assets/icons/repeat.svg'
+import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon.svg'
+import { ReactComponent as RepeatIcon } from '../../../../assets/icons/repeat-icon.svg'
 
 // types
 import { IEventCardProps } from '../../../../types/interfaces'
@@ -131,7 +131,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 									<div className={'event-info'}>
 										{employeeColorIndicator}
 										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
-										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
+										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon small-icon'} />}
 										<span className={'title'}>{employeeName}</span>
 									</div>
 									<span className={'duration'}>{duration}</span>
@@ -145,7 +145,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 										<div className={'event-info'}>
 											{employeeColorIndicator}
 											{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
-											{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
+											{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon small-icon'} />}
 											{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'time'}>{timeText}</span>}
 										</div>
 									</div>
@@ -161,7 +161,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 										<div className={'flex items-center gap-1 min-w-0'}>
 											{employeeColorIndicator}
 											{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
-											{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
+											{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon small-icon'} />}
 											{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'title'}>{employeeName}</span>}
 										</div>
 										<span className={'duration'}>{duration}</span>

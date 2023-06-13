@@ -9,7 +9,7 @@ import { change } from 'redux-form'
 
 // assets
 import { ReactComponent as ClockIcon } from '../../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../../assets/icons/coupon.svg'
+import { ReactComponent as CouponIcon } from '../../assets/icons/voucher-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-current-color.svg'
 

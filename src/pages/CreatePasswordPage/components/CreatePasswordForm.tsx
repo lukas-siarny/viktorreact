@@ -12,7 +12,7 @@ import { CHANGE_PASSWORD_NEW_LINK_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../.
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
 
 // assets
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-16.svg'
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 
 // schema
 import { ICreatePasswordForm, validationCreatePasswordFn } from '../../../schemas/password'

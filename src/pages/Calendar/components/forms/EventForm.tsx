@@ -25,7 +25,7 @@ import Permissions from '../../../../utils/Permissions'
 import { ICalendarEmployeesPayload } from '../../../../types/interfaces'
 
 // assets
-import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
 import { ReactComponent as DateSuffixIcon } from '../../../../assets/icons/date-suffix-icon.svg'
 
@@ -137,7 +137,7 @@ const EventForm: FC<Props> = (props) => {
 							optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
 							options={employeesOptions}
 							label={t('loc:Zamestnanec')}
-							suffixIcon={<EmployeesIcon className={'text-notino-grayDark'} />}
+							suffixIcon={<EmployeesIcon className={'text-notino-grayDark small-icon'} />}
 							placeholder={t('loc:Vyber zamestnanca')}
 							name={'employee'}
 							optionLabelProp={'label'}

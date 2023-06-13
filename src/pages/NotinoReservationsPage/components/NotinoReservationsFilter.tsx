@@ -43,8 +43,8 @@ import { RootState } from '../../../reducers'
 import { INotinoReservationsFilter } from '../../../types/interfaces'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
-import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-icon.svg'
 
 type ComponentProps = {}
 

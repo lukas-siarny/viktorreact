@@ -29,7 +29,7 @@ import { IBreadcrumbs, IIndustryFilter, IServicesSelectionData, SalonSubPageProp
 import { Paths } from '../../types/api'
 
 // assets
-import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../assets/icons/service-icon.svg'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 

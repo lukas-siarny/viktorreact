@@ -20,7 +20,7 @@ import { RootState } from '../../../reducers'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // schema

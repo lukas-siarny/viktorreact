@@ -14,7 +14,7 @@ import InputNumberField from './InputNumberField'
 import { DELETE_BUTTON_ID, STRINGS } from '../utils/enums'
 
 // assets
-import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon-16.svg'
+import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
 import { formFieldID } from '../utils/helper'
 
 const { Item } = Form
@@ -60,7 +60,7 @@ const InputsArrayField = (props: Props) => {
 		<Button
 			id={buttonID}
 			onClick={() => fields.push(emptyValue ?? '')}
-			icon={<PlusIcon className={'text-notino-black'} />}
+			icon={<PlusIcon className={'text-notino-black small-icon'} />}
 			className={'noti-btn mt-2'}
 			type={'default'}
 			size={'small'}

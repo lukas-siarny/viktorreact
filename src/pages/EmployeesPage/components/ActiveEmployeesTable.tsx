@@ -24,8 +24,8 @@ import { RootState } from '../../../reducers'
 import { getActiveEmployees, reorderEmployees } from '../../../reducers/employees/employeesActions'
 
 // assets
-import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
-import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
+import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline-icon.svg'
+import { ReactComponent as QuestionIcon } from '../../../assets/icons/question-icon.svg'
 
 // types
 import { Columns } from '../../../types/interfaces'

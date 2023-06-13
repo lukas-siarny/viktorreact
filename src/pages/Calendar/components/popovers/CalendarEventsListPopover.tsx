@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import cx from 'classnames'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-16.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
 // components
 import CalendarEventContent from '../eventCards/CalendarEventContent'

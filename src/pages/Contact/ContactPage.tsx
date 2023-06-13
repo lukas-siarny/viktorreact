@@ -15,11 +15,11 @@ import i18n from '../../utils/i18n'
 import { LOCALES } from '../../components/LanguagePicker'
 
 // assets
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
-import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
-import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
-import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
-import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
+import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-2-icon.svg'
+import { ReactComponent as TimerIcon } from '../../assets/icons/clock-icon.svg'
+import { ReactComponent as QuestionIcon } from '../../assets/icons/question-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-icon.svg'
+import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 const NOTE_MAX_LENGTH = 60
@@ -142,7 +142,7 @@ const ContactPage: FC<Props> = () => {
 					if (view === 'not_found') {
 						return (
 							<Result
-								icon={<QuestionIcon />}
+								icon={<QuestionIcon style={{ width: 100, height: 100 }} />}
 								title={<span className={'text-notino-black'}>{t('loc:Podpora nebola nájdená')}</span>}
 								subTitle={
 									<span className={'text-gray-600'}>
@@ -160,7 +160,7 @@ const ContactPage: FC<Props> = () => {
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>
-											<PhoneIcon width={20} height={20} className={'mr-2'} />
+											<PhoneIcon className={'mr-2 text-notino-pink medium-icon'} />
 											{t('loc:Kontaktné údaje')}
 										</h3>
 									}
@@ -219,7 +219,7 @@ const ContactPage: FC<Props> = () => {
 																			<>
 																				<Row align={'middle'} justify={'space-between'}>
 																					<Row align={'middle'} className={'gap-1'}>
-																						<PencilIcon />
+																						<PencilIcon className={'text-notino-gray'} />
 																						<h4 className={'m-0'}>{t('loc:Poznámka')}</h4>
 																					</Row>
 																					<Button
@@ -261,7 +261,7 @@ const ContactPage: FC<Props> = () => {
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>
-											<TimerIcon width={20} height={20} className={'mr-2'} />
+											<TimerIcon className={'mr-2 medium-icon text-notino-pink'} />
 											{t('loc:Otváracie hodiny')}
 										</h3>
 									}

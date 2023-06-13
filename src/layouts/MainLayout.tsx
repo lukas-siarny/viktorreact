@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 // components
 import LayoutSider, { LayoutSiderProps } from '../components/LayoutComponents/LayoutSider'
 import HeaderSelectCountryForm, { IHeaderCountryForm } from '../components/HeaderSelectCountryForm'
+import AvatarComponents from '../components/AvatarComponents'
 
 // redux
 import { RootState } from '../reducers'
@@ -22,10 +23,8 @@ import { ADMIN_PERMISSIONS, FORM, PAGE, PERMISSION, STRINGS } from '../utils/enu
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
-import { ReactComponent as BackIcon } from '../assets/icons/rollback.svg'
-import AvatarComponents from '../components/AvatarComponents'
+import { ReactComponent as BackIcon } from '../assets/icons/rollback-icon.svg'
 import { ReactComponent as ChevronIcon } from '../assets/icons/chevron-down.svg'
-import { ReactComponent as AddPurple } from '../assets/icons/add-icon-purple.svg'
 import SalonDefaultAvatar from '../assets/icons/salon-default-avatar.png'
 
 // hooks
@@ -93,7 +92,7 @@ const MainLayout: FC<Props> = (props) => {
 					{
 						key: 'add-salon',
 						className: 'font-medium button-add',
-						icon: <AddPurple />,
+						icon: <PlusIcon className={'text-notino-pink'} />,
 						onClick: () => navigate(t('paths:salons/create')),
 						label: STRINGS(t).addRecord(t('loc:salón'))
 					}
@@ -172,7 +171,7 @@ const MainLayout: FC<Props> = (props) => {
 											onClick={() => {
 												navigate(backUrl as string)
 											}}
-											icon={<BackIcon className={'filter-invert max'} />}
+											icon={<BackIcon className={'text-white'} />}
 											className={'noti-btn noti-admin-back-button h-8 text-notino-white self-center bg-notino-pink mr-2'}
 											type={'default'}
 											size={'small'}

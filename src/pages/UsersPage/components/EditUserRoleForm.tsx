@@ -12,7 +12,7 @@ import { FORM, ADMIN_PERMISSIONS, STRINGS } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
 // assets
-import { ReactComponent as KeyIcon } from '../../../assets/icons/key.svg'
+import { ReactComponent as KeyIcon } from '../../../assets/icons/key-icon.svg'
 
 // reducers
 import { RootState } from '../../../reducers'

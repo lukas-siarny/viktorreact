@@ -26,8 +26,8 @@ import SmsTimeStats from '../../../components/Dashboards/SmsTimeStats'
 import Voucher from './Voucher'
 
 // assets
-import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
-import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
+import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-hidden-icon.svg'
+import { ReactComponent as SettingIcon } from '../../../assets/icons/setting-icon.svg'
 import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-icon.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 import { ReactComponent as QrCodeIcon } from '../../../assets/icons/qr-code-icon.svg'
@@ -135,7 +135,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							subTitle={`${t('loc:Salón bol skrytý z dôvodu')}:`}
 							message={selectedSalon.data?.publicationDeclineReason}
 							actionLabel={t('loc:Upraviť údaje salónu')}
-							icon={<EyeOffIcon />}
+							icon={<EyeOffIcon className={'text-danger'} />}
 							onActionItemClick={() => navigate(basePath)}
 						/>
 					)}

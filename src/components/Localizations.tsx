@@ -6,7 +6,7 @@ import i18next from 'i18next'
 import cx from 'classnames'
 
 // assets
-import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon.svg'
 
 // utils
 import { validationString } from '../utils/helper'

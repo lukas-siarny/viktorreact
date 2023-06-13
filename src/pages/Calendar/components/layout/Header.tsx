@@ -13,7 +13,7 @@ import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_SET_NEW_DATE,
 // assets
 import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-currentColor-12.svg'
 import { ReactComponent as ChevronLeft } from '../../../../assets/icons/chevron-left-16.svg'
-import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
+import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
 
 // components

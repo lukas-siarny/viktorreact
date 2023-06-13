@@ -79,15 +79,25 @@ body, .ant-layout
 .ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover
 	color: $textColor-gray-600
 // Matus v Designe vo vacsine pripadov pouziva zmensenu formu ikony vo velkosti 16x16, tak staci aplikovat tuto pomocnu classku na <Ikona className={'small-icon'} />
+.icon-10
+	width: 10px
+	height: 10px
 .small-icon
 	width: 16px
 	height: 16px
+
+.medium-icon
+	width: 24px
+	height: 24px
+
 .big-icon
 	width: 32px
 	height: 32px
+
 .text-bottom
 	display: inline-block
 	align-self: flex-end
+
 .hover-icon
 	filter: grayscale(100%)
 
@@ -1057,11 +1067,11 @@ span.ant-tag
 				background-image: url("../assets/icons/message-icon-16-thin.svg")
 		&.address-list-item
 			&::before
-				background-image: url("../assets/icons/home-icon-16.svg")
+				background-image: url("../assets/icons/home-icon.svg")
 		&.note-list-item
 			margin-top: 14px
 			&::before
-				background-image: url("../assets/icons/pencil-icon-16.svg")
+				background-image: url("../assets/icons/pencil-icon.svg")
 
 .noti-opening-hours-table
 	display: flex
@@ -1247,7 +1257,7 @@ span.ant-tag
 		display: block
 		width: 20px
 		height: 20px
-		background: url("../assets/icons/location-16.svg") center center no-repeat
+		background: url("../assets/icons/location-icon.svg") center center no-repeat
 		background-size: contain
 		flex: 0 0 auto
 
@@ -1391,7 +1401,7 @@ span.ant-tag .title
 						border-radius: 8px
 						padding: 8px
 						&::before
-							background: url("../assets/icons/location-16.svg") no-repeat center center
+							background: url("../assets/icons/location-icon.svg") no-repeat center center
 	@media (max-width: 850px)
 		.cards-wrapper
 			flex-direction: column
@@ -1432,7 +1442,7 @@ span.ant-tag .title
 				height: 16px
 				margin-top: 2px
 				flex: 0 0 auto
-				background: url("../assets/icons/location-gray-16.svg") no-repeat center center
+				background: url("../assets/icons/location-icon.svg") no-repeat center center
 
 .ant-tabs.ant-tabs-top.box-tab
 	position: relative
@@ -1597,3 +1607,4 @@ th.future-divider
 			padding: 150px 40px 16px 40px
 			z-index: 10
 			transition: background 300ms ease-in-out
+

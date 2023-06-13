@@ -8,7 +8,7 @@ import { FORM, SUBMIT_BUTTON_ID } from '../../../../utils/enums'
 import { formFieldID } from '../../../../utils/helper'
 
 // assets
-import { ReactComponent as VoucherIcon } from '../../../../assets/icons/coupon.svg'
+import { ReactComponent as VoucherIcon } from '../../../../assets/icons/voucher-icon.svg'
 
 // components
 import InputField from '../../../../atoms/InputField'

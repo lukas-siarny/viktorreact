@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Typography } from 'antd'
 import { ReactComponent as VoucherIcon } from '../../../assets/images/voucher.svg'
 import { ReactComponent as CopyableIcon } from '../../../assets/icons/copyable-icon.svg'
-import { ReactComponent as CheckIcon } from '../../../assets/icons/checkbox-checked-icon-16.svg'
+import { ReactComponent as CheckIcon } from '../../../assets/icons/check-icon.svg'
 
 type Props = {
 	code?: string | null

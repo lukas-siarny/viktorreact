@@ -12,14 +12,14 @@ import { isPristine } from 'redux-form'
 import cx from 'classnames'
 
 // assets
-import { ReactComponent as EditIcon } from '../../../../assets/icons/edit-icon-16.svg'
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-16.svg'
+import { ReactComponent as EditIcon } from '../../../../assets/icons/edit-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { ReactComponent as DotsIcon } from '../../../../assets/icons/more-info-horizontal-icon.svg'
 import { ReactComponent as MessageIcon } from '../../../../assets/icons/message-icon-16-thin.svg'
 import { ReactComponent as ChevronDown } from '../../../../assets/icons/chevron-down.svg'
 import { ReactComponent as NoteIcon } from '../../../../assets/icons/note-icon.svg'
-import { ReactComponent as DollarIcon } from '../../../../assets/icons/dollar.svg'
-import { ReactComponent as CrossedIcon } from '../../../../assets/icons/crossed-red-16.svg'
+import { ReactComponent as DollarIcon } from '../../../../assets/icons/dollar-icon.svg'
+import { ReactComponent as CrossedIcon } from '../../../../assets/icons/close-circle-icon.svg'
 
 // components
 import UserAvatar from '../../../../components/AvatarComponents'
@@ -91,7 +91,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 						</Row>
 						<Row className={'buttons gap-4'}>
 							<button className={'nc-popover-header-button'} type={'button'} onClick={onEdit}>
-								<EditIcon />
+								<EditIcon className={'small-icon'} />
 							</button>
 							{(moreMenuItems || []).length > 0 && (
 								<Dropdown
@@ -365,7 +365,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		cancel_by_salon: {
 			key: 'cancel-by-salon',
 			label: <span className={'text-notino-red'}>{STRINGS(t).cancel(t('loc:rezerváciu'))}</span>,
-			icon: <CrossedIcon />,
+			icon: <CrossedIcon className={'text-danger'} />,
 			className: itemClassName,
 			onClick: () => handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)
 		}

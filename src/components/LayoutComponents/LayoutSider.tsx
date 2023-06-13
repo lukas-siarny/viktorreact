@@ -8,31 +8,31 @@ import { sortBy } from 'lodash'
 
 // assets
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
-import { ReactComponent as LogoCollapsedIcon } from '../../assets/icons/logoCollapsed.svg'
-import { ReactComponent as HomeIcon } from '../../assets/icons/home-24-icon.svg'
-import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-24-icon.svg'
-import { ReactComponent as SalonIcon } from '../../assets/icons/salon-24-icon.svg'
-import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
-import { ReactComponent as UsersIcon } from '../../assets/icons/users-24-icon.svg'
-import { ReactComponent as CustomerIcon } from '../../assets/icons/customer-24-icon.svg'
-import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
+import { ReactComponent as NotinoPartnerIcon } from '../../assets/icons/notino-partner-icon.svg'
+import { ReactComponent as HomeIcon } from '../../assets/icons/home-icon-filled.svg'
+import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-icon.svg'
+import { ReactComponent as SalonIcon } from '../../assets/icons/salon-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../assets/icons/service-icon.svg'
+import { ReactComponent as UsersIcon } from '../../assets/icons/users-icon.svg'
+import { ReactComponent as CustomerIcon } from '../../assets/icons/customer-icon.svg'
+import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-icon.svg'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/profile-icon.svg'
 import { ReactComponent as LogOutIcon } from '../../assets/icons/logout-icon.svg'
-import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
+import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down-icon.svg'
 import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.svg'
-import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
+import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees-icon.svg'
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
-import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
-import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24.svg'
-import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
-import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
-import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
+import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon.svg'
+import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-icon.svg'
+import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-icon.svg'
+import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries-icon.svg'
+import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-icon.svg'
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
-import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.svg'
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
-import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
+import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-icon.svg'
+import { ReactComponent as SettingIcon } from '../../assets/icons/setting-icon.svg'
+import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations-icon.svg'
 import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
-import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices.svg'
+import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices-icon.svg'
 import { ReactComponent as DocumentsIcon } from '../../assets/icons/document-icon.svg'
 
 // utils
@@ -140,7 +140,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.USERS,
 						label: t('loc:Používatelia'),
 						onClick: () => navigate(t('paths:users')),
-						icon: <UsersIcon />,
+						icon: <UsersIcon className={'text-notino-black'} />,
 						id: PAGE.USERS
 					})
 				}
@@ -150,49 +150,49 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.CATEGORIES,
 							label: t('loc:Kategórie'),
 							onClick: () => navigate(t('paths:categories')),
-							icon: <CategoryIcon />,
+							icon: <CategoryIcon className={'text-notino-black'} />,
 							id: PAGE.CATEGORIES
 						},
 						{
 							key: PAGE.CATEGORY_PARAMETERS,
 							label: t('loc:Parametre'),
 							onClick: () => navigate(t('paths:category-parameters')),
-							icon: <ParametersIcon />,
+							icon: <ParametersIcon className={'text-notino-black'} />,
 							id: PAGE.CATEGORY_PARAMETERS
 						},
 						{
 							key: PAGE.COSMETICS,
 							label: t('loc:Kozmetika'),
 							onClick: () => navigate(t('paths:cosmetics')),
-							icon: <CosmeticIcon />,
+							icon: <CosmeticIcon className={'text-notino-black'} />,
 							id: PAGE.COSMETICS
 						},
 						{
 							key: PAGE.LANGUAGES,
 							label: t('loc:Jazyky'),
 							onClick: () => navigate(t('paths:languages-in-salons')),
-							icon: <LanguagesIcon />,
+							icon: <LanguagesIcon className={'text-notino-black'} />,
 							id: PAGE.LANGUAGES
 						},
 						{
 							key: PAGE.SUPPORT_CONTACTS,
 							label: t('loc:Podpora'),
 							onClick: () => navigate(t('paths:support-contacts')),
-							icon: <HelpIcon />,
+							icon: <HelpIcon className={'text-notino-black'} />,
 							id: PAGE.SUPPORT_CONTACTS
 						},
 						{
 							key: PAGE.SPECIALIST_CONTACTS,
 							label: t('loc:Špecialisti'),
 							onClick: () => navigate(t('paths:specialist-contacts')),
-							icon: <SpecialistIcon />,
+							icon: <SpecialistIcon className={'text-notino-black'} />,
 							id: PAGE.SPECIALIST_CONTACTS
 						},
 						{
 							key: PAGE.REVIEWS,
 							label: t('loc:Recenzie'),
 							onClick: () => navigate(t('paths:reviews')),
-							icon: <ReviewsIcon />,
+							icon: <ReviewsIcon className={'text-notino-black'} />,
 							id: PAGE.REVIEWS
 						},
 						{
@@ -209,7 +209,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.SMS_CREDITS,
 						label: t('loc:SMS kredity'),
 						onClick: () => navigate(t('paths:sms-credits')),
-						icon: <SmsUnitPricesIcon />,
+						icon: <SmsUnitPricesIcon className={'text-notino-black'} />,
 						id: PAGE.SMS_CREDITS
 					})
 				}
@@ -220,14 +220,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.NOTINO_RESERVATIONS,
 							label: t('loc:Prehľad rezervacií'),
 							onClick: () => navigate(t('paths:reservations')),
-							icon: <ReservationsIcon />,
+							icon: <ReservationsIcon className={'text-notino-black'} />,
 							id: PAGE.NOTINO_RESERVATIONS
 						},
 						{
 							key: PAGE.SALONS,
 							label: t('loc:Salóny'),
 							onClick: () => navigate(t('paths:salons')),
-							icon: <SalonIcon />,
+							icon: <SalonIcon className={'text-notino-black'} />,
 							id: PAGE.SALONS
 						}
 					)
@@ -249,7 +249,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 								</div>
 							),
 							onClick: () => navigate(parentPath as string),
-							icon: <SalonIcon />,
+							icon: <SalonIcon className={'text-notino-black'} />,
 							id: PAGE.SALONS
 						},
 						{
@@ -261,35 +261,35 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.BILLING_INFO,
 							label: t('loc:Fakturačné údaje'),
 							onClick: () => navigate(getPath(t('paths:billing-info'))),
-							icon: <InvoiceIcon />,
+							icon: <InvoiceIcon className={'text-notino-black'} />,
 							id: PAGE.BILLING_INFO
 						},
 						{
 							key: PAGE.SERVICES_SETTINGS,
 							label: t('loc:Nastavenie služieb'),
 							onClick: () => navigate(getPath(t('paths:services-settings'))),
-							icon: <ServiceIcon className={'text-black'} />,
+							icon: <ServiceIcon className={'text-black medium-icon'} strokeWidth={'0.5'} />,
 							id: PAGE.SERVICES_SETTINGS
 						},
 						{
 							key: PAGE.EMPLOYEES,
 							label: t('loc:Zamestnanci'),
 							onClick: () => navigate(getPath(t('paths:employees'))),
-							icon: <EmployeesIcon />,
+							icon: <EmployeesIcon className={'text-notino-black'} />,
 							id: PAGE.EMPLOYEES
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
 							label: t('loc:Nastavenia rezervácií'),
 							onClick: () => navigate(getPath(t('paths:reservations-settings'))),
-							icon: <SettingIcon />,
+							icon: <SettingIcon className={'text-notino-black'} />,
 							id: PAGE.SALON_SETTINGS
 						},
 						{
 							key: PAGE.INDUSTRIES_AND_SERVICES,
 							label: t('loc:Odvetvia a služby'),
 							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
-							icon: <IndustiresIcon />,
+							icon: <IndustiresIcon className={'text-notino-black'} />,
 							id: PAGE.INDUSTRIES_AND_SERVICES
 						},
 						{
@@ -308,14 +308,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Prehľad rezervácií {{ reservationsCount }}', { reservationsCount: count }),
 							onClick: () => navigate(getPath(t('paths:salon-reservations'))),
-							icon: <ReservationsIcon />,
+							icon: <ReservationsIcon className={'text-notino-black'} />,
 							id: PAGE.RESERVATIONS
 						},
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Plánovací kalendár'),
 							onClick: () => navigate(getPath(t('paths:calendar'))),
-							icon: <CalendarIcon />,
+							icon: <CalendarIcon className={'text-notino-black'} />,
 							id: PAGE.CALENDAR
 						}
 					)
@@ -326,7 +326,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.SMS_CREDIT,
 						label: t('loc:SMS kredit'),
 						onClick: () => navigate(getPath(t('paths:sms-credit'))),
-						icon: <SmsUnitPricesIcon />,
+						icon: <SmsUnitPricesIcon className={'text-notino-black'} />,
 						id: PAGE.SMS_CREDIT
 					})
 				}
@@ -463,7 +463,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<div id={'noti-sider-wrapper'} className='flex flex-col h-full'>
 				{collapsed ? (
 					<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
-						<LogoCollapsedIcon className='h-8' />
+						<NotinoPartnerIcon className='h-8' />
 					</Link>
 				) : (
 					<Link className='flex justify-center items-center' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>

@@ -37,7 +37,7 @@ import { validationCategoryParamsFn, ICategoryParamsForm } from '../../../schema
 import { RootState } from '../../../reducers'
 
 // assets
-import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon-16.svg'
+import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 const { Item } = Form
@@ -59,7 +59,7 @@ const LocalizationsArray = (props: any) => {
 		<Button
 			id={formFieldID(FORM.CATEGORY_PARAMS, ADD_BUTTON_ID)}
 			onClick={() => fields.push(emptyValue)}
-			icon={<PlusIcon className={'text-notino-black'} />}
+			icon={<PlusIcon className={'text-notino-black small-icon'} />}
 			className={'noti-btn mt-2'}
 			type={'default'}
 			size={'small'}

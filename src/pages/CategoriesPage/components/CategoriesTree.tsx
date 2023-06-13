@@ -400,7 +400,7 @@ const CategoriesTree = () => {
 						showIcon
 						showLine
 						draggable={{
-							icon: <DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-notino-pink w-4 h-4 flex'} />
+							icon: <DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'w-4 h-4 flex'} />
 						}}
 						onSelect={onCategoryClickHandler}
 						onExpand={(expandedKeys) => {

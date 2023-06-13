@@ -5,7 +5,7 @@ import { getFormValues } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-16.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../../assets/icons/info-icon.svg'
 import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
 

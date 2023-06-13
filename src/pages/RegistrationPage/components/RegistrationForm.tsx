@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 // assets
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-16.svg'
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 
 // atoms
 import InputField from '../../../atoms/InputField'

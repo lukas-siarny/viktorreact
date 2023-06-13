@@ -7,7 +7,7 @@ import { Form, TimePicker } from 'antd'
 import { TimePickerProps } from 'antd/lib/time-picker'
 
 import { DEFAULT_TIME_FORMAT, DROPDOWN_POSITION } from '../utils/enums'
-import { ReactComponent as TimerIcon } from '../assets/icons/timer-16-icon.svg'
+import { ReactComponent as TimerIcon } from '../assets/icons/timer-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
 import { formFieldID } from '../utils/helper'

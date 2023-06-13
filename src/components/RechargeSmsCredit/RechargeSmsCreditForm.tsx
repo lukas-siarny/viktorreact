@@ -9,7 +9,7 @@ import { formFieldID, showErrorNotification, validationNumberMin, validationRequ
 import { withPromptUnsavedChanges } from '../../utils/promptUnsavedChanges'
 
 // assets
-import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
+import { ReactComponent as CoinsIcon } from '../../assets/icons/coins-icon.svg'
 
 // atoms
 import TextareaField from '../../atoms/TextareaField'

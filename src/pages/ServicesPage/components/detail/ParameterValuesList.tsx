@@ -14,7 +14,7 @@ import { validationNumberMin } from '../../../../utils/helper'
 
 // assets
 import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../../../../assets/icons/coupon.svg'
+import { ReactComponent as CouponIcon } from '../../../../assets/icons/voucher-icon.svg'
 
 // schema
 import { IParameterValue } from '../../../../schemas/service'

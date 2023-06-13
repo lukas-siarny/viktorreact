@@ -8,7 +8,7 @@ import ConfirmModal, { IConfirmModal } from '../../../atoms/ConfirmModal'
 import ConfirmBulkForm from './forms/ConfirmBulkForm'
 
 // types
-import { IBulkConfirmForm, ConfirmModalData, HandleUpdateReservationStateFunc } from '../../../types/interfaces'
+import { IBulkConfirmForm, ConfirmModalData, HandleUpdateReservationStateFunc, IAuthUserPayload } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
 
 // utils
@@ -40,6 +40,7 @@ type Props = {
 	loadingData?: boolean
 	queryEventId?: string | null
 	clearConfirmModal: () => void
+	salonID: string
 }
 
 const INIT_CONFIRM_MODAL_VALUES = {
@@ -54,11 +55,31 @@ interface IConfirmModalState extends IConfirmModal {
 	content: React.ReactNode
 }
 
+const isOnlyReservationNoteChanged = (initialValues?: ICalendarReservationForm, values?: ICalendarReservationForm) => {
+	const areValuesWithoutNoteTheSame =
+		initialValues?.customer?.key === values?.customer?.key &&
+		initialValues?.service?.key === values?.service?.key &&
+		initialValues?.date === values?.date &&
+		initialValues?.timeFrom === values?.timeFrom &&
+		initialValues?.employee?.key === values?.employee?.key
+
+	const isNoteChanged = !!(!(!initialValues?.note && !values?.note) || (initialValues?.note && values?.note && initialValues.note !== values.note))
+
+	return areValuesWithoutNoteTheSame && isNoteChanged
+}
+
+const isAuthUserAssignedEmployee = (salonID: string, authUser?: IAuthUserPayload['data'], values?: ICalendarReservationForm) => {
+	const authUserEmployeeID = authUser?.salons.find((salon) => salon.id === salonID)?.employeeID
+	return authUserEmployeeID === values?.employee?.key
+}
+
 const CalendarConfirmModal: FC<Props> = (props) => {
-	const { handleSubmitReservation, handleSubmitEvent, handleDeleteEvent, handleUpdateReservationState, loadingData, queryEventId, data, clearConfirmModal } = props
+	const { handleSubmitReservation, handleSubmitEvent, handleDeleteEvent, handleUpdateReservationState, loadingData, queryEventId, data, clearConfirmModal, salonID } = props
 
 	const [confirmModal, setConfirmModal] = useState<IConfirmModalState>(INIT_CONFIRM_MODAL_VALUES)
 	const disabledNotifications = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.settings?.disabledNotifications)
+	const initialFormValues: ICalendarReservationForm = useSelector((state: RootState) => (state.form[FORM.CALENDAR_RESERVATION_FORM] as any)?.initial)
+	const authUser = useSelector((state: RootState) => state.user.authUser)
 
 	const [t] = useTranslation()
 
@@ -68,6 +89,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 		// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
 		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
 		const eventId = (values?.updateFromCalendar ? values?.eventId : queryEventId) || undefined
+		const onlyReservationNoteChanged = isOnlyReservationNoteChanged(initialFormValues, values)
 
 		if (eventId) {
 			setConfirmModal({
@@ -83,7 +105,9 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				content: getConfirmModalText(
 					t('loc:Naozaj chcete upraviť rezerváciu?'),
 					[CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CHANGED_CUSTOMER, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CHANGED_EMPLOYEE],
-					disabledNotifications
+					disabledNotifications,
+					onlyReservationNoteChanged,
+					onlyReservationNoteChanged && isAuthUserAssignedEmployee(salonID, authUser.data, values)
 				)
 			})
 		} else {

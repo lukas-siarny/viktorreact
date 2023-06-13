@@ -33,6 +33,7 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting-icon.s
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations-icon.svg'
 import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
 import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices-icon.svg'
+import { ReactComponent as DocumentsIcon } from '../../assets/icons/document-icon.svg'
 
 // utils
 import { CYPRESS_CLASS_NAMES, PAGE, PERMISSION } from '../../utils/enums'
@@ -46,6 +47,7 @@ import { getSupportContact } from '../../reducers/supportContacts/supportContact
 // components
 import { getLanguagePickerAsSubmenuItem } from '../LanguagePicker'
 import AvatarComponents from '../AvatarComponents'
+import NewBadge from '../NewBadge'
 
 // types
 import { setIsSiderCollapsed } from '../../reducers/helperSettings/helperSettingsActions'
@@ -76,6 +78,7 @@ const MENU_ITEMS_ORDER = [
 	PAGE.REVIEWS,
 	PAGE.SMS_CREDITS,
 	PAGE.NOTINO_RESERVATIONS,
+	PAGE.DOCUMENTS,
 	PAGE.SALONS, // last item for Notino view and second item for Salon view (after homepage)
 	// Salon view
 	PAGE.BILLING_INFO,
@@ -191,6 +194,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick: () => navigate(t('paths:reviews')),
 							icon: <ReviewsIcon className={'text-notino-black'} />,
 							id: PAGE.REVIEWS
+						},
+						{
+							key: PAGE.DOCUMENTS,
+							label: t('loc:Dokumenty'),
+							onClick: () => navigate(t('paths:documents')),
+							icon: <DocumentsIcon className={'text-black'} />,
+							id: PAGE.DOCUMENTS
 						}
 					)
 				}
@@ -230,7 +240,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					mainGroupItems.push(
 						{
 							key: PAGE.SALONS,
-							label: t('loc:Detail salónu'),
+							className: 'text-black',
+							label: (
+								<div className={'flex items-center'}>
+									<span className={'ant-menu-title-content'}>{t('loc:Detail salónu')}</span>
+
+									<NewBadge showInMenu pageEnum={PAGE.SALONS} />
+								</div>
+							),
 							onClick: () => navigate(parentPath as string),
 							icon: <SalonIcon className={'text-notino-black'} />,
 							id: PAGE.SALONS

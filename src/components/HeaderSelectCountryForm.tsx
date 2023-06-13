@@ -22,15 +22,16 @@ export interface IHeaderCountryForm {
 	countryCode?: string
 }
 
-type ComponentProps = {}
+type ComponentProps = {
+	required?: boolean
+}
 
 type Props = InjectedFormProps<IHeaderCountryForm, ComponentProps> & ComponentProps
 
 const HeaderSelectCountryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit } = props
+	const { handleSubmit, required } = props
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<div className={'flex items-center'}>
@@ -41,7 +42,7 @@ const HeaderSelectCountryForm: FC<Props> = (props) => {
 					name={'countryCode'}
 					placeholder={t('loc:Krajina')}
 					className={'p-0 m-0 w-48'}
-					allowClear
+					allowClear={!required}
 					size={'middle'}
 					filterOptions
 					onDidMountSearch

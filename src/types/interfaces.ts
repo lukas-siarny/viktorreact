@@ -1,6 +1,6 @@
 import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
-import { PaginationProps } from 'antd'
+import { CheckboxOptionType, PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/react'
 
 // utils
@@ -18,7 +18,8 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
 	SALON_TABS_KEYS,
-	CALENDAR_EVENT_DISPLAY_TYPE
+	CALENDAR_EVENT_DISPLAY_TYPE,
+	MS_REDIRECT_MESSAGE_KEY
 } from '../utils/enums'
 
 // types
@@ -29,13 +30,14 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 import { ICalendarEventForm } from '../schemas/event'
 import { ICalendarReservationForm } from '../schemas/reservation'
 import {
-	ICalendarPageURLQueryParams,
+	ICalendarPageURLQueryParams, IDocumentsPageURLQueryParams,
 	INotinoReservationsPageURLQueryParams,
 	IRechargeSmsCreditAdminPageURLQueryParams,
 	IReviewsPageURLQueryParams,
 	ISalonReservationsPageURLQueryParams,
 	IServicesPageURLQueryParams
 } from '../schemas/queryParams'
+import { AxiosError } from 'axios'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -269,7 +271,7 @@ export interface INoteModal {
 }
 
 export interface IDataUploadForm {
-	file: string | Blob
+	file: File[]
 }
 
 export interface ISalonsReportForm {
@@ -656,6 +658,8 @@ export type ISalonReservationsFilter = Omit<ISalonReservationsPageURLQueryParams
 
 export type INotinoReservationsFilter = Omit<INotinoReservationsPageURLQueryParams, 'state' | 'page' | 'limit'>
 
+export type IDocumentsFilter = Omit<IDocumentsPageURLQueryParams, 'order' | 'page' | 'limit'>
+
 export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
 
 export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
@@ -670,4 +674,22 @@ export type ServicesActiveKeys = {
 	salonID: string
 	industries: string[]
 	categories: string[]
+}
+
+export type IServicesSelectionData = {
+	[key: string]: {
+		options: CheckboxOptionType[]
+		title: string,
+		orderIndex: number
+	}
+}
+
+export interface IIndustryFilter {
+	search?: string
+}
+
+export type MSRedirectMessage = {
+	key: typeof MS_REDIRECT_MESSAGE_KEY,
+	status: 'idle' | 'success' | 'error' | 'loading'
+	messages?: IErrorMessage[]
 }

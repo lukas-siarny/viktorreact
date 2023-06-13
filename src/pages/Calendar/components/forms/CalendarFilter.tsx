@@ -16,7 +16,7 @@ import { ReactComponent as ServicesIcon } from '../../../../assets/icons/service
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-icon.svg'
 
 // utils
-import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../../../utils/enums'
+import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM, STRINGS } from '../../../../utils/enums'
 
 // atoms
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
@@ -121,7 +121,7 @@ const CalendarFilter = (props: Props) => {
 							<FilterEmptyState
 								icon={<ServicesIcon className={'medium-icon'} />}
 								infoMessage={t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
-								buttonLabel={t('loc:Priradiť služby')}
+								buttonLabel={STRINGS(t).assign(t('loc:služby'))}
 								buttonDissabled={loadingData}
 								buttonOnClick={() => navigate(`${parentPath}${t('paths:industries-and-services')}`)}
 							/>

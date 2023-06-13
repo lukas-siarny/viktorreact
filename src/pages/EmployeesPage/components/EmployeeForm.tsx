@@ -6,7 +6,7 @@ import { Divider, Form, Space, Button, Tag } from 'antd'
 import { isEmpty } from 'lodash'
 
 // utils
-import { FORM, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 
@@ -68,7 +68,7 @@ const EmployeeForm: FC<Props> = (props) => {
 								name={'avatar'}
 								label={t('loc:Avatar')}
 								disabled={disabled}
-								signUrl={URL_UPLOAD_IMAGES}
+								signUrl={URL_UPLOAD_FILE}
 								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
 								multiple={false}
 								maxCount={1}

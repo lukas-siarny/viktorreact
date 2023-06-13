@@ -110,7 +110,7 @@ const EmployeeForm: FC<Props> = (props) => {
 					{isEdit && (
 						<div>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
-								<ServiceIcon className={'text-notino-black mr-2 medium-icon stroke-width-0-5'} /> {t('loc:Priradené služby')}
+								<ServiceIcon strokeWidth={'0.5'} className={'text-notino-black mr-2 medium-icon'} /> {t('loc:Priradené služby')}
 							</h3>
 							<Divider className={'mb-3 mt-3'} />
 							<div className={'flex w-full flex-col md:flex-row md:gap-2'}>

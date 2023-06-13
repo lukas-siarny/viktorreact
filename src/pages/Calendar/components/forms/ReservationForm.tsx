@@ -11,7 +11,16 @@ import dayjs from 'dayjs'
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification, findNodeInTree } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import {
+	CALENDAR_EVENT_TYPE,
+	DEFAULT_TIME_FORMAT,
+	ENUMERATIONS_KEYS,
+	FORM,
+	PERMISSION,
+	CREATE_EVENT_PERMISSIONS,
+	UPDATE_EVENT_PERMISSIONS,
+	RESERVATION_SOURCE_TYPE
+} from '../../../../utils/enums'
 
 // types
 import { EmployeeService, ICalendarEmployeesPayload, ServiceType } from '../../../../types/interfaces'
@@ -422,6 +431,7 @@ const ReservationForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							onChange={onChangeEmployee}
+							disabled={eventDetail?.data?.reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE}
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

@@ -593,7 +593,7 @@ export const getPaginatedReservations =
 
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/paginated', {
 				...(normalizeQueryParams(queryParamsEditedForRequest) as any),
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION]
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, RESERVATION_FROM_IMPORT]
 			})
 
 			const tableData: ISalonReservationsTableData[] = map(data.calendarEvents, (event) => {

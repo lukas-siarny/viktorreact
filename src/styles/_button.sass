@@ -88,14 +88,14 @@
 		height: 52px
 		font-size: 14px
 		padding: 0 28px
-		.ant-btn-icon
+		.ant-btn-icon:not(.ant-btn-loading-icon)
 			svg
 				left: 24px // same as button padding
 			& + span
 				padding-left: 28px // 24px icon + 4px text padding
 	&[ant-click-animating-without-extra-node]:after
 		animation: 0s !important // Vypni ant animaciu okolo buttonu
-	.ant-btn-icon
+	.ant-btn-icon:not(.ant-btn-loading-icon)
 		svg
 			position: absolute
 			top: 50%

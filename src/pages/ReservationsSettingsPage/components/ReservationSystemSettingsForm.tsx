@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row } from 'antd'
+import cx from 'classnames'
 
 // atoms
 import SwitchField from '../../../atoms/SwitchField'
@@ -274,7 +275,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</div>
 				)}
 				{/* Imports */}
-				<div className={'w-12/25'}>
+				<div className={cx({ 'w-12/25': isPartner, 'w-full': !isPartner })}>
 					<div className={'flex'}>
 						<h3 className={'mb-0 mt-0 flex items-center'}>
 							<UploadIcon className={'text-notino-black mr-2'} />
@@ -282,7 +283,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						</h3>
 					</div>
 					<Divider className={'my-3'} />
-					<Row>
+					<div className={'flex flex-wrap gap-2'}>
 						<ImportForm
 							accept={uploadModal.data.accept}
 							title={uploadModal.data.title}
@@ -351,7 +352,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							disabled={disabled}
 							type='primary'
 							htmlType='button'
-							className={'noti-btn mr-2'}
+							className={'noti-btn'}
 							icon={<UploadIcon />}
 						>
 							{t('loc:Importovať rezervácie')}
@@ -378,7 +379,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						>
 							{t('loc:Importovať zákazníkov')}
 						</Button>
-					</Row>
+					</div>
 				</div>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>

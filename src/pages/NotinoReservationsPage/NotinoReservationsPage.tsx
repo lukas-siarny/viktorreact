@@ -155,7 +155,7 @@ const NotinoReservationsPage = () => {
 				const firstThree = record.id.substring(0, 3)
 				const lastThree = record.id.substring(record.id.length - 3)
 
-				return <Tooltip title={record.deletedAt ? `${record.id} - ${t('')}` : record.id}>{`${firstThree}...${lastThree}`}</Tooltip>
+				return <Tooltip title={record.id}>{`${firstThree}...${lastThree}`}</Tooltip>
 			}
 		},
 		{
@@ -325,6 +325,7 @@ const NotinoReservationsPage = () => {
 				)
 			}
 		},
+		/* TODO: lepší preklad */
 		{
 			title: t('loc:Vymazané'),
 			dataIndex: 'deletedAt',

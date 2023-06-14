@@ -89,21 +89,19 @@
 		height: 52px
 		font-size: 14px
 		padding: 0 28px
-		.ant-btn-icon
-			&:not(.anticon-loading)
-				svg
-					left: 24px // same as button padding
+		.ant-btn-icon:not(.ant-btn-loading-icon)
+			svg
+				left: 24px // same as button padding
 			& + span
 				padding-left: 28px // 24px icon + 4px text padding
 	&[ant-click-animating-without-extra-node]:after
 		animation: 0s !important // Vypni ant animaciu okolo buttonu
-	.ant-btn-icon
-		&:not(.anticon-loading)
-			svg
-				position: absolute
-				top: 50%
-				transform: translateY(-50%)
-				left: 16px // same as button padding
+	.ant-btn-icon:not(.ant-btn-loading-icon)
+		svg
+			position: absolute
+			top: 50%
+			transform: translateY(-50%)
+			left: 16px // same as button padding
 		& + span
 			padding-left: 28px // 24px icon + 4px text padding
 	// &.ant-btn-icon-only > svg:first-child

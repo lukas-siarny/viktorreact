@@ -155,7 +155,7 @@ const CategoriesTree = () => {
 				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1, !!get(child, 'deletedAt')) : null,
 				nameLocalizations: get(child, 'nameLocalizations'),
 				categoryParameterID: get(child, 'categoryParameter'),
-				className: cx(get(child, 'id'), `noti-tree-node-level-${level}`),
+				className: get(child, 'id'),
 				level,
 				index,
 				image: get(child, 'image'),
@@ -180,7 +180,7 @@ const CategoriesTree = () => {
 				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[], 1, !!get(category, 'deletedAt')) : null,
 				nameLocalizations: get(category, 'nameLocalizations'),
 				categoryParameterID: get(category, 'categoryParameter'),
-				className: cx(get(category, 'id'), `noti-tree-node-level-${level}`),
+				className: get(category, 'id'),
 				level,
 				index,
 				image: get(category, 'image'),
@@ -400,7 +400,7 @@ const CategoriesTree = () => {
 						showIcon
 						showLine
 						draggable={{
-							icon: <DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'w-4 h-4 flex'} />
+							icon: <DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-notino-pink w-4 h-4 flex'} />
 						}}
 						onSelect={onCategoryClickHandler}
 						onExpand={(expandedKeys) => {

@@ -454,15 +454,17 @@ const NotinoDashboard: FC = () => {
 		dispatch(
 			getReservationStats({
 				countryCode: selectedCountry,
-				year: now.year(),
-				month: now.month() + 1
+				year: monthReservationsStatsDate.year(),
+				month: monthReservationsStatsDate.month() + 1
 			})
 		)
 		dispatch(getNotinoDashboard(selectedCountry))
 		// months are indexed from 0 and API has indexed months from 1
-		dispatch(getSalonsMonthStats(now.year(), now.month() + 1, selectedCountry))
-		dispatch(getSalonsAnnualStats(now.year(), selectedCountry))
+		dispatch(getSalonsMonthStats(monthStatsDate.year(), monthStatsDate.month() + 1, selectedCountry))
+		dispatch(getSalonsAnnualStats(annualStatsDate.year(), selectedCountry))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, selectedCountry])
+
 	const annualStats: TimeStats = useMemo(() => {
 		return transformToStatsData(salonsAnnualStats.data, salonsAnnualStats.isLoading, salonsAnnualStats.isFailure, annualStatsDate)
 	}, [salonsAnnualStats, annualStatsDate])

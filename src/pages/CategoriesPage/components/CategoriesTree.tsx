@@ -310,11 +310,12 @@ const CategoriesTree = () => {
 		}
 
 		try {
+			// Note: NOT-5612 bug will be resolved in v2.4 due continuos problems on BE, replace undefined -> null
 			let body: any = {
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
-				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? null,
-				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? null,
-				categoryParameterID: formData.categoryParameterID?.value ?? null,
+				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
+				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,
+				categoryParameterID: formData.categoryParameterID?.value ?? undefined,
 				descriptionLocalizations
 			}
 

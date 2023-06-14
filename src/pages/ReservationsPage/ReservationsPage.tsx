@@ -249,14 +249,14 @@ const ReservationsPage = (props: Props) => {
 				return (
 					<div className={'flex items-center'}>
 						<UserAvatar
-							style={value.deletedAt && { filter: 'grayscale(100)' }}
+							style={value.deletedAt && { filter: 'grayscale(100)', opacity: 0.75 }}
 							className='mr-2-5 w-7 h-7'
 							src={value?.image?.resizedImages?.thumbnail}
 							fallBackSrc={value?.image?.original}
 						/>
 						{value.deletedAt ? (
 							<Tooltip title={t('loc:Priradený kolega je vymazaný zo salónu')}>
-								<div className={'text-trueGray-400'}>{getAssignedUserLabel(value)}</div>
+								<div className={'text-notino-gray'}>{getAssignedUserLabel(value)}</div>
 							</Tooltip>
 						) : (
 							getAssignedUserLabel(value)

@@ -24,14 +24,14 @@ import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 
 // schema
-import { ISalonsPageURLQueryParams } from '../../../../schemas/queryParams'
+import { ISalonsDeletedPageURLQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
 	onImportSalons: () => void
 	activeSalons?: boolean
 }
 
-export type ISalonsFilterDeleted = Pick<ISalonsPageURLQueryParams, 'search' | 'categoryFirstLevelIDs' | 'countryCode'>
+export type ISalonsFilterDeleted = Pick<ISalonsDeletedPageURLQueryParams, 'search' | 'categoryFirstLevelIDs' | 'countryCode'>
 
 type Props = InjectedFormProps<ISalonsFilterDeleted, ComponentProps> & ComponentProps
 

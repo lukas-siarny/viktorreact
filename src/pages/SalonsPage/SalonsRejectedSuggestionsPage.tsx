@@ -7,28 +7,28 @@ import { initialize } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
 
 // components
-import CustomTable from '../../../components/CustomTable'
-import RejectedSuggestionsFilter from './filters/RejectedSuggestionsFilter'
+import CustomTable from '../../components/CustomTable'
+import RejectedSuggestionsFilter from './components/filters/RejectedSuggestionsFilter'
 
 // utils
-import { FORM, ROW_BUTTON_WITH_ID, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
-import { formFieldID, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../../utils/helper'
-import { deleteReq } from '../../../utils/request'
+import { FORM, ROW_BUTTON_WITH_ID, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { formFieldID, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { deleteReq } from '../../utils/request'
 
 // reducers
-import { RootState } from '../../../reducers'
-import { getRejectedSuggestions } from '../../../reducers/salons/salonsActions'
+import { RootState } from '../../reducers'
+import { getRejectedSuggestions } from '../../reducers/salons/salonsActions'
 
 // types
-import { Columns, ISearchFilter } from '../../../types/interfaces'
+import { Columns, ISearchFilter } from '../../types/interfaces'
 
 // assets
-import { ReactComponent as IconCheck } from '../../../assets/icons/checker-icon.svg'
+import { ReactComponent as IconCheck } from '../../assets/icons/checker-icon.svg'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
-const RejectedSalonSuggestions = () => {
+const SalonsRejectedSuggestionsPage = () => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -215,4 +215,4 @@ const RejectedSalonSuggestions = () => {
 		</Row>
 	)
 }
-export default RejectedSalonSuggestions
+export default SalonsRejectedSuggestionsPage

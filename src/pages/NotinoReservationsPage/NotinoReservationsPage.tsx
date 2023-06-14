@@ -211,8 +211,9 @@ const NotinoReservationsPage = () => {
 							src={record.customer.thumbnail}
 							fallBackSrc={record.customer.originalImage}
 						/>
+						{/* TODO: lepší preklad */}
 						{record.customer.deletedAt ? (
-							<Tooltip title={`${t('loc:Zákazník')} ${t('loc:Vymazaný').toLocaleLowerCase()}`}>
+							<Tooltip title={t('loc:Vymazané')}>
 								<div className={'text-notino-gray truncate'}>{record.customer.name}</div>
 							</Tooltip>
 						) : (
@@ -237,8 +238,9 @@ const NotinoReservationsPage = () => {
 							src={record.service.thumbnail}
 							fallBackSrc={record.service.originalImage}
 						/>
+						{/* TODO: lepší preklad */}
 						{record.service.deletedAt ? (
-							<Tooltip title={`${t('loc:Služba')} ${t('loc:Vymazaná').toLocaleLowerCase()}`}>
+							<Tooltip title={t('loc:Vymazané')}>
 								<div className={'text-notino-gray truncate'}>{record.service.name}</div>
 							</Tooltip>
 						) : (

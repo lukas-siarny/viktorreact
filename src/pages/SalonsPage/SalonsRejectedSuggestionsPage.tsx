@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
-import RejectedSuggestionsFilter from './components/filters/RejectedSuggestionsFilter'
+import SalonsRejectedSuggestionsFilter from './components/filters/SalonsRejectedSuggestionsFilter'
 
 // utils
 import { FORM, ROW_BUTTON_WITH_ID, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
@@ -26,18 +26,22 @@ import { Columns, ISearchFilter } from '../../types/interfaces'
 import { ReactComponent as IconCheck } from '../../assets/icons/checker-icon.svg'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
-const SalonsRejectedSuggestionsPage = () => {
-	const [t] = useTranslation()
-	const navigate = useNavigate()
-	const dispatch = useDispatch()
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('userLastName:ASC')
+// schema
+import { salonsRejectedSuggestionsPageURLQueryParamsSchema } from '../../schemas/queryParams'
+import { SalonsPageCommonProps } from './components/salonUtils'
+
+type Props = SalonsPageCommonProps & {}
+
+const SalonsRejectedSuggestionsPage: React.FC<Props> = (props) => {
+	const { dispatch, t, navigate } = props
+
+	const [query, setQuery] = useQueryParams(salonsRejectedSuggestionsPageURLQueryParamsSchema, {
+		page: 1,
+		order: 'userLastName:ASC'
 	})
+
 	const salons = useSelector((state: RootState) => state.salons.rejectedSuggestions)
 	const [submitting, setSubmitting] = useState(false)
 
@@ -185,7 +189,7 @@ const SalonsRejectedSuggestionsPage = () => {
 			<Col span={24}>
 				<div className='content-body'>
 					<Spin spinning={loading}>
-						<RejectedSuggestionsFilter onSubmit={handleSubmit} total={salons?.data?.pagination?.totalCount} />
+						<SalonsRejectedSuggestionsFilter onSubmit={handleSubmit} total={salons?.data?.pagination?.totalCount} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}

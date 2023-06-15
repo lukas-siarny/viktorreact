@@ -1,51 +1,37 @@
-import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { compose } from 'redux'
-import { Col, Image, Row, Spin, Tooltip } from 'antd'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine } from 'redux-form'
-import { useNavigate } from 'react-router-dom'
-import { isEmpty } from 'lodash'
 
 // components
 import CustomTable from '../../components/CustomTable'
-import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/filters/SalonsFilterDeleted'
 
 // utils
-import { withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, REQUEST_STATUS, SALON_STATES, SALONS_TAB_KEYS } from '../../utils/enums'
-import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { getCheckerIcon, getSalonTagChanges, getSalonTagCreateType, getSalonTagSourceType } from './components/salonUtils'
+import { FORM, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys } from '../../utils/helper'
+import { SalonsPageCommonProps, getSalonsColumns } from './components/salonUtils'
 
 // reducers
 import { getSalonsToCheck } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
-import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
-
-// types
-import { Columns } from '../../types/interfaces'
 
 // hooks
 import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
 import { salonsToCheckPageURLQueryParamsSchema } from '../../schemas/queryParams'
+import SalonsToCheckFilter, { ISalonsToCheckFilter } from './components/filters/SalonsToCheckFilter'
 
-type Props = {
-	selectedCountry?: string
-}
+type Props = SalonsPageCommonProps & {}
 
-const SalonsToCheckPage = (props: Props) => {
-	const [t] = useTranslation()
-	const dispatch = useDispatch()
-	const navigate = useNavigate()
+const salonsColumns = getSalonsColumns()
 
-	const { selectedCountry } = props
+const SalonsToCheckPage: React.FC<Props> = (props) => {
+	const { selectedCountry, changeSelectedCountry, dispatch, t, navigate } = props
 
 	const salons = useSelector((state: RootState) => state.salons.salonsToCheck)
-
 	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.SALONS_FILTER_ACITVE)(state))
 
 	useEffect(() => {
@@ -60,7 +46,7 @@ const SalonsToCheckPage = (props: Props) => {
 		const countryCode = isFormPristine ? selectedCountry : query.countryCode
 
 		dispatch(
-			initialize(FORM.SALONS_FILTER_DELETED, {
+			initialize(FORM.SALONS_TO_CHECK_FILTER, {
 				search: query.search,
 				statuses_all: query.statuses_all,
 				statuses_published: query.statuses_published,
@@ -118,9 +104,9 @@ const SalonsToCheckPage = (props: Props) => {
 		setQuery(newQuery)
 	}
 
-	const handleSubmitDeleted = (values: ISalonsFilterDeleted) => {
+	const handleSubmitFilter = (values: ISalonsToCheckFilter) => {
 		// update selected country globally based on filter
-		dispatch(setSelectedCountry(values?.countryCode || undefined))
+		changeSelectedCountry(values?.countryCode || undefined)
 
 		const newQuery = {
 			...query,
@@ -130,154 +116,17 @@ const SalonsToCheckPage = (props: Props) => {
 		setQuery(newQuery)
 	}
 
-	// define columns for both tables - active and deleted
-	const tableColumns: { [key: string]: (props?: Columns[0]) => Columns[0] } = useMemo(
-		() => ({
-			id: (columnProps) => ({
-				title: t('loc:ID'),
-				dataIndex: 'id',
-				key: 'id',
-				ellipsis: false,
-				sorter: false,
-				render: (value) => {
-					const firstThree = value.substring(0, 3)
-					const lastThree = value.substring(value.length - 3)
-
-					return <Tooltip title={value}>{`${firstThree}...${lastThree}`}</Tooltip>
-				},
-				...columnProps
-			}),
-			name: (columnProps) => ({
-				title: <span id={'sortby-title'}>{t('loc:Názov')}</span>,
-				dataIndex: 'name',
-				key: 'name',
-				ellipsis: true,
-				render: (value) => value || '-',
-				...columnProps
-			}),
-			address: (columnProps) => ({
-				title: t('loc:Adresa'),
-				dataIndex: 'address',
-				key: 'address',
-				ellipsis: true,
-				sorter: false,
-				render: (value) => (!isEmpty(value) ? <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</> : '-'),
-				...columnProps
-			}),
-			createType: (columnProps) => ({
-				title: t('loc:Typ salónu'),
-				dataIndex: 'createType',
-				key: 'createType',
-				sorter: false,
-				render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
-				...columnProps
-			}),
-			createdAt: (columnProps) => ({
-				title: t('loc:Vytvorený'),
-				dataIndex: 'createdAt',
-				key: 'createdAt',
-				ellipsis: true,
-				sorter: true,
-				render: (value) => (value ? formatDateByLocale(value) : '-'),
-				...columnProps
-			}),
-			lastUpdatedAt: (columnProps) => ({
-				title: t('loc:Upravený'),
-				dataIndex: 'lastUpdatedAt',
-				key: 'lastUpdatedAt',
-				ellipsis: true,
-				sorter: false,
-				render: (value) => (value ? formatDateByLocale(value) : '-'),
-				...columnProps
-			}),
-			deletedAt: (columnProps) => ({
-				title: t('loc:Vymazaný'),
-				dataIndex: 'deletedAt',
-				key: 'deletedAt',
-				ellipsis: true,
-				sorter: false,
-				render: (value) => (value ? formatDateByLocale(value) : '-'),
-				...columnProps
-			}),
-			isPublished: (columnProps) => ({
-				title: t('loc:Publikovaný'),
-				key: 'isPublished',
-				ellipsis: true,
-				sorter: false,
-				render: (_value, record: any) => {
-					let checked = false
-					switch (record.state) {
-						case SALON_STATES.PUBLISHED:
-						case SALON_STATES.PUBLISHED_PENDING:
-						case SALON_STATES.PUBLISHED_DECLINED:
-							checked = true
-							break
-						default:
-							break
-					}
-					return <div className={'flex items-center'}>{getCheckerIcon(checked)}</div>
-				},
-				...columnProps
-			}),
-			changes: (columnProps) => ({
-				title: t('loc:Zmeny'),
-				key: 'changes',
-				ellipsis: true,
-				sorter: false,
-				render: (_value, record) => getSalonTagChanges(record.state),
-				...columnProps
-			}),
-			fillingProgress: (columnProps) => ({
-				title: t('loc:Vyplnenie profilu'),
-				dataIndex: 'fillingProgressSalon',
-				key: 'fillingProgress',
-				sorter: true,
-				render: (value: number | undefined) => <span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>,
-				...columnProps
-			}),
-			assignedUser: (columnProps) => ({
-				title: t('loc:Notino používateľ'),
-				dataIndex: 'assignedUser',
-				key: 'assignedUser',
-				sorter: false,
-				render: (value: any) => <span className={'inline-block truncate w-full'}>{getAssignedUserLabel(value)}</span>,
-				...columnProps
-			}),
-			premiumSourceUserType: (columnProps) => ({
-				title: t('loc:Zdroj PREMIUM'),
-				dataIndex: 'premiumSourceUserType',
-				key: 'premiumSourceUserType',
-				sorter: false,
-				render: (value: string) => getSalonTagSourceType(value),
-				...columnProps
-			}),
-			enabledRS: (columnProps) => ({
-				title: t('loc:Rezervačný systém'),
-				dataIndex: 'settings',
-				key: 'settings',
-				sorter: false,
-				render: (value: any) => getCheckerIcon(value?.enabledReservations),
-				...columnProps
-			}),
-			availableReservationSystem: (columnProps) => ({
-				title: t('loc:Dostupné pre online rezervácie'),
-				dataIndex: 'availableReservationSystem',
-				key: 'availableReservationSystem',
-				sorter: false,
-				render: (value: boolean) => getCheckerIcon(value),
-				...columnProps
-			})
-		}),
-		[t]
-	)
-
 	const columns = [
-		tableColumns.id({ width: '8%' }),
-		tableColumns.name({ width: '20%' }),
-		tableColumns.address({ width: '16%' }),
-		tableColumns.deletedAt({ width: '16%' }),
-		tableColumns.fillingProgress({ width: '16%' }),
-		tableColumns.createdAt({ width: '20%' })
+		salonsColumns.id({ width: '8%' }),
+		salonsColumns.name({ width: '15%' }),
+		salonsColumns.address({ width: '15%' }),
+		salonsColumns.isPublished({ width: '8%' }),
+		salonsColumns.changes({ width: '10%' }),
+		salonsColumns.createType({ width: '10%' }),
+		salonsColumns.premiumSourceUserType({ width: '6%' }),
+		salonsColumns.assignedUser({ width: '10%' }),
+		salonsColumns.lastUpdatedAt({ width: '8%' }),
+		salonsColumns.createdAt({ width: '8%' })
 	]
 
 	return (
@@ -285,7 +134,7 @@ const SalonsToCheckPage = (props: Props) => {
 			<Col span={24}>
 				<Spin spinning={salons?.isLoading}>
 					<div className='content-body'>
-						<SalonsFilterDeleted onSubmit={handleSubmitDeleted} />
+						<SalonsToCheckFilter onSubmit={handleSubmitFilter} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}

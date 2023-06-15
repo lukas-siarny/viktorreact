@@ -24,6 +24,8 @@ import SalonsActivePage from './SalonsActivePage'
 import SalonsDeletedPage from './SalonsDeletedPage'
 import SalonsRejectedSuggestionsPage from './SalonsRejectedSuggestionsPage'
 import SalonsToCheckPage from './SalonsToCheckPage'
+import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
+import { SalonsPageCommonProps } from './components/salonUtils'
 
 type Props = {
 	tabKey: SALONS_TAB_KEYS
@@ -36,13 +38,6 @@ const SalonsPage = (props: Props) => {
 	const navigate = useNavigate()
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
-	const { data } = useSelector((state: RootState) => state.categories.categories)
-
-	// transform root categories (industries) into object, where ID is key of record, and content is { image, name }
-	const industries: { [key: string]: any } = useMemo(
-		() => data?.reduce((result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }), {}) || {},
-		[data]
-	)
 
 	const tabKey = props.tabKey || SALONS_TAB_KEYS.ACTIVE
 	const isNotinoUser = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO]), [authUserPermissions])
@@ -80,31 +75,41 @@ const SalonsPage = (props: Props) => {
 		[navigate, t]
 	)
 
-	const tabContent: TabsProps['items'] = useMemo(
-		() => [
+	// update selected country globally based on filter
+	const changeSelectedCountry = useCallback((countryCode?: string) => dispatch(setSelectedCountry(countryCode || undefined)), [dispatch])
+
+	const tabContent: TabsProps['items'] = useMemo(() => {
+		const commonProps: SalonsPageCommonProps = {
+			t,
+			navigate,
+			dispatch,
+			selectedCountry,
+			changeSelectedCountry
+		}
+
+		return [
 			{
 				key: SALONS_TAB_KEYS.ACTIVE,
 				label: <>{t('loc:Aktívne')}</>,
-				children: <SalonsActivePage selectedCountry={selectedCountry} />
+				children: <SalonsActivePage {...commonProps} />
 			},
 			{
 				key: SALONS_TAB_KEYS.DELETED,
 				label: <>{t('loc:Vymazané')}</>,
-				children: <SalonsDeletedPage selectedCountry={selectedCountry} />
+				children: <SalonsDeletedPage {...commonProps} />
 			},
 			{
 				key: SALONS_TAB_KEYS.MISTAKES,
 				label: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
-				children: <SalonsRejectedSuggestionsPage />
+				children: <SalonsRejectedSuggestionsPage {...commonProps} />
 			},
 			{
 				key: SALONS_TAB_KEYS.TO_CHECK,
 				label: <>{t('loc:Na kontrolu zmien')}</>,
-				children: <SalonsToCheckPage selectedCountry={selectedCountry} />
+				children: <SalonsToCheckPage selectedCountry={selectedCountry} {...commonProps} />
 			}
-		],
-		[t, selectedCountry]
-	)
+		]
+	}, [t, selectedCountry, changeSelectedCountry, dispatch, navigate])
 
 	return (
 		<>

@@ -6,8 +6,8 @@ import { IResetStore } from '../generalTypes'
 import { BASIC_SALON, BASIC_SALONS, REJECTED_SUGGESTIONS, SALON, SALON_HISTORY, SALONS, SALONS_TO_CHECK, SUGGESTED_SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
-import { IQueryParams, ISearchable } from '../../types/interfaces'
-import { IGetSalonsHistoryQueryParams, IGetSalonsQueryParams, IGetSalonsToCheckQueryParams } from '../../schemas/queryParams'
+import { ISearchable } from '../../types/interfaces'
+import { IGetSalonsHistoryQueryParams, IGetSalonsQueryParams, IGetSalonsToCheckQueryParams, ISearchableParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -239,7 +239,7 @@ export const getSuggestedSalons = (): ThunkResult<Promise<ISuggestedSalonsPayloa
 }
 
 export const getBasicSalons =
-	(queryParams: IQueryParams): ThunkResult<Promise<IBasicSalonsPayload>> =>
+	(queryParams: ISearchableParams): ThunkResult<Promise<IBasicSalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IBasicSalonsPayload
 		try {
@@ -316,7 +316,7 @@ export const getSalonHistory =
 	}
 
 export const getRejectedSuggestions =
-	(queryParams: IQueryParams): ThunkResult<Promise<IRejectedSuggestionsPayload>> =>
+	(queryParams: ISearchableParams): ThunkResult<Promise<IRejectedSuggestionsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IRejectedSuggestionsPayload
 

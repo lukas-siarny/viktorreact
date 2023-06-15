@@ -114,6 +114,8 @@ export const salonsDeletedPageURLQueryParamsSchema = salonsQueryParamsSchema.pic
 
 export const salonsToCheckPageURLQueryParamsSchema = salonsToCheckQueryParamsSchema
 
+export const salonsRejectedSuggestionsPageURLQueryParamsSchema = searchableSchema
+
 export const rechargeSmsCreditAdminPageSchema = salonsQueryParamsSchema
 	.pick({
 		page: true,
@@ -133,6 +135,7 @@ export const salonHistoryPageURLQueryParamsSchema = salonHistoryQueryParamsSchem
 
 export type ISalonsActivePageURLQueryParams = z.infer<typeof salonsActivePageURLQueryParamsSchema>
 export type ISalonsDeletedPageURLQueryParams = z.infer<typeof salonsDeletedPageURLQueryParamsSchema>
+export type ISalonsRejectedSuggestionsPageURLQueryParams = z.infer<typeof salonsRejectedSuggestionsPageURLQueryParamsSchema>
 export type IRechargeSmsCreditAdminPageURLQueryParams = z.infer<typeof rechargeSmsCreditAdminPageSchema>
 export type ISalonHistoryPageURLQueryParams = z.infer<typeof salonHistoryPageURLQueryParamsSchema>
 export type ISalonToCheckPageURLQueryParams = z.infer<typeof salonsToCheckPageURLQueryParamsSchema>

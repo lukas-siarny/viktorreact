@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { Dispatch } from 'react'
 import { isEmpty, map } from 'lodash'
-import { Tag } from 'antd'
-import i18next from 'i18next'
+import { Tag, Tooltip, Image } from 'antd'
+import i18next, { TFunction } from 'i18next'
+import { NavigateFunction } from 'react-router'
+import { AnyAction } from 'redux'
 
 // types
-import { AutocompleteLabelInValue, OpeningHours } from '../../../types/interfaces'
+import { AutocompleteLabelInValue, Columns, OpeningHours } from '../../../types/interfaces'
 import { ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
+import { ICategoriesPayload } from '../../../reducers/categories/categoriesActions'
 
 // enums
 import { SALON_STATES, SALON_CREATE_TYPE, SALON_SOURCE_TYPE } from '../../../utils/enums'
@@ -28,6 +31,9 @@ import { ISalonForm } from '../../../schemas/salon'
 // assets
 import { ReactComponent as CheckerIcon } from '../../../assets/icons/check-icon-circle-icon.svg'
 import { ReactComponent as CrossIcon } from '../../../assets/icons/close-circle-icon.svg'
+
+// utils
+import { formatDateByLocale, getAssignedUserLabel, setOrder } from '../../../utils/helper'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
@@ -300,3 +306,197 @@ export const getSalonTagSourceType = (sourceType?: string | SALON_SOURCE_TYPE) =
 
 export const getCheckerIcon = (valid?: boolean) =>
 	valid ? <CheckerIcon className={'medium-icon text-notino-success'} /> : <CrossIcon className={'medium-icon text-notino-gray'} />
+
+export type SalonsPageCommonProps = {
+	selectedCountry?: string
+	changeSelectedCountry: (selectedCountry?: string) => void
+	t: TFunction
+	navigate: NavigateFunction
+	dispatch: Dispatch<any>
+}
+
+/**
+ * define columns used in salons pages / active / deleted / to check /
+ */
+export const getSalonsColumns = (order?: string, categories?: ICategoriesPayload['data']) => {
+	const tableColumns: { [key: string]: (props?: Columns[0]) => Columns[0] } = {
+		id: (columnProps) => ({
+			title: i18next.t('loc:ID'),
+			dataIndex: 'id',
+			key: 'id',
+			ellipsis: false,
+			sorter: false,
+			render: (value) => {
+				const firstThree = value.substring(0, 3)
+				const lastThree = value.substring(value.length - 3)
+
+				return <Tooltip title={value}>{`${firstThree}...${lastThree}`}</Tooltip>
+			},
+			...columnProps
+		}),
+		name: (columnProps) => ({
+			title: <span id={'sortby-title'}>{i18next.t('loc:Názov')}</span>,
+			dataIndex: 'name',
+			key: 'name',
+			ellipsis: true,
+			sorter: true,
+			sortOrder: setOrder(order, 'name'),
+			render: (value) => value || '-',
+			...columnProps
+		}),
+		address: (columnProps) => ({
+			title: i18next.t('loc:Adresa'),
+			dataIndex: 'address',
+			key: 'address',
+			ellipsis: true,
+			sorter: false,
+			render: (value) => (!isEmpty(value) ? <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</> : '-'),
+			...columnProps
+		}),
+		createType: (columnProps) => ({
+			title: i18next.t('loc:Typ salónu'),
+			dataIndex: 'createType',
+			key: 'createType',
+			sorter: false,
+			render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
+			...columnProps
+		}),
+		createdAt: (columnProps) => ({
+			title: i18next.t('loc:Vytvorený'),
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			ellipsis: true,
+			sorter: true,
+			sortOrder: setOrder(order, 'createdAt'),
+			render: (value) => (value ? formatDateByLocale(value) : '-'),
+			...columnProps
+		}),
+		lastUpdatedAt: (columnProps) => ({
+			title: i18next.t('loc:Upravený'),
+			dataIndex: 'lastUpdatedAt',
+			key: 'lastUpdatedAt',
+			ellipsis: true,
+			sorter: false,
+			render: (value) => (value ? formatDateByLocale(value) : '-'),
+			...columnProps
+		}),
+		deletedAt: (columnProps) => ({
+			title: i18next.t('loc:Vymazaný'),
+			dataIndex: 'deletedAt',
+			key: 'deletedAt',
+			ellipsis: true,
+			sorter: false,
+			render: (value) => (value ? formatDateByLocale(value) : '-'),
+			...columnProps
+		}),
+		isPublished: (columnProps) => ({
+			title: i18next.t('loc:Publikovaný'),
+			key: 'isPublished',
+			ellipsis: true,
+			sorter: false,
+			render: (_value, record: any) => {
+				let checked = false
+				switch (record.state) {
+					case SALON_STATES.PUBLISHED:
+					case SALON_STATES.PUBLISHED_PENDING:
+					case SALON_STATES.PUBLISHED_DECLINED:
+						checked = true
+						break
+					default:
+						break
+				}
+				return <div className={'flex items-center'}>{getCheckerIcon(checked)}</div>
+			},
+			...columnProps
+		}),
+		changes: (columnProps) => ({
+			title: i18next.t('loc:Zmeny'),
+			key: 'changes',
+			ellipsis: true,
+			sorter: false,
+			render: (_value, record) => getSalonTagChanges(record.state),
+			...columnProps
+		}),
+		fillingProgress: (columnProps) => ({
+			title: i18next.t('loc:Vyplnenie profilu'),
+			dataIndex: 'fillingProgressSalon',
+			key: 'fillingProgress',
+			sorter: true,
+			sortOrder: setOrder(order, 'fillingProgress'),
+			render: (value: number | undefined) => <span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>,
+			...columnProps
+		}),
+		assignedUser: (columnProps) => ({
+			title: i18next.t('loc:Notino používateľ'),
+			dataIndex: 'assignedUser',
+			key: 'assignedUser',
+			sorter: false,
+			render: (value: any) => <span className={'inline-block truncate w-full'}>{getAssignedUserLabel(value)}</span>,
+			...columnProps
+		}),
+		premiumSourceUserType: (columnProps) => ({
+			title: i18next.t('loc:Zdroj PREMIUM'),
+			dataIndex: 'premiumSourceUserType',
+			key: 'premiumSourceUserType',
+			sorter: false,
+			render: (value: string) => getSalonTagSourceType(value),
+			...columnProps
+		}),
+		enabledRS: (columnProps) => ({
+			title: i18next.t('loc:Rezervačný systém'),
+			dataIndex: 'settings',
+			key: 'settings',
+			sorter: false,
+			render: (value: any) => getCheckerIcon(value?.enabledReservations),
+			...columnProps
+		}),
+		availableReservationSystem: (columnProps) => ({
+			title: i18next.t('loc:Dostupné pre online rezervácie'),
+			dataIndex: 'availableReservationSystem',
+			key: 'availableReservationSystem',
+			sorter: false,
+			render: (value: boolean) => getCheckerIcon(value),
+			...columnProps
+		})
+	}
+
+	if (categories) {
+		const industries: { [key: string]: { image?: string; name: string } } = categories.reduce(
+			(result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }),
+			{}
+		)
+
+		tableColumns.categories = (columnProps) => ({
+			title: i18next.t('loc:Odvetvia'),
+			dataIndex: 'categories',
+			key: 'categories',
+			sorter: false,
+			render: (value: any[]) => {
+				const fallback = '-'
+
+				if (value?.length > 0) {
+					const industriesContent: any[] = value.map((category: any) => {
+						const industry = industries[category.id]
+						if (!industry) {
+							// eslint-disable-next-line no-console
+							console.error('Missingy industry with ID: ', category.id)
+							return fallback
+						}
+
+						return (
+							<Tooltip key={category.id} title={industry.name}>
+								<Image src={industry.image} loading='lazy' width={32} height={32} className='pr-0-5 pb-0-5 rounded' alt={industry.name} preview={false} />
+							</Tooltip>
+						)
+					})
+
+					return <div className='flex flex-wrap'>{industriesContent}</div>
+				}
+
+				return fallback
+			},
+			...columnProps
+		})
+	}
+	return tableColumns
+}

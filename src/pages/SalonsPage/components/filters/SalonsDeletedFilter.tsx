@@ -31,9 +31,9 @@ type ComponentProps = {
 	activeSalons?: boolean
 }
 
-export type ISalonsFilterDeleted = Pick<ISalonsDeletedPageURLQueryParams, 'search' | 'categoryFirstLevelIDs' | 'countryCode'>
+export type ISalonsDeletedFilter = Pick<ISalonsDeletedPageURLQueryParams, 'search' | 'categoryFirstLevelIDs' | 'countryCode'>
 
-type Props = InjectedFormProps<ISalonsFilterDeleted, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonsDeletedFilter, ComponentProps> & ComponentProps
 
 const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 

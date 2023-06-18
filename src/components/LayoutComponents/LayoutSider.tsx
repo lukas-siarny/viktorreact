@@ -297,7 +297,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						{
 							key: PAGE.AFFILIATE_PROGRAM,
 							label: t('loc:Vernostný program'),
-							onClick: () => navigate(getPath(t('paths:loaylty-program'))),
+							onClick: () => navigate(getPath(t('paths:loyalty-program'))),
 							icon: <CoinsIcon className={'text-black'} />,
 							id: PAGE.AFFILIATE_PROGRAM
 						},

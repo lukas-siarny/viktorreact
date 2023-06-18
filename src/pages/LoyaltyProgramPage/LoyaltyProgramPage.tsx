@@ -5,15 +5,13 @@ import { Col, Row } from 'antd'
 import i18next from 'i18next'
 
 // assets
-import { ReactComponent as CheckCircleIcon } from '../../assets/icons/check-circle.svg'
-
-// components
+import { ReactComponent as CheckCircleIcon } from '../../assets/icons/approwed-icon.svg'
 
 // utils
 import { ROW_GUTTER_X_DEFAULT, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
-const LoayaltyProgramPage = () => {
+const LoyaltyProgramPage = () => {
 	const [t] = useTranslation()
 
 	return (
@@ -48,7 +46,7 @@ const LoayaltyProgramPage = () => {
 								</li>
 							</ul>
 						</div>
-						<img src={`/images/${i18next.language}/loaylty-program.png`} alt={''} className={'hidden md:block'} width={386} height={363} />
+						<img src={`/images/${i18next.language}/loyalty-program.png`} alt={''} className={'hidden md:block'} width={386} height={363} />
 					</div>
 				</div>
 			</Col>
@@ -56,4 +54,4 @@ const LoayaltyProgramPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(LoayaltyProgramPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(LoyaltyProgramPage)

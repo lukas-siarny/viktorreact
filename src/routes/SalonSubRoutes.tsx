@@ -58,7 +58,7 @@ import SmsCreditPartnerPage from '../pages/SmsCreditPartnerPage/SmsCreditPartner
 import RechargeSmsCreditPage from '../pages/SmsCreditPartnerPage/RechargeSmsCreditPartnerPage'
 
 // Loaylty program
-import LoayaltyProgramPage from '../pages/LoyaltyProgramPage/LoyaltyProgramPage'
+import LoyaltyProgramPage from '../pages/LoyaltyProgramPage/LoyaltyProgramPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -194,10 +194,10 @@ const SalonSubRoutes: FC = () => {
 			</Route>
 			<Route
 				errorElement={<ErrorBoundary />}
-				path={t('paths:loaylty-program')}
+				path={t('paths:loyalty-program')}
 				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.AFFILIATE_PROGRAM} />}
 			>
-				<Route index element={<LoayaltyProgramPage parentPath={parentPath} salonID={salonID} />} />
+				<Route index element={<LoyaltyProgramPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}
 			<Route element={<AuthRoute layout={MainLayout} />}>

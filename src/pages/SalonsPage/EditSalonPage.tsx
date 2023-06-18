@@ -360,6 +360,16 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 		)
 	}
 
+	const verifyChanges = async () => {
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/check', { salonID }, undefined)
+			dispatch(selectSalon(salonID))
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
+
 	// render buttons on footer based on salon statuses
 	const renderContentFooter = () => {
 		if (isDeletedSalon) {
@@ -368,6 +378,8 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 
 		return (
 			<div className={'content-footer'} id={'content-footer-container'}>
+				{/** NOTE: temporary button - only for development */}
+				<Button onClick={verifyChanges}>Verifikovat salon</Button>
 				{(() => {
 					// order of cases is important to show correct buttons
 					switch (true) {

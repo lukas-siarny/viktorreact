@@ -457,46 +457,53 @@ export const getSalonsColumns = (order?: string, categories?: ICategoriesPayload
 			sorter: false,
 			render: (value: boolean) => getCheckerIcon(value),
 			...columnProps
-		})
-	}
+		}),
+		categories: (columnProps) => {
+			const categoriesCol = {
+				title: i18next.t('loc:Odvetvia'),
+				dataIndex: 'categories',
+				key: 'categories',
+				sorter: false,
+				...columnProps
+			}
 
-	if (categories) {
-		const industries: { [key: string]: { image?: string; name: string } } = categories.reduce(
-			(result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }),
-			{}
-		)
+			if (categories) {
+				const industries: { [key: string]: { image?: string; name: string } } = categories.reduce(
+					(result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }),
+					{}
+				)
 
-		tableColumns.categories = (columnProps) => ({
-			title: i18next.t('loc:Odvetvia'),
-			dataIndex: 'categories',
-			key: 'categories',
-			sorter: false,
-			render: (value: any[]) => {
-				const fallback = '-'
+				return {
+					...categoriesCol,
+					render: (value: any[]) => {
+						const fallback = '-'
 
-				if (value?.length > 0) {
-					const industriesContent: any[] = value.map((category: any) => {
-						const industry = industries[category.id]
-						if (!industry) {
-							// eslint-disable-next-line no-console
-							console.error('Missingy industry with ID: ', category.id)
-							return fallback
+						if (value?.length > 0) {
+							const industriesContent: any[] = value.map((category: any) => {
+								const industry = industries[category.id]
+								if (!industry) {
+									// eslint-disable-next-line no-console
+									console.error('Missingy industry with ID: ', category.id)
+									return fallback
+								}
+
+								return (
+									<Tooltip key={category.id} title={industry.name}>
+										<Image src={industry.image} loading='lazy' width={32} height={32} className='pr-0-5 pb-0-5 rounded' alt={industry.name} preview={false} />
+									</Tooltip>
+								)
+							})
+
+							return <div className='flex flex-wrap'>{industriesContent}</div>
 						}
 
-						return (
-							<Tooltip key={category.id} title={industry.name}>
-								<Image src={industry.image} loading='lazy' width={32} height={32} className='pr-0-5 pb-0-5 rounded' alt={industry.name} preview={false} />
-							</Tooltip>
-						)
-					})
-
-					return <div className='flex flex-wrap'>{industriesContent}</div>
+						return fallback
+					}
 				}
+			}
 
-				return fallback
-			},
-			...columnProps
-		})
+			return categoriesCol
+		}
 	}
 	return tableColumns
 }

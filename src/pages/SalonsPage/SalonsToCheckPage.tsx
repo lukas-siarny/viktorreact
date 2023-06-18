@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { Col, Row, Spin } from 'antd'
+import { Col, Row, Spin, Tooltip } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine } from 'redux-form'
 
 // components
+import { Link } from 'react-router-dom'
 import CustomTable from '../../components/CustomTable'
 
 // utils
 import { FORM, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { getLinkWithEncodedBackUrl, normalizeDirectionKeys } from '../../utils/helper'
+import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys } from '../../utils/helper'
 import { SalonsPageCommonProps, getSalonsColumns } from './components/salonUtils'
 
 // reducers
@@ -23,6 +24,9 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 // schema
 import { salonsToCheckPageURLQueryParamsSchema } from '../../schemas/queryParams'
 import SalonsToCheckFilter, { ISalonsToCheckFilter } from './components/filters/SalonsToCheckFilter'
+
+// types
+import { Columns } from '../../types/interfaces'
 
 type Props = SalonsPageCommonProps & {}
 
@@ -116,7 +120,7 @@ const SalonsToCheckPage: React.FC<Props> = (props) => {
 		setQuery(newQuery)
 	}
 
-	const columns = [
+	const columns: Columns = [
 		salonsColumns.id({ width: '8%' }),
 		salonsColumns.name({ width: '15%' }),
 		salonsColumns.address({ width: '15%' }),
@@ -125,8 +129,42 @@ const SalonsToCheckPage: React.FC<Props> = (props) => {
 		salonsColumns.createType({ width: '10%' }),
 		salonsColumns.premiumSourceUserType({ width: '6%' }),
 		salonsColumns.assignedUser({ width: '10%' }),
-		salonsColumns.lastUpdatedAt({ width: '8%' }),
-		salonsColumns.createdAt({ width: '8%' })
+		salonsColumns.lastUpdatedAt({ width: '10%' }),
+		salonsColumns.createdAt({ width: '10%' }),
+		{
+			title: t('loc:Skontroloval'),
+			dataIndex: 'checker',
+			key: 'checker',
+			width: '8%',
+			render: (value) => {
+				if (value) {
+					let name
+					if (value.name) {
+						name = <div className={'truncate'}>{value.name}</div>
+					} else {
+						const firstThree = value.id.substring(0, 3)
+						const lastThree = value.id.substring(value.id.length - 3)
+
+						name = <Tooltip title={value.id}>{`${firstThree}...${lastThree}`}</Tooltip>
+					}
+
+					return (
+						<Link to={`${t('paths:users')}/${value.id}`} onClick={(e) => e.stopPropagation()} className={'text-notino-pink hover:text-black'}>
+							{name}
+						</Link>
+					)
+				}
+
+				return '-'
+			}
+		},
+		{
+			title: t('loc:Dátum poslednej kontroly'),
+			dataIndex: 'checkedAt',
+			key: 'checkedAt',
+			width: '8%',
+			render: (value) => (value ? <div className={'truncate'}>{formatDateByLocale(value)}</div> : '-')
+		}
 	]
 
 	return (
@@ -140,7 +178,7 @@ const SalonsToCheckPage: React.FC<Props> = (props) => {
 							onChange={onChangeTable}
 							columns={columns || []}
 							dataSource={salons?.data?.salons}
-							scroll={{ x: 1000 }}
+							scroll={{ x: 1500 }}
 							rowKey='id'
 							rowClassName={'clickable-row'}
 							twoToneRows

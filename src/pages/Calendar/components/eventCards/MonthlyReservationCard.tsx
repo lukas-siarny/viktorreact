@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
 // assets
-import { ReactComponent as CalendarIcon } from '../../../../assets/icons/calendar-24.svg'
+import { ReactComponent as CalendarIcon } from '../../../../assets/icons/calendar-icon.svg'
 
 // types
 import { ICalendarMonthlyReservationsCardData, PopoverTriggerPosition } from '../../../../types/interfaces'

@@ -284,11 +284,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	/**
 	 * nastavi novy datum do query, novy current range a tiez datum pre aktualne zobrazenu instanciu Fullcalendara
 	 */
-	const setNewSelectedDate = (newDate: string, monthViewFullRange = false) => {
+	const setNewSelectedDate = (newDate: string, setFromSidebar = false) => {
 		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
 
 		const newCalendarDate = getSelectedDateForCalendar(query.view, newDate)
+
+		const monthViewFullRange = setFromSidebar && query.view === CALENDAR_VIEW.MONTH
 
 		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi (currentRange state alebo monthlyViewFullRange)
 		if (!isDateInRange(monthViewFullRange ? monthlyViewFullRange.start : currentRange.start, monthViewFullRange ? monthlyViewFullRange.end : currentRange.end, newDate)) {
@@ -430,12 +432,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	// scroll to time after initialization
+	// eslint-disable-next-line consistent-return
 	useEffect(() => {
-		/**
-		 * je potrebne trochu pockat, kym sa kalendar vyinicializuje a az tak zavolaz scrollToTime
-		 */
-		scrollToTimeTimeout.current = setTimeout(() => scrollToTime(dayjs().hour()), CALENDAR_INIT_TIME)
-		return () => clearTimeout(scrollToTimeTimeout.current)
+		// ak je pri inite otvoreny sidebar, tak sa cas vyninicializuje na zaklade dotiahnuteho detialu eventu v sidebare
+		if (query.sidebarView === undefined) {
+			/**
+			 * je potrebne trochu pockat, kym sa kalendar vyinicializuje a az tak zavolat scrollToTime
+			 */
+			scrollToTimeTimeout.current = setTimeout(() => scrollToTime(dayjs().hour()), CALENDAR_INIT_TIME)
+			return () => clearTimeout(scrollToTimeTimeout.current)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [scrollToTime])
 
 	useEffect(() => {
@@ -862,6 +869,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			handleUpdateReservationState={handleUpdateReservationState}
 			handleDeleteEvent={handleDeleteEvent}
 			clearConfirmModal={clearConfirmModal}
+			salonID={salonID}
 		/>
 	)
 

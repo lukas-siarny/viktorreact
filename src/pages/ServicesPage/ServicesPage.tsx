@@ -43,7 +43,7 @@ import { Paths } from '../../types/api'
 import { ReactComponent as DragIcon } from '../../assets/icons/drag-icon.svg'
 import { ReactComponent as ChevronPink } from '../../assets/icons/chevron-pink.svg'
 import { ReactComponent as InfoNotinoIcon } from '../../assets/icons/info-notino-icon.svg'
-import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../assets/icons/service-icon.svg'
 
 type ServicesPatchBody = Paths.PatchApiB2BAdminSalonsSalonIdCategoriesReorder.RequestBody
 

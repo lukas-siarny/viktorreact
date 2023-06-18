@@ -13,7 +13,7 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
-import { ReactComponent as LocationIcon } from '../../../assets/icons/location-16.svg'
+import { ReactComponent as LocationIcon } from '../../../assets/icons/location-icon.svg'
 
 // utils
 import { PERMISSION, FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'

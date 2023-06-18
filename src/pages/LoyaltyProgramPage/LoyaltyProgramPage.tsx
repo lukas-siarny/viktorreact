@@ -23,7 +23,7 @@ const LoayaltyProgramPage = () => {
 					<div className={'flex w-full gap-6 xl:gap-8 items-center flex-col xl:flex-row'}>
 						<div className={'flex-1'}>
 							<span className={'text-white bg-notino-pink rounded-2xl text-sm font-semibold px-2 py-1 inline-block mb-1'}>{t('loc:Pripravujeme pre vás')}</span>
-							<h2 className={'font-bold text-3xl lg:text-4xl mb-3'}>{t('loc:Vernostný program Notino')}</h2>
+							<h2 className={'font-bold text-4xl mb-3'}>{t('loc:Vernostný program Notino')}</h2>
 							<p className={'text-notino-grayDark font-bold text-base mb-6 max-w-md'}>
 								{t('loc:Štedro vás odmeníme za každého vášho zákazníka, ktorý nakúpi alebo vytvorí online rezerváciu cez našu aplikáciu.')}
 							</p>

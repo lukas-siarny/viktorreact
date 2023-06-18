@@ -89,21 +89,19 @@
 		height: 52px
 		font-size: 14px
 		padding: 0 28px
-		.ant-btn-icon
-			&:not(.anticon-loading)
-				svg
-					left: 24px // same as button padding
+		.ant-btn-icon:not(.ant-btn-loading-icon)
+			svg
+				left: 24px // same as button padding
 			& + span
 				padding-left: 28px // 24px icon + 4px text padding
 	&[ant-click-animating-without-extra-node]:after
 		animation: 0s !important // Vypni ant animaciu okolo buttonu
-	.ant-btn-icon
-		&:not(.anticon-loading)
-			svg
-				position: absolute
-				top: 50%
-				transform: translateY(-50%)
-				left: 16px // same as button padding
+	.ant-btn-icon:not(.ant-btn-loading-icon)
+		svg
+			position: absolute
+			top: 50%
+			transform: translateY(-50%)
+			left: 16px // same as button padding
 		& + span
 			padding-left: 28px // 24px icon + 4px text padding
 	// &.ant-btn-icon-only > svg:first-child
@@ -396,7 +394,7 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 			border: 1px solid rgba(66, 133, 244, 0.3)
 		&:after
 			content: ''
-			background: url('../assets/icons/google.svg') left no-repeat
+			background: url('../assets/icons/google-icon.svg') left no-repeat
 			position: absolute
 			top: 0
 			bottom: 0
@@ -421,7 +419,7 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 			border: 1px solid rgba(66, 133, 244, 0.3)
 		&:after
 			content: ''
-			background: url('../assets/icons/microsoft.svg') left no-repeat
+			background: url('../assets/icons/microsoft-icon.svg') left no-repeat
 			position: absolute
 			top: 0
 			bottom: 0

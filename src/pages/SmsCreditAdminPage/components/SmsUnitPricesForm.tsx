@@ -20,7 +20,7 @@ import DeleteButton from '../../../components/DeleteButton'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 

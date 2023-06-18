@@ -11,7 +11,16 @@ import dayjs from 'dayjs'
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification, findNodeInTree } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import {
+	CALENDAR_EVENT_TYPE,
+	DEFAULT_TIME_FORMAT,
+	ENUMERATIONS_KEYS,
+	FORM,
+	PERMISSION,
+	CREATE_EVENT_PERMISSIONS,
+	UPDATE_EVENT_PERMISSIONS,
+	RESERVATION_SOURCE_TYPE
+} from '../../../../utils/enums'
 
 // types
 import { EmployeeService, ICalendarEmployeesPayload, ServiceType } from '../../../../types/interfaces'
@@ -19,9 +28,9 @@ import { ICustomerForm } from '../../../../schemas/customer'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
-import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-24-icon.svg'
-import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
+import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-icon.svg'
+import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
 import { ReactComponent as DateSuffixIcon } from '../../../../assets/icons/date-suffix-icon.svg'
 import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
@@ -371,7 +380,7 @@ const ReservationForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							label={t('loc:Služba')}
-							suffixIcon={<ServiceIcon className={'text-notino-grayDark'} width={16} height={16} />}
+							suffixIcon={<ServiceIcon className={'text-notino-grayDark'} />}
 							placeholder={t('loc:Vyber službu')}
 							name={'service'}
 							size={'large'}
@@ -412,7 +421,7 @@ const ReservationForm: FC<Props> = (props) => {
 							optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
 							options={employeesOptions}
 							label={t('loc:Zamestnanec')}
-							suffixIcon={<EmployeesIcon className={'text-notino-grayDark'} />}
+							suffixIcon={<EmployeesIcon className={'text-notino-grayDark small-icon'} />}
 							placeholder={t('loc:Vyber zamestnanca')}
 							name={'employee'}
 							optionLabelProp={'label'}
@@ -422,6 +431,7 @@ const ReservationForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							onChange={onChangeEmployee}
+							disabled={eventDetail?.data?.reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE}
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

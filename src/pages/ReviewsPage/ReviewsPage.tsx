@@ -30,7 +30,7 @@ import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCount
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 // assets
-import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
+import { ReactComponent as EyeoffIcon } from '../../assets/icons/eye-hidden-icon.svg'
 import { ReactComponent as EyeIcon } from '../../assets/icons/eye-icon.svg'
 
 // hooks
@@ -258,7 +258,7 @@ const ReviewsPage = () => {
 												{
 													key: 'visible_in_b2c',
 													label: showReviewText,
-													icon: <EyeIcon width={16} height={16} />,
+													icon: <EyeIcon />,
 													className: cx(dropdownItemClassName, {
 														'moderate-accept-message': record?.verificationStatus === REVIEW_VERIFICATION_STATUS.NOT_VERIFIED,
 														'moderate-publish-message': record?.verificationStatus !== REVIEW_VERIFICATION_STATUS.NOT_VERIFIED
@@ -276,7 +276,7 @@ const ReviewsPage = () => {
 												{
 													key: 'hidden_in_b2c',
 													label: t('loc:Skryť text'),
-													icon: <EyeoffIcon width={16} height={16} />,
+													icon: <EyeoffIcon />,
 													className: cx(dropdownItemClassName, 'moderate-hide-message'),
 													disabled: disabledHideReview,
 													onClick: (menuInfo) => {

@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Tooltip, TooltipProps } from 'antd'
 
 // assets
-import { ReactComponent as InfoIcon16 } from '../assets/icons/info-icon-16.svg'
+import { ReactComponent as InfoIcon16 } from '../assets/icons/info-icon.svg'
 
 type Props = {
 	title: React.ReactNode

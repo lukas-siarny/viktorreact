@@ -32,7 +32,7 @@ import { RootState } from '../../reducers'
 import useBackUrl from '../../hooks/useBackUrl'
 
 // assets
-import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
+import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees-icon.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 const CreateEmployeePage = (props: SalonSubPageProps) => {

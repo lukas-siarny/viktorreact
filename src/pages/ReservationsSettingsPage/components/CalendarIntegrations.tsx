@@ -23,7 +23,7 @@ import SalonIdsForm from './SalonIdsForm'
 import ConfirmModal from '../../../atoms/ConfirmModal'
 
 // assets
-import { ReactComponent as CheckIcon } from '../../../assets/icons/checkbox-checked-icon-24.svg'
+import { ReactComponent as CheckIcon } from '../../../assets/icons/check-icon.svg'
 import { ReactComponent as CopyableIcon } from '../../../assets/icons/copyable-icon.svg'
 import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-icon.svg'
 
@@ -37,6 +37,8 @@ enum REQUEST_MODAL_TYPE {
 
 const { Paragraph } = Typography
 
+const ENABLED_GOOGLE_SYNC = JSON.parse(window.__RUNTIME_CONFIG__.ENABLE_GOOGLE_CALENDAR_SYNC)
+
 const CalendarIntegrations = () => {
 	const { t } = useTranslation()
 	const { salonID } = useParams<Required<{ salonID: string }>>()
@@ -48,7 +50,7 @@ const CalendarIntegrations = () => {
 	const salonIdsValues: Partial<{ salonIDs: string[] }> = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
 	const partnerInOneSalon = authUser?.data?.salons.length === 1 && authUser.data.salons[0].id === salonID
 	const signedSalon = authUser?.data?.salons.find((salon) => salon.id === salonID)
-	// const hasGoogleSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`)
+	const hasGoogleSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`)
 	const hasMicrosoftSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`)
 	const googleSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`))
 	const microsoftSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`))
@@ -212,9 +214,9 @@ const CalendarIntegrations = () => {
 	return (
 		<>
 			{modals}
-			{/* hasGoogleSync && (
+			{ENABLED_GOOGLE_SYNC && hasGoogleSync && (
 				<div className={'flex items-center mb-4'}>
-					<CheckIcon className={'text-notino-pink mr-2'} />
+					<CheckIcon className={'text-notino-pink mr-2 medium-icon'} />
 					<span>{t('loc:Synchronizácia s {{ calendarType }} kalendárom bola spustená.', { calendarType: 'Google' })}</span>
 					<Button
 						onClick={() => {
@@ -234,10 +236,10 @@ const CalendarIntegrations = () => {
 						{t('loc:Zrušiť')}
 					</Button>
 				</div>
-			) */}
+			)}
 			{hasMicrosoftSync && (
 				<div className={'flex items-center mb-4'}>
-					<CheckIcon className={'text-notino-pink mr-2'} />
+					<CheckIcon className={'text-notino-pink mr-2 medium-icon'} />
 					<span>{t('loc:Synchronizácia s {{ calendarType }} kalendárom bola spustená.', { calendarType: 'Microsoft' })}</span>
 					<Button
 						onClick={() => {
@@ -258,26 +260,29 @@ const CalendarIntegrations = () => {
 					</Button>
 				</div>
 			)}
-			{/* <button
-				className={'sync-button google mr-2'}
-				onClick={() => {
-					if (partnerInOneSalon) {
-						handleGoogleLogin()
-					} else {
-						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [...(googleSyncInitData?.map((salon) => salon.id) || []), salonID] }))
-						setVisibleModal({
-							type: EXTERNAL_CALENDAR_TYPE.GOOGLE,
-							requestType: REQUEST_MODAL_TYPE.CREATE,
-							title: t('loc:Synchronizácia {{ calendarType }} kalendára', { calendarType: 'Google' }),
-							description: t('loc:Vyberte, z ktorých salónov chcete automaticky synchronizovať informácie o vašich rezerváciach.')
-						})
-					}
-				}}
-				disabled={hasGoogleSync}
-				type='button'
-			>
-				{'Google'}
-			</button> */}
+
+			{ENABLED_GOOGLE_SYNC && (
+				<button
+					className={'sync-button google mr-2'}
+					onClick={() => {
+						if (partnerInOneSalon) {
+							handleGoogleLogin()
+						} else {
+							dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [...(googleSyncInitData?.map((salon) => salon.id) || []), salonID] }))
+							setVisibleModal({
+								type: EXTERNAL_CALENDAR_TYPE.GOOGLE,
+								requestType: REQUEST_MODAL_TYPE.CREATE,
+								title: t('loc:Synchronizácia {{ calendarType }} kalendára', { calendarType: 'Google' }),
+								description: t('loc:Vyberte, z ktorých salónov chcete automaticky synchronizovať informácie o vašich rezerváciach.')
+							})
+						}
+					}}
+					disabled={hasGoogleSync}
+					type='button'
+				>
+					{'Google'}
+				</button>
+			)}
 			<button
 				className={'sync-button microsoft mr-2'}
 				onClick={() => {
@@ -309,7 +314,7 @@ const CalendarIntegrations = () => {
 								text: httpsIcalUrl,
 								icon: [
 									<CopyableIcon width={24} height={24} className={'text-notino-pink hover:text-notino-pink'} />,
-									<CheckIcon width={24} height={24} className={'text-notino-pink hover:text-notino-pink'} />
+									<CheckIcon className={'text-notino-pink hover:text-notino-pink medium-icon'} />
 								]
 							}}
 						>

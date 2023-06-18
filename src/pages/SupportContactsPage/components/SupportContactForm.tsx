@@ -26,7 +26,7 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 
 // schema
 import { ISupportContactForm, validationSupportContactFn } from '../../../schemas/supportContact'

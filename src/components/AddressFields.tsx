@@ -24,7 +24,7 @@ import StandaloneSearchBoxField from '../atoms/StandaloneSearchBoxField'
 import { RootState } from '../reducers'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../assets/icons/globe-icon.svg'
 
 type LocationSearchElements = {
 	loadingElement: ReactElement<any>

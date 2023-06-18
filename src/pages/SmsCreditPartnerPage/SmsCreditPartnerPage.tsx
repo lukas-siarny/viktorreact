@@ -22,7 +22,7 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { ISmsCreditPartnerPageQueryParams } from '../../schemas/queryParams'
 
 // assets
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
+import { ReactComponent as SettingIcon } from '../../assets/icons/setting-icon.svg'
 
 // components
 import RemainingSmsCredit from '../../components/Dashboards/RemainingSmsCredit'

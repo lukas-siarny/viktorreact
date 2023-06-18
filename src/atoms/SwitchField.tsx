@@ -6,7 +6,7 @@ import cx from 'classnames'
 import { Form, Switch, Tooltip, Typography } from 'antd'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { SwitchProps } from 'antd/lib/switch'
-import { ReactComponent as InfoIcon } from '../assets/icons/info-icon-16.svg'
+import { ReactComponent as InfoIcon } from '../assets/icons/info-icon.svg'
 import { formFieldID } from '../utils/helper'
 import { KEYBOARD_KEY } from '../utils/enums'
 

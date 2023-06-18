@@ -43,12 +43,12 @@ import { checkConditions, getConditionIcon } from '../../serviceUtils'
 import { RootState } from '../../../../reducers'
 
 // assets
-import { ReactComponent as PencilIcon } from '../../../../assets/icons/pencil-icon-16.svg'
+import { ReactComponent as PencilIcon } from '../../../../assets/icons/pencil-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
 import { ReactComponent as EditIcon } from '../../../../assets/icons/edit-icon.svg'
-import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees.svg'
-import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
-import { ReactComponent as SettingIcon } from '../../../../assets/icons/setting.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-icon.svg'
+import { ReactComponent as SettingIcon } from '../../../../assets/icons/setting-icon.svg'
 
 // schema
 import { validationServiceFn, IServiceForm } from '../../../../schemas/service'

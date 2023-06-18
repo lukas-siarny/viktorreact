@@ -18,7 +18,7 @@ import Permissions from '../../../utils/Permissions'
 import { validationEditEmployeeRoleFn, IEditEmployeeRoleForm } from '../../../schemas/role'
 
 // assets
-import { ReactComponent as KeyIcon } from '../../../assets/icons/key.svg'
+import { ReactComponent as KeyIcon } from '../../../assets/icons/key-icon.svg'
 
 // reducers
 import { RootState } from '../../../reducers'

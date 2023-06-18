@@ -15,7 +15,7 @@ import TimeRangeField from '../../atoms/TimeRangeField'
 import { translateDayName } from '../../utils/helper'
 
 // assets
-import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon-16.svg'
+import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 const TimeRangesComponent = (props: any) => {
 	const { fields, disabled, onDemandSwitch } = props
@@ -44,7 +44,7 @@ const TimeRangesComponent = (props: any) => {
 			<div className={'flex items-center gap-2'}>
 				<Button
 					onClick={() => fields.push({ timeFrom: null, timeTo: null })}
-					icon={<PlusIcon className={'text-notino-black'} />}
+					icon={<PlusIcon className={'text-notino-black small-icon'} />}
 					className={'noti-btn'}
 					type={'default'}
 					size={'small'}

@@ -1,6 +1,6 @@
 import React, { useState, ReactNode, useCallback } from 'react'
 import { Collapse, Button, Badge, Row, Col } from 'antd'
-import { ReactComponent as FilterIcon } from '../assets/icons/filter-icon.svg'
+import { ReactComponent as FilterIcon } from '../assets/icons/filter-filled-icon.svg'
 import { FILTER_BUTTON_ID, FORM, ROW_GUTTER_X_DEFAULT } from '../utils/enums'
 import { formFieldID } from '../utils/helper'
 

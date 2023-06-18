@@ -20,7 +20,7 @@ import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
 
 type ComponentProps = {}
 

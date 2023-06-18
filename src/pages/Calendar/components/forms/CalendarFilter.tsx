@@ -12,8 +12,8 @@ import { RootState } from '../../../../reducers'
 
 // assets
 import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chevron-down.svg'
-import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees.svg'
+import { ReactComponent as ServicesIcon } from '../../../../assets/icons/service-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-icon.svg'
 
 // utils
 import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM, STRINGS } from '../../../../utils/enums'
@@ -119,7 +119,7 @@ const CalendarFilter = (props: Props) => {
 							/>
 						) : (
 							<FilterEmptyState
-								icon={<ServicesIcon />}
+								icon={<ServicesIcon className={'medium-icon'} />}
 								infoMessage={t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
 								buttonLabel={STRINGS(t).assign(t('loc:služby'))}
 								buttonDissabled={loadingData}

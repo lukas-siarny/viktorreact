@@ -3,7 +3,6 @@ import { isEmpty, map } from 'lodash'
 import { Tag, Tooltip, Image } from 'antd'
 import i18next, { TFunction } from 'i18next'
 import { NavigateFunction } from 'react-router'
-import { AnyAction } from 'redux'
 
 // types
 import { AutocompleteLabelInValue, Columns, OpeningHours } from '../../../types/interfaces'
@@ -316,7 +315,7 @@ export type SalonsPageCommonProps = {
 }
 
 /**
- * define columns used in salons pages / active / deleted / to check /
+ * define common columns used in salons pages / active / deleted / to check /
  */
 export const getSalonsColumns = (order?: string, categories?: ICategoriesPayload['data']) => {
 	const tableColumns: { [key: string]: (props?: Columns[0]) => Columns[0] } = {

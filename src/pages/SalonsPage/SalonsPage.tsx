@@ -8,10 +8,16 @@ import { useNavigate } from 'react-router-dom'
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import TabsComponent from '../../components/TabsComponent'
+import SalonsActivePage from './SalonsActivePage'
+import SalonsDeletedPage from './SalonsDeletedPage'
+import SalonsRejectedSuggestionsPage from './SalonsRejectedSuggestionsPage'
+import SalonsToCheckPage from './SalonsToCheckPage'
 
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { PERMISSION, SALONS_TAB_KEYS } from '../../utils/enums'
+import { SalonsPageCommonProps } from './components/salonUtils'
+import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -19,13 +25,6 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
-
-import SalonsActivePage from './SalonsActivePage'
-import SalonsDeletedPage from './SalonsDeletedPage'
-import SalonsRejectedSuggestionsPage from './SalonsRejectedSuggestionsPage'
-import SalonsToCheckPage from './SalonsToCheckPage'
-import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
-import { SalonsPageCommonProps } from './components/salonUtils'
 
 type Props = {
 	tabKey: SALONS_TAB_KEYS

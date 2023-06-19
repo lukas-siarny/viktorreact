@@ -1,11 +1,9 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useMemo, useCallback, useRef, useEffect } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Divider, Form, Row } from 'antd'
+import { Col, Divider, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 // components
 import Filters from '../../../../components/Filters'
@@ -14,7 +12,6 @@ import Filters from '../../../../components/Filters'
 import { RootState } from '../../../../reducers'
 
 // assets
-import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-icon.svg'
 
 // utils
@@ -22,17 +19,14 @@ import {
 	ENUMERATIONS_KEYS,
 	FIELD_MODE,
 	FORM,
-	PERMISSION,
 	ROW_GUTTER_X_M,
 	SALON_CREATE_TYPE,
 	SALON_FILTER_STATES,
 	FILTER_ENTITY,
 	CHANGE_DEBOUNCE_TIME,
-	STRINGS,
 	VALIDATION_MAX_LENGTH
 } from '../../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, optionRenderWithTag } from '../../../../utils/helper'
-import Permissions from '../../../../utils/Permissions'
+import { optionRenderWithImage, validationString, optionRenderWithTag } from '../../../../utils/helper'
 import searchWrapper from '../../../../utils/filters'
 
 // atoms
@@ -78,7 +72,6 @@ const SalonsToCheckFilter = (props: Props) => {
 	const { handleSubmit, hasAssignedUserId } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
 
 	const firstRender = useRef(true)
 
@@ -144,34 +137,7 @@ const SalonsToCheckFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters
-				customContent={
-					<Permissions
-						allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER]}
-						render={(hasPermission, { openForbiddenModal }) => (
-							<Button
-								onClick={() => {
-									if (hasPermission) {
-										navigate(getLinkWithEncodedBackUrl(t('paths:salons/create')))
-									} else {
-										openForbiddenModal()
-									}
-								}}
-								type='primary'
-								htmlType='button'
-								className={'noti-btn w-full'}
-								icon={<PlusIcon />}
-							>
-								{STRINGS(t).addRecord(t('loc:salón'))}
-							</Button>
-						)}
-					/>
-				}
-				search={searchInput}
-				activeFilters={checkSalonFiltersSize(form?.values)}
-				form={FORM.SALONS_TO_CHECK_FILTER}
-				forceRender
-			>
+			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_TO_CHECK_FILTER} forceRender>
 				<>
 					<Row>
 						<Col span={24}>

@@ -6,7 +6,7 @@ import { VALIDATION_MAX_LENGTH, FORM, ASSET_TYPE } from '../utils/enums'
 export const documentSchema = z.object({
 	message: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255),
 	languageCode: twoCharsConstraint,
-	assetType: z.nativeEnum(ASSET_TYPE)
+	assetType: z.nativeEnum(ASSET_TYPE) // TODO: spravit labelInValue obnejjt + extra
 })
 
 export type IDocumentForm = z.infer<typeof documentSchema> & {

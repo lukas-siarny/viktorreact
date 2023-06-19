@@ -91,7 +91,10 @@ export const getAssetTypes = (): ThunkResult<Promise<IAssetTypesPayload>> => asy
 		const options: ISelectOptionItem[] = data.assetTypes.map((assetType) => ({
 			key: assetType.key,
 			label: assetType.name || assetType.key,
-			value: assetType.key
+			value: assetType.key,
+			extra: {
+				mimeTypes: assetType.mimeTypes
+			}
 		}))
 
 		payload = { data, options }

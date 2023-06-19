@@ -40,7 +40,8 @@ const DocumentsForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, disabledForm, pristine, visible, setVisible } = props
 	const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
 	const formValues: Partial<IDocumentForm> = useSelector((state: RootState) => getFormValues(FORM.DOCUMENTS_FORM)(state))
-
+	// console.log('assetTypes', assetTypes)
+	console.log('formValues', formValues)
 	return (
 		<Modal
 			className='rounded-fields'
@@ -61,18 +62,20 @@ const DocumentsForm: FC<Props> = (props) => {
 			<Spin spinning={submitting}>
 				<Form onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)} layout={'vertical'} className={'form'}>
 					<Field
-						component={FileUploadField}
-						name={'files'}
-						label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })}
-						accept={'.pdf'}
-						maxCount={UPLOAD.MAX_COUNT}
-						type={'file'}
-						category={UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE}
-						multiple
-						handleUploadOutside={false}
-						disabled={submitting}
-						validate={validationRequired}
+						component={SelectField}
+						name={'assetType'}
+						label={t('loc:Vyberte typ dokumentu')}
+						placeholder={t('loc:Typ dokumentu')}
+						allowClear
+						size={'large'}
+						filterOptions
 						required
+						onDidMountSearch
+						labelInValue
+						readOnly={formValues?.id}
+						options={assetTypes?.options}
+						loading={assetTypes?.isLoading}
+						disabled={assetTypes?.isLoading}
 					/>
 					<Field
 						component={SelectField}
@@ -89,19 +92,18 @@ const DocumentsForm: FC<Props> = (props) => {
 						options={languageOptions}
 					/>
 					<Field
-						component={SelectField}
-						name={'assetType'}
-						label={t('loc:Vyberte typ dokumentu')}
-						placeholder={t('loc:Typ dokumentu')}
-						allowClear
-						size={'large'}
-						filterOptions
+						component={FileUploadField}
+						name={'files'}
+						label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })}
+						accept={'.pdf'}
+						maxCount={UPLOAD.MAX_COUNT}
+						type={'file'}
+						category={UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE}
+						multiple
+						handleUploadOutside={false}
+						disabled={submitting || !formValues?.assetType}
+						validate={validationRequired}
 						required
-						onDidMountSearch
-						readOnly={formValues?.id}
-						options={assetTypes?.options}
-						loading={assetTypes?.isLoading}
-						disabled={assetTypes?.isLoading}
 					/>
 					<Field
 						name={'message'}

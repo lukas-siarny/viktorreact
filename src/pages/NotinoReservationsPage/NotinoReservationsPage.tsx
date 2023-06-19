@@ -7,6 +7,8 @@ import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useNavigate } from 'react-router-dom'
+import { ColumnProps } from 'antd/es/table'
+import cx from 'classnames'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -23,27 +25,27 @@ import {
 	DEFAULT_DATE_INPUT_FORMAT,
 	FORM,
 	PERMISSION,
-	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_STATE,
 	ROW_GUTTER_X_DEFAULT
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
-import { getNotinoReservations } from '../../reducers/calendar/calendarActions'
+import { getNotinoReservations, INotinoReservationsTableData } from '../../reducers/calendar/calendarActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { Columns, IBreadcrumbs, INotinoReservationsFilter } from '../../types/interfaces'
+import { IBreadcrumbs, INotinoReservationsFilter } from '../../types/interfaces'
 
 // hooks
 import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 // schema
 import { notinoReservationsQueryParamsSchema } from '../../schemas/queryParams'
+
+type TableDataItem = NonNullable<INotinoReservationsTableData>
 
 const NotinoReservationsPage = () => {
 	const [t] = useTranslation()
@@ -142,40 +144,49 @@ const NotinoReservationsPage = () => {
 		setQuery(newQuery)
 	}
 
-	const columns: Columns = [
+	const columns: ColumnProps<TableDataItem>[] = [
 		{
 			title: t('loc:ID'),
 			dataIndex: 'id',
 			key: 'id',
 			ellipsis: true,
-			width: '15%',
-			render: (value) => {
-				const firstThree = value?.substring(0, 3)
-				const lastThree = value?.substring(value.length - 3)
+			width: '8%',
+			render: (_value, record) => {
+				const firstThree = record.id.substring(0, 3)
+				const lastThree = record.id.substring(record.id.length - 3)
 
-				return <Tooltip title={value}>{`${firstThree}...${lastThree}`}</Tooltip>
+				return <Tooltip title={record.id}>{`${firstThree}...${lastThree}`}</Tooltip>
 			}
 		},
 		{
 			title: t('loc:Názov salónu'),
-			dataIndex: ['salon', 'name'],
+			dataIndex: 'salon',
 			key: 'salonName',
 			ellipsis: true,
-			width: '20%'
+			width: '12%',
+			render: (_value, record) => {
+				return record.salon.deletedAt ? (
+					<Tooltip title={t('loc:Salón bol vymazaný')}>
+						<div className={'text-notino-gray'}>{record.salon.name}</div>
+					</Tooltip>
+				) : (
+					<div className={'truncate'}>{record.salon.name}</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Dátum vytvorenia'),
 			dataIndex: 'createdAt',
 			key: 'createdAt',
 			ellipsis: true,
-			width: '20%'
+			width: '12%'
 		},
 		{
 			title: t('loc:Dátum rezervácie'),
 			dataIndex: 'startDate',
 			key: 'startDate',
 			ellipsis: true,
-			width: '20%'
+			width: '8%'
 		},
 
 		{
@@ -183,19 +194,31 @@ const NotinoReservationsPage = () => {
 			dataIndex: 'time',
 			key: 'time',
 			ellipsis: true,
-			width: '15%'
+			width: '8%'
 		},
 		{
 			title: t('loc:Zákazník'),
 			dataIndex: 'customer',
 			key: 'customer',
 			ellipsis: true,
-			width: '25%',
-			render: (value) => {
+			width: '12%',
+			render: (_value, record) => {
 				return (
-					<div title={getAssignedUserLabel(value)} className={'flex items-center'}>
-						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.profileImage?.resizedImages?.thumbnail} fallBackSrc={value?.profileImage?.original} />
-						<div className={'truncate'}>{getAssignedUserLabel(value)}</div>
+					<div title={record.customer.name} className={'flex items-center'}>
+						<UserAvatar
+							style={record.customer.deletedAt || record.deletedAt ? { filter: 'grayscale(100)', opacity: 0.75 } : undefined}
+							className='mr-2-5 w-7 h-7'
+							src={record.customer.thumbnail}
+							fallBackSrc={record.customer.originalImage}
+						/>
+						{/* TODO: lepší preklad */}
+						{record.customer.deletedAt ? (
+							<Tooltip title={t('loc:Vymazané')}>
+								<div className={'text-notino-gray truncate'}>{record.customer.name}</div>
+							</Tooltip>
+						) : (
+							<div className={'truncate'}>{record.customer.name}</div>
+						)}
 					</div>
 				)
 			}
@@ -205,12 +228,24 @@ const NotinoReservationsPage = () => {
 			dataIndex: 'service',
 			key: 'service',
 			ellipsis: true,
-			width: '25%',
-			render: (value) => {
+			width: '12%',
+			render: (_value, record) => {
 				return (
-					<div title={value?.name} className={'flex items-center'}>
-						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
-						<div className={'truncate'}>{value?.name}</div>
+					<div title={record.service.name} className={'flex items-center'}>
+						<UserAvatar
+							style={record.service.deletedAt || record.deletedAt ? { filter: 'grayscale(100)', opacity: 0.75 } : undefined}
+							className='mr-2-5 w-7 h-7'
+							src={record.service.thumbnail}
+							fallBackSrc={record.service.originalImage}
+						/>
+						{/* TODO: lepší preklad */}
+						{record.service.deletedAt ? (
+							<Tooltip title={t('loc:Vymazané')}>
+								<div className={'text-notino-gray truncate'}>{record.service.name}</div>
+							</Tooltip>
+						) : (
+							<div className={'truncate'}>{record.service.name}</div>
+						)}
 					</div>
 				)
 			}
@@ -220,22 +255,22 @@ const NotinoReservationsPage = () => {
 			dataIndex: 'employee',
 			key: 'employee',
 			ellipsis: true,
-			width: '25%',
-			render: (value) => {
+			width: '12%',
+			render: (_value, record) => {
 				return (
-					<div title={getAssignedUserLabel(value)} className={'flex items-center'}>
+					<div title={record.employee.name} className={'flex items-center'}>
 						<UserAvatar
-							style={value?.deletedAt && { filter: 'grayscale(100)' }}
+							style={record.employee.deletedAt || record.deletedAt ? { filter: 'grayscale(100)', opacity: 0.75 } : undefined}
 							className='mr-2-5 w-7 h-7'
-							src={value?.image?.resizedImages?.thumbnail}
-							fallBackSrc={value?.image?.original}
+							src={record.employee.thumbnail}
+							fallBackSrc={record.employee.originalImage}
 						/>
-						{value?.deletedAt ? (
+						{record.employee.deletedAt ? (
 							<Tooltip title={t('loc:Priradený kolega je vymazaný zo salónu')}>
-								<div className={'text-trueGray-400'}>{getAssignedUserLabel(value)}</div>
+								<div className={'text-notino-gray truncate'}>{record.employee.name}</div>
 							</Tooltip>
 						) : (
-							<div className={'truncate'}>{getAssignedUserLabel(value)}</div>
+							<div className={'truncate'}>{record.employee.name}</div>
 						)}
 					</div>
 				)
@@ -246,19 +281,25 @@ const NotinoReservationsPage = () => {
 			dataIndex: 'createSourceType',
 			key: 'createSourceType',
 			ellipsis: true,
-			width: '10%'
+			width: '8%'
 		},
 		{
 			title: t('loc:Stav'),
 			dataIndex: 'state',
 			key: 'state',
 			ellipsis: true,
-			width: '15%',
-			render: (value) => {
+			width: '8%',
+			render: (_value, record) => {
+				if (!record.state) {
+					return '-'
+				}
+
+				const { icon, text } = translateReservationState(record.state)
+
 				return (
-					<div title={translateReservationState(value as RESERVATION_STATE).text} className={'flex items-center'}>
-						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
-						<div className={'truncate'}>{translateReservationState(value as RESERVATION_STATE).text}</div>
+					<div title={text} className={'flex items-center'}>
+						<div className={cx('mr-2 flex items-center w-4 h-4', { 'icon-grayslace': record.deletedAt, 'opacity-75': record.deletedAt })}>{icon}</div>
+						<div className={'truncate'}>{text}</div>
 					</div>
 				)
 			}
@@ -268,17 +309,30 @@ const NotinoReservationsPage = () => {
 			dataIndex: 'paymentMethod',
 			key: 'paymentMethod',
 			ellipsis: true,
-			width: '10%',
-			render: (value) => {
-				return value ? (
-					<div title={translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text} className={'flex items-center'}>
-						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
-						<div className={'truncate'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
+			width: '8%',
+			render: (_value, record) => {
+				if (!record.paymentMethod) {
+					return '-'
+				}
+
+				const { icon, text } = translateReservationPaymentMethod(record.paymentMethod)
+
+				return (
+					<div title={text} className={'flex items-center'}>
+						<div className={cx('mr-2 flex items-center w-4 h-4', { 'icon-grayslace': record.deletedAt, 'opacity-75': record.deletedAt })}>{icon}</div>
+						<div className={'truncate'}>{text}</div>
 					</div>
-				) : (
-					'-'
 				)
 			}
+		},
+		/* TODO: lepší preklad */
+		{
+			title: t('loc:Vymazané'),
+			dataIndex: 'deletedAt',
+			key: 'deletedAt',
+			ellipsis: true,
+			width: '8%',
+			render: (value) => value || '-'
 		}
 	]
 
@@ -299,27 +353,29 @@ const NotinoReservationsPage = () => {
 				<Col span={24}>
 					<div className='content-body'>
 						<NotinoReservationsFilter onSubmit={handleSubmit} />
-						<CustomTable
+						<CustomTable<TableDataItem>
 							className='table-fixed'
 							columns={columns}
 							onChange={onChangeTable}
 							loading={notinoReservations?.isLoading}
 							dataSource={notinoReservations?.tableData}
-							rowClassName={'clickable-row'}
+							rowClassName={(record) => cx({ 'noti-table-row-shadow': record.deletedAt, 'clickable-row': !record.deletedAt && !record.salon.deletedAt })}
 							onRow={(record) => ({
 								onClick: () => {
-									const redirectQuery = {
-										view: CALENDAR_VIEW.DAY,
-										date: dayjs(record.startDate, DEFAULT_DATE_INPUT_FORMAT).format(CALENDAR_DATE_FORMAT.QUERY),
-										eventsViewType: CALENDAR_EVENT_TYPE.RESERVATION,
-										sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
-										eventId: record.key
-									}
+									if (!record.deletedAt && !record.salon.deletedAt) {
+										const redirectQuery = {
+											view: CALENDAR_VIEW.DAY,
+											date: dayjs(record.startDate, DEFAULT_DATE_INPUT_FORMAT).format(CALENDAR_DATE_FORMAT.QUERY),
+											eventsViewType: CALENDAR_EVENT_TYPE.RESERVATION,
+											sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+											eventId: record.key
+										}
 
-									navigate({
-										pathname: t('paths:salons/{{salonID}}/calendar', { salonID: record.salon.id }),
-										search: formatObjToQuery(redirectQuery)
-									})
+										navigate({
+											pathname: t('paths:salons/{{salonID}}/calendar', { salonID: record.salon.id }),
+											search: formatObjToQuery(redirectQuery)
+										})
+									}
 								}
 							})}
 							twoToneRows

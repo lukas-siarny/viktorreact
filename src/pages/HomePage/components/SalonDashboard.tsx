@@ -217,16 +217,6 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							count={services?.listData?.industries.servicesAvailableForOnlineReservationsCount}
 							onActionItemClick={() => navigate(getPath(t('paths:services-settings')))}
 						/>
-						<Statistics
-							title={t('loc:Počet zákazníkov')}
-							count={customers.data?.pagination.totalCount}
-							onActionItemClick={() => navigate(getPath(t('paths:customers')))}
-						/>
-						<Statistics
-							title={t('loc:Počet zamestnancov')}
-							count={activeEmployees?.data?.pagination.totalCount ?? 0}
-							onActionItemClick={() => navigate(getPath(t('paths:employees')))}
-						/>
 						<Statistics title={t('loc:Vyplnenosť profilu')} count={`${selectedSalon.data.fillingProgressSalon}%`} onActionItemClick={() => navigate(basePath)} />
 					</div>
 					<Permissions allowed={SMS_TIME_STATS_PERMISSIONS}>

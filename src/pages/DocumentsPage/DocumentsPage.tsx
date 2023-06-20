@@ -139,9 +139,8 @@ const DocumentsPage = () => {
 										value: record.assetType.key,
 										label: record.assetType.name,
 										extra: {
-											// TODO: bude posielat BE a bude to v recorde initnute v ackii
-											mimeTypes: ['image/png', 'image/jpeg'],
-											fileType: 'IMAGE'
+											mimeTypes: record.assetType.mimeTypes,
+											fileType: record.assetType.fileType
 										}
 									},
 									languageCode: record.languageCode,

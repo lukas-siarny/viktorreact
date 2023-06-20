@@ -105,15 +105,18 @@ const DocumentsForm: FC<Props> = (props) => {
 						validate={validationRequired}
 						required
 					/>
-					<Field
-						name={'message'}
-						label={t('loc:Sprievodná správa')}
-						placeholder={t('loc:Zadajte sprievodnú správu')}
-						className={'pb-4'}
-						maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
-						showLettersCount
-						component={TextareaField}
-					/>
+					{/* // Message ffield nebude pre dokumenty typu IMAGE dostupný */}
+					{formValues?.assetType?.extra?.fileType === FILE_FILTER_DATA_TYPE.IMAGE ? undefined : (
+						<Field
+							name={'message'}
+							label={t('loc:Sprievodná správa')}
+							placeholder={t('loc:Zadajte sprievodnú správu')}
+							className={'pb-4'}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+							showLettersCount
+							component={TextareaField}
+						/>
+					)}
 					<Button
 						id={formFieldID(FORM.DOCUMENTS_FORM, SUBMIT_BUTTON_ID)}
 						className='noti-btn'

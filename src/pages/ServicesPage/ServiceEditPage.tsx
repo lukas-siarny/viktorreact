@@ -145,14 +145,11 @@ const ServiceEditPage = (props: Props) => {
 
 			let descriptionLocalizations: any[] | null = []
 
-			const serviceDescDefaultLng = values.descriptionLocalizations.defualtLanguage
-			const serviceDescEnLng = values.descriptionLocalizations.enLanguage
-
 			if (values.descriptionLocalizations.use) {
-				descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.DEFAULT, value: serviceDescDefaultLng })
+				descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.DEFAULT, value: values.descriptionLocalizations.defualtLanguage })
 
 				if (values.descriptionLocalizations.enLanguage) {
-					descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.EN, value: serviceDescEnLng })
+					descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.EN, value: values.descriptionLocalizations.enLanguage })
 				}
 			} else {
 				descriptionLocalizations = null

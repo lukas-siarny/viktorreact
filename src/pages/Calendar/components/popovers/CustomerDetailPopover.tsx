@@ -166,7 +166,7 @@ const CalendarDetailPopover: FC<ICustomerDetailPopoverProps> = () => {
 			content={customer.data && <PopoverContent customer={customer.data.customer} onClose={() => setIsOpen(false)} />}
 			align={{ offset: [-175, -32] }} // offset popoveru od "InfoIcon" trigger buttonu
 		>
-			<div className={'absolute right-7 z-50 w-6 h-6 bg-notino-white flex items-center justify-center'} style={{ top: 30 }}>
+			<div className={'absolute right-7 z-50 w-6 h-6 flex items-center justify-center'} style={{ top: 30 }}>
 				{customer?.isLoading ? (
 					<LoadingIcon className={'animate-spin w-4 h-4 text-notino-grayDark'} />
 				) : (

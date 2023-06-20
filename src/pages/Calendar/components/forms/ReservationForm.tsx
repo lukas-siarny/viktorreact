@@ -361,6 +361,7 @@ const ReservationForm: FC<Props> = (props) => {
 										showSearch
 										labelInValue
 										required
+										disabled={eventDetail?.data?.reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE}
 										onSearch={searchCustomers}
 										actions={[
 											{
@@ -431,7 +432,6 @@ const ReservationForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							onChange={onChangeEmployee}
-							disabled={eventDetail?.data?.reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE}
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

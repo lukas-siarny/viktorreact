@@ -305,7 +305,8 @@ export const getMimeTypeName = (mimeTypes?: string[], fileType?: FILE_FILTER_DAT
 					names.push({ mimeType, name: '.sheet' })
 					break
 				default:
-					return 'Unknown File Type'
+					names.push({ mimeType: 'application/pdf', name: '.pdf' })
+					break
 			}
 		})
 		const formattedNames = names?.map((name) => name.name).join(', ')
@@ -317,6 +318,7 @@ export const getMimeTypeName = (mimeTypes?: string[], fileType?: FILE_FILTER_DAT
 			formattedMimeTypes
 		}
 	}
+	return null
 }
 
 export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?: boolean) => {

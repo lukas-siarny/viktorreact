@@ -50,7 +50,6 @@ const ServiceEditPage = (props: Props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const service = useSelector((state: RootState) => state.service.service.data?.service)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const category = useSelector((state: RootState) => state.categories.category)
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 
 	const [visibleServiceEditModal, setVisibleServiceEditModal] = useState(false)
@@ -146,28 +145,13 @@ const ServiceEditPage = (props: Props) => {
 
 			let descriptionLocalizations: any[] | null = []
 
-			const categoryDescDefaultLng =
-				category?.data?.descriptionLocalizations.find((desc) => {
-					return LOCALES[desc.language?.toLowerCase() as LANGUAGE]?.countryCode?.toLowerCase() === salon.data?.address?.countryCode?.toLowerCase()
-				})?.value || null
-			const categoryDescEnLng = category?.data?.descriptionLocalizations.find((desc) => desc.language?.toLowerCase() === LANGUAGE.EN?.toLowerCase())?.value || null
 			const serviceDescDefaultLng = values.descriptionLocalizations.defualtLanguage
 			const serviceDescEnLng = values.descriptionLocalizations.enLanguage
 
-			// musi byt potvrdeny checkbox
-			// porovnavaju sa hodnoty zadane v kategoriach a hodnoty vo formulari
-			// obe jazyky su rovnake => posleme null
-			// prvy jazyk je iny, druhy je rovnaky => posleme len prvy
-			// prvy jazyk je rovnaky, druhy je iny => vtedy musime poslat obe
-			// obe su ine => posleme obe
-
-			const isDefaultLngSame = categoryDescDefaultLng?.trim() === serviceDescDefaultLng?.trim()
-			const isEnLngSame = categoryDescEnLng?.trim() === serviceDescEnLng?.trim()
-
-			if (values.descriptionLocalizations.use && !(isDefaultLngSame && isEnLngSame)) {
+			if (values.descriptionLocalizations.use) {
 				descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.DEFAULT, value: serviceDescDefaultLng })
 
-				if (values.descriptionLocalizations.enLanguage && !isEnLngSame) {
+				if (values.descriptionLocalizations.enLanguage) {
 					descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.EN, value: serviceDescEnLng })
 				}
 			} else {

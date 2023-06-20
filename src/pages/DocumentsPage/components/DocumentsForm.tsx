@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { destroy, Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Form, Modal, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
-import { formFieldID, optionRenderWithIcon, validationRequired, checkUploadingBeforeSubmit } from '../../../utils/helper'
-import { FORM, SUBMIT_BUTTON_ID, UPLOAD, UPLOAD_IMG_CATEGORIES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { formFieldID, optionRenderWithIcon, validationRequired, checkUploadingBeforeSubmit, getMimeTypeName } from '../../../utils/helper'
+import { FILE_FILTER_DATA_TYPE, FORM, SUBMIT_BUTTON_ID, UPLOAD, UPLOAD_IMG_CATEGORIES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // components
 import { languageOptions } from '../../../components/LanguagePicker'
@@ -40,8 +40,8 @@ const DocumentsForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, disabledForm, pristine, visible, setVisible } = props
 	const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
 	const formValues: Partial<IDocumentForm> = useSelector((state: RootState) => getFormValues(FORM.DOCUMENTS_FORM)(state))
-	// console.log('assetTypes', assetTypes)
-	console.log('formValues', formValues)
+	const mimeType = getMimeTypeName(formValues?.assetType?.extra?.mimeTypes, formValues?.assetType?.extra?.fileType)
+
 	return (
 		<Modal
 			className='rounded-fields'
@@ -94,11 +94,11 @@ const DocumentsForm: FC<Props> = (props) => {
 					<Field
 						component={FileUploadField}
 						name={'files'}
-						label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })}
-						accept={'.pdf'}
+						label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: mimeType?.formattedNames || '.pdf' })}
+						accept={mimeType?.formattedMimeTypes || 'application/pdf'}
 						maxCount={UPLOAD.MAX_COUNT}
 						type={'file'}
-						category={UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE}
+						category={mimeType?.fileType === FILE_FILTER_DATA_TYPE.DOC ? UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE : UPLOAD_IMG_CATEGORIES.ASSET_IMAGE_TYPE}
 						multiple
 						handleUploadOutside={false}
 						disabled={submitting || !formValues?.assetType}

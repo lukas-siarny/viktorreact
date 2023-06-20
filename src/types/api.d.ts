@@ -1337,6 +1337,8 @@ declare namespace Paths {
                     assetType: {
                         key: "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2C_PLACEHOLDER_HOMESCREEN";
                         name: string;
+                        mimeTypes: string[];
+                        fileType: "DOC" | "IMAGE";
                     };
                 }[];
                 pagination: {
@@ -3482,6 +3484,7 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type AssignedUserID = string; // uuid
             export type CategoryFirstLevelIDs = string /* uuid */[];
+            export type CategoryThirdLevelIDs = string /* uuid */[];
             /**
              * example:
              * SK
@@ -3512,6 +3515,7 @@ declare namespace Paths {
         export interface QueryParameters {
             search?: Parameters.Search;
             categoryFirstLevelIDs?: Parameters.CategoryFirstLevelIDs;
+            categoryThirdLevelIDs?: Parameters.CategoryThirdLevelIDs;
             statuses?: Parameters.Statuses;
             countryCode?: /**
              * example:

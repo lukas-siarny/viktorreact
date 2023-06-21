@@ -389,6 +389,8 @@ const ReservationForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							required
 							labelInValue
+							showSearch
+							filterOption
 							onChange={onChangeService}
 						/>
 						<Field

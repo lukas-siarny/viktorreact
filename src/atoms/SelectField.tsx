@@ -606,7 +606,7 @@ const SelectField = (props: Props) => {
 			allowClear={allowClear}
 			showSearch={showSearch}
 			// NOTE: set to FALSE when we expect filtering on BE
-			filterOption={filterOption && localFilterOption}
+			filterOption={typeof filterOption === 'function' ? filterOption : filterOption && localFilterOption}
 			onSearch={showSearch ? onSearchDebounced : undefined}
 			suffixIcon={suffIcon}
 			labelInValue={labelInValue}

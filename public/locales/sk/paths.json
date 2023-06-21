@@ -27,6 +27,8 @@
   "languages-in-salons": "/languages-in-salons",
   "login": "/login",
   "my-account": "/my-account",
+  "my-documents": "/my-documents",
+  "my-documents/{{documentID}}": "/my-documents/{{documentID}}",
   "recharge": "recharge",
   "rejected": "rejected",
   "reservations": "/reservations",

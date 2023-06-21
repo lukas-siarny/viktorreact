@@ -38,7 +38,7 @@ const DocumentsFilter = (props: Props) => {
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Row gutter={ROW_GUTTER_X_M}>
-				<Col span={8}>
+				<Col span={4}>
 					<Field
 						component={SelectField}
 						optionRender={(itemData: any) => optionRenderWithIcon(itemData, <GlobeIcon />)}
@@ -51,7 +51,7 @@ const DocumentsFilter = (props: Props) => {
 						options={languageOptions}
 					/>
 				</Col>
-				<Col span={8}>
+				<Col span={12}>
 					<Field
 						component={SelectField}
 						name={'assetType'}

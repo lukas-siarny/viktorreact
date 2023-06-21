@@ -272,7 +272,7 @@ export const getMimeTypeName = (mimeTypes?: string[], fileType?: FILE_FILTER_DAT
 					names.push({ mimeType, name: '.icon' })
 					break
 				case 'image/jpeg':
-					names.push({ mimeType, name: '.jpeg' })
+					names.push({ mimeType, name: '.jpg, .jpeg' })
 					break
 				case 'application/json':
 					names.push({ mimeType, name: '.json' })

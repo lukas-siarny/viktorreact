@@ -32,6 +32,7 @@ import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-icon
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting-icon.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations-icon.svg'
 import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
+import { ReactComponent as CoinsIcon } from '../../assets/icons/coins-icon.svg'
 import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices-icon.svg'
 import { ReactComponent as DocumentsIcon } from '../../assets/icons/document-icon.svg'
 
@@ -87,6 +88,7 @@ const MENU_ITEMS_ORDER = [
 	PAGE.EMPLOYEES,
 	PAGE.SALON_SETTINGS,
 	PAGE.SMS_CREDIT,
+	PAGE.AFFILIATE_PROGRAM,
 	'divider-2',
 	PAGE.CUSTOMERS,
 	PAGE.RESERVATIONS,
@@ -291,6 +293,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
 							icon: <IndustiresIcon className={'text-notino-black'} />,
 							id: PAGE.INDUSTRIES_AND_SERVICES
+						},
+						{
+							key: PAGE.AFFILIATE_PROGRAM,
+							label: t('loc:Vernostný program'),
+							onClick: () => navigate(getPath(t('paths:loyalty-program'))),
+							icon: <CoinsIcon className={'text-black'} />,
+							id: PAGE.AFFILIATE_PROGRAM
 						},
 						{
 							type: 'divider',

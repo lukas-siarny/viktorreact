@@ -253,8 +253,8 @@ export const translateMessageType = (msgType: MSG_TYPE) => {
 export const getMimeTypeName = (mimeTypes?: string[], fileType?: FILE_FILTER_DATA_TYPE) => {
 	// mapped for those values: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 	if (mimeTypes?.length) {
-		const names: any[] = []
-		mimeTypes.forEach((mimeType) => {
+		const names: { mimeType: string; name: string }[] = []
+		mimeTypes?.forEach((mimeType) => {
 			switch (mimeType) {
 				case 'image/bmp':
 					names.push({ mimeType, name: '.bmp' })
@@ -309,13 +309,20 @@ export const getMimeTypeName = (mimeTypes?: string[], fileType?: FILE_FILTER_DAT
 					break
 			}
 		})
-		const formattedNames = names?.map((name) => name.name).join(', ')
-		const formattedMimeTypes = names.map((name) => name.mimeType).join(', ')
+
+		const formattedNames: string[] = []
+		const formattedMimeTypes: string[] = []
+
+		names.forEach((name) => {
+			formattedNames.push(name.name)
+			formattedMimeTypes.push(name.mimeType)
+		})
+
 		return {
 			fileType,
 			names,
-			formattedNames,
-			formattedMimeTypes
+			formattedNames: formattedNames.join(', '),
+			formattedMimeTypes: formattedMimeTypes.join(', ')
 		}
 	}
 	return null

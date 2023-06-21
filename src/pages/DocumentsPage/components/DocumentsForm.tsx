@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC } from 'react'
 import { destroy, Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Form, Modal, Spin } from 'antd'
@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // utils
 import { formFieldID, optionRenderWithIcon, validationRequired, checkUploadingBeforeSubmit, getMimeTypeName } from '../../../utils/helper'
-import { FILE_FILTER_DATA_TYPE, FORM, SUBMIT_BUTTON_ID, UPLOAD, UPLOAD_IMG_CATEGORIES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FILE_FILTER_DATA_TYPE, FORM, SUBMIT_BUTTON_ID, UPLOAD, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_FILE, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // components
 import { languageOptions } from '../../../components/LanguagePicker'
+import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // atoms
-import FileUploadField from '../../../atoms/FileUploadField'
 import SelectField from '../../../atoms/SelectField'
 import TextareaField from '../../../atoms/TextareaField'
 
@@ -68,9 +68,7 @@ const DocumentsForm: FC<Props> = (props) => {
 						placeholder={t('loc:Typ dokumentu')}
 						allowClear
 						size={'large'}
-						filterOptions
 						required
-						onDidMountSearch
 						labelInValue
 						readOnly={formValues?.id}
 						options={assetTypes?.options}
@@ -85,26 +83,27 @@ const DocumentsForm: FC<Props> = (props) => {
 						placeholder={t('loc:Jazyk')}
 						allowClear
 						size={'large'}
-						filterOptions
 						required
 						readOnly={formValues?.id}
-						onDidMountSearch
 						options={languageOptions}
 					/>
+
 					<Field
-						component={FileUploadField}
+						className={'m-0'}
+						uploaderClassName={'overflow-x-auto'}
+						component={ImgUploadField}
+						accept={mimeType?.formattedMimeTypes || 'application/pdf'}
 						name={'files'}
 						label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: mimeType?.formattedNames || '.pdf' })}
-						accept={mimeType?.formattedMimeTypes || 'application/pdf'}
-						maxCount={UPLOAD.MAX_COUNT}
-						type={'file'}
-						category={mimeType?.fileType === FILE_FILTER_DATA_TYPE.DOC ? UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE : UPLOAD_IMG_CATEGORIES.ASSET_IMAGE_TYPE}
-						multiple
-						handleUploadOutside={false}
+						signUrl={URL_UPLOAD_FILE}
 						disabled={submitting || !formValues?.assetType}
-						validate={validationRequired}
+						multiple
+						maxCount={UPLOAD.MAX_COUNT}
 						required
+						validate={validationRequired}
+						category={mimeType?.fileType === FILE_FILTER_DATA_TYPE.DOC ? UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE : UPLOAD_IMG_CATEGORIES.ASSET_IMAGE_TYPE}
 					/>
+
 					{/* // Message ffield nebude pre dokumenty typu IMAGE dostupný */}
 					{formValues?.assetType?.extra?.fileType === FILE_FILTER_DATA_TYPE.IMAGE ? undefined : (
 						<Field

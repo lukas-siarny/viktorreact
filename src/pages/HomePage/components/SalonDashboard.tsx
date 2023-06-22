@@ -17,6 +17,7 @@ import { getPendingReservationsCount } from '../../../reducers/calendar/calendar
 import { PERMISSION, RESERVATION_STATE, RESERVATIONS_STATE, SALON_STATES } from '../../../utils/enums'
 import Permissions, { checkPermissions } from '../../../utils/Permissions'
 import { arrayBufferToBase64, handleAuthorizedDownload } from '../../../utils/helper'
+import { getReq } from '../../../utils/request'
 
 // components
 import Alert from '../../../components/Dashboards/Alert'
@@ -37,7 +38,6 @@ import { ISalonReservationsPageURLQueryParams } from '../../../schemas/queryPara
 
 // hooks
 import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
-import { getReq } from '../../../utils/request'
 
 const SMS_TIME_STATS_PERMISSIONS = [PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]
 

@@ -3,7 +3,7 @@ import React, { useMemo, useCallback, useRef, useEffect } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Dropdown, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
+import { debounce, filter, flatten, isArray, isEmpty, isNil, map, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,6 +20,7 @@ import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-icon
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-icon.svg'
 import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
 import { ReactComponent as MoreInfoIcon } from '../../../../assets/icons/more-info-horizontal-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-icon.svg'
 
 // utils
 import {
@@ -117,6 +118,7 @@ const SalonsFilterActive = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+	const services = useSelector((state: RootState) => state.service.services.data)
 	const notinoUsers = useSelector((state: RootState) => state.user.notinoUsers)
 
 	const searchNotinoUsers = useCallback(
@@ -365,6 +367,24 @@ const SalonsFilterActive = (props: Props) => {
 		[t]
 	)
 
+	const servicesOptions = flatten(
+		map(services?.groupedServicesByCategory, (industry) =>
+			map(industry.category?.children, (category) => {
+				return {
+					label: category?.category?.name,
+					key: category?.category?.id,
+					children: map(category.category?.children, (item) => {
+						return {
+							value: item.service.id,
+							label: item.category.name,
+							key: item.service.id
+						}
+					})
+				}
+			})
+		)
+	)
+
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE} forceRender>
@@ -504,7 +524,7 @@ const SalonsFilterActive = (props: Props) => {
 						</Col>
 					</Row>
 					<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_M}>
-						<Col span={6}>
+						<Col span={5}>
 							<Field
 								component={SelectField}
 								name={'enabledReservationsSetting'}
@@ -517,7 +537,7 @@ const SalonsFilterActive = (props: Props) => {
 								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
 							/>
 						</Col>
-						<Col span={6}>
+						<Col span={5}>
 							<Field
 								component={SelectField}
 								name={'hasAvailableReservationSystem'}
@@ -530,7 +550,7 @@ const SalonsFilterActive = (props: Props) => {
 								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
 							/>
 						</Col>
-						<Col span={6}>
+						<Col span={5}>
 							<Field
 								component={SelectField}
 								name={'hasSetOpeningHours'}
@@ -542,7 +562,22 @@ const SalonsFilterActive = (props: Props) => {
 								options={openingHoursOptions}
 							/>
 						</Col>
-						<Col span={6}>
+						<Col span={5}>
+							<Field
+								component={SelectField}
+								placeholder={t('loc:Priradený Notino používateľ')}
+								name={'assignedUserID'}
+								size={'large'}
+								showSearch
+								onSearch={searchNotinoUsers}
+								loading={notinoUsers.isLoading}
+								allowInfinityScroll
+								allowClear
+								filterOption={false}
+								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
+							/>
+						</Col>
+						<Col span={5}>
 							<Field
 								component={SelectField}
 								placeholder={t('loc:Priradený Notino používateľ')}

@@ -15,6 +15,7 @@ import { checkPermissions } from '../utils/Permissions'
 // redux
 import { RootState } from '../reducers'
 import { selectSalon } from '../reducers/selectedSalon/selectedSalonActions'
+import { getPendingReservationsCount } from '../reducers/calendar/calendarActions'
 
 // layouts
 import MainLayout from '../layouts/MainLayout'
@@ -56,10 +57,12 @@ import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
 import SmsCreditPartnerPage from '../pages/SmsCreditPartnerPage/SmsCreditPartnerPage'
 import RechargeSmsCreditPage from '../pages/SmsCreditPartnerPage/RechargeSmsCreditPartnerPage'
 
+// Loaylty program
+import LoyaltyProgramPage from '../pages/LoyaltyProgramPage/LoyaltyProgramPage'
+
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
-import { getPendingReservationsCount } from '../reducers/calendar/calendarActions'
 
 const SalonSubRoutes: FC = () => {
 	const navigate = useNavigate()
@@ -188,6 +191,13 @@ const SalonSubRoutes: FC = () => {
 			<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credit')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SMS_CREDIT} />}>
 				<Route index element={<SmsCreditPartnerPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={t('paths:recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
+			</Route>
+			<Route
+				errorElement={<ErrorBoundary />}
+				path={t('paths:loyalty-program')}
+				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.AFFILIATE_PROGRAM} />}
+			>
+				<Route index element={<LoyaltyProgramPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}
 			<Route element={<AuthRoute layout={MainLayout} />}>

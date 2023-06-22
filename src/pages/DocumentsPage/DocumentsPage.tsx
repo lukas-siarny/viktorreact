@@ -16,7 +16,7 @@ import DocumentsFilter from './components/DocumentsFilter'
 import DocumentsForm from './components/DocumentsForm'
 
 // utils
-import { ADMIN_PERMISSIONS, FORM, PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, ASSET_TYPE, FORM, PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
@@ -134,7 +134,15 @@ const DocumentsPage = () => {
 							setVisible(true)
 							dispatch(
 								initialize(FORM.DOCUMENTS_FORM, {
-									assetType: record.assetType.key,
+									assetType: {
+										key: record.assetType.key,
+										value: record.assetType.key,
+										label: record.assetType.name,
+										extra: {
+											mimeTypes: record.assetType.mimeTypes,
+											fileType: record.assetType.fileType
+										}
+									},
 									languageCode: record.languageCode,
 									id: record.id
 								})
@@ -162,7 +170,7 @@ const DocumentsPage = () => {
 				languageCode: values?.languageCode as any,
 				fileIDs: fileIDs as any,
 				message: values?.message || null,
-				assetType: values?.assetType
+				assetType: values?.assetType.value as ASSET_TYPE
 			})
 			setVisible(false)
 			dispatch(getDocuments(query))

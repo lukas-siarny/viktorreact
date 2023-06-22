@@ -20,7 +20,6 @@ import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-icon
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-icon.svg'
 import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
 import { ReactComponent as MoreInfoIcon } from '../../../../assets/icons/more-info-horizontal-icon.svg'
-import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-icon.svg'
 
 // utils
 import {
@@ -75,7 +74,7 @@ type ComponentProps = {
 
 export type ISalonsFilterActive = Pick<
 	ISalonsPageURLQueryParams,
-	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType'
+	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType' | 'categoryThirdLevelIDs'
 > & {
 	dateFromTo: {
 		dateFrom: string
@@ -118,7 +117,6 @@ const SalonsFilterActive = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-	const services = useSelector((state: RootState) => state.service.services.data)
 	const notinoUsers = useSelector((state: RootState) => state.user.notinoUsers)
 
 	const searchNotinoUsers = useCallback(
@@ -202,6 +200,31 @@ const SalonsFilterActive = (props: Props) => {
 			}
 		],
 		[t]
+	)
+
+	const categoryThirdLevelIDsOptions = useMemo(
+		() =>
+			flatten(
+				map(categories.data, (industry) =>
+					map(industry.children, (category) => {
+						return {
+							label: category.name,
+							key: category.id,
+							children: map(category.children, (item) => {
+								return {
+									value: item.id,
+									label: item.name,
+									key: item.id,
+									extra: {
+										image: industry.image?.resizedImages.thumbnail || industry.image?.original
+									}
+								}
+							})
+						}
+					})
+				)
+			),
+		[categories.data]
 	)
 
 	const isLargerScreen = useMedia(['(max-width: 1280px)'], [true], false)
@@ -367,24 +390,6 @@ const SalonsFilterActive = (props: Props) => {
 		[t]
 	)
 
-	const servicesOptions = flatten(
-		map(services?.groupedServicesByCategory, (industry) =>
-			map(industry.category?.children, (category) => {
-				return {
-					label: category?.category?.name,
-					key: category?.category?.id,
-					children: map(category.category?.children, (item) => {
-						return {
-							value: item.service.id,
-							label: item.category.name,
-							key: item.service.id
-						}
-					})
-				}
-			})
-		)
-	)
-
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE} forceRender>
@@ -408,8 +413,6 @@ const SalonsFilterActive = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									filterOptions
-									onDidMountSearch
 									options={publishedOptions}
 									optionRender={optionRenderWithTag}
 								/>
@@ -422,8 +425,6 @@ const SalonsFilterActive = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									filterOptions
-									onDidMountSearch
 									options={changesOptions}
 									optionRender={optionRenderWithTag}
 								/>
@@ -436,8 +437,6 @@ const SalonsFilterActive = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									filterOptions
-									onDidMountSearch
 									options={createTypesOptions}
 									optionRender={optionRenderWithTag}
 								/>
@@ -456,30 +455,46 @@ const SalonsFilterActive = (props: Props) => {
 								placeholder={t('loc:Krajina')}
 								allowClear
 								size={'large'}
-								filterOptions
-								onDidMountSearch
 								options={countries?.enumerationsOptions}
 								loading={countries?.isLoading}
 								disabled={countries?.isLoading}
 							/>
 						</Col>
-						<Col span={5}>
+						<Col span={10}>
 							<Field
 								component={SelectField}
-								name={'categoryFirstLevelIDs'}
-								mode={'multiple'}
 								placeholder={t('loc:Odvetvie')}
-								allowClear
+								name={'categoryFirstLevelIDs'}
 								size={'large'}
-								filterOptions
-								onDidMountSearch
-								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
-								options={categories?.enumerationsOptions}
+								mode={'multiple'}
+								showSearch
 								loading={categories?.isLoading}
 								disabled={categories?.isLoading}
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+								allowClear
+								filterOption
+								options={categories?.enumerationsOptions}
 							/>
 						</Col>
-						<Col span={5}>
+						<Col span={10}>
+							<Field
+								component={SelectField}
+								placeholder={t('loc:Služby')}
+								name={'categoryThirdLevelIDs'}
+								mode={'multiple'}
+								size={'large'}
+								showSearch
+								loading={categories?.isLoading}
+								disabled={categories?.isLoading}
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+								allowClear
+								filterOption
+								options={categoryThirdLevelIDsOptions}
+							/>
+						</Col>
+					</Row>
+					<Row gutter={ROW_GUTTER_X_M}>
+						<Col span={6}>
 							<Field
 								component={SelectField}
 								name={'sourceType'}
@@ -487,13 +502,11 @@ const SalonsFilterActive = (props: Props) => {
 								className={'select-with-tag-options'}
 								allowClear
 								size={'large'}
-								filterOptions
-								onDidMountSearch
 								options={sourceOptions}
 								optionRender={optionRenderWithTag}
 							/>
 						</Col>
-						<Col span={5}>
+						<Col span={6}>
 							<Field
 								component={SelectField}
 								name={'premiumSourceUserType'}
@@ -501,13 +514,61 @@ const SalonsFilterActive = (props: Props) => {
 								className={'select-with-tag-options'}
 								allowClear
 								size={'large'}
-								filterOptions
-								onDidMountSearch
 								options={premiumSourceOptions}
 								optionRender={optionRenderWithTag}
 							/>
 						</Col>
-						<Col span={5}>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'enabledReservationsSetting'}
+								placeholder={t('loc:Rezervačný systém')}
+								allowClear
+								size={'large'}
+								options={rsOptions}
+								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'hasAvailableReservationSystem'}
+								placeholder={t('loc:Dostupné pre online rezervácie')}
+								allowClear
+								size={'large'}
+								options={rsAvailableOnlineOptions}
+								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+							/>
+						</Col>
+					</Row>
+					<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_M}>
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								name={'hasSetOpeningHours'}
+								placeholder={t('loc:Otváracie hodiny')}
+								allowClear
+								size={'large'}
+								filterOption
+								options={openingHoursOptions}
+							/>
+						</Col>
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								placeholder={t('loc:Priradený Notino používateľ')}
+								name={'assignedUserID'}
+								size={'large'}
+								showSearch
+								onSearch={searchNotinoUsers}
+								loading={notinoUsers.isLoading}
+								allowInfinityScroll
+								allowClear
+								filterOption={false}
+								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
+							/>
+						</Col>
+						<Col span={8}>
 							<Field
 								className={'w-full'}
 								rangePickerClassName={'w-full'}
@@ -520,76 +581,6 @@ const SalonsFilterActive = (props: Props) => {
 								dropdownAlign={{ points: ['tr', 'br'] }}
 								allowEmpty={[false, false]}
 								size={'large'}
-							/>
-						</Col>
-					</Row>
-					<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_M}>
-						<Col span={5}>
-							<Field
-								component={SelectField}
-								name={'enabledReservationsSetting'}
-								placeholder={t('loc:Rezervačný systém')}
-								allowClear
-								size={'large'}
-								filterOptions
-								onDidMountSearch
-								options={rsOptions}
-								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
-							/>
-						</Col>
-						<Col span={5}>
-							<Field
-								component={SelectField}
-								name={'hasAvailableReservationSystem'}
-								placeholder={t('loc:Dostupné pre online rezervácie')}
-								allowClear
-								size={'large'}
-								filterOptions
-								onDidMountSearch
-								options={rsAvailableOnlineOptions}
-								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
-							/>
-						</Col>
-						<Col span={5}>
-							<Field
-								component={SelectField}
-								name={'hasSetOpeningHours'}
-								placeholder={t('loc:Otváracie hodiny')}
-								allowClear
-								size={'large'}
-								filterOptions
-								onDidMountSearch
-								options={openingHoursOptions}
-							/>
-						</Col>
-						<Col span={5}>
-							<Field
-								component={SelectField}
-								placeholder={t('loc:Priradený Notino používateľ')}
-								name={'assignedUserID'}
-								size={'large'}
-								showSearch
-								onSearch={searchNotinoUsers}
-								loading={notinoUsers.isLoading}
-								allowInfinityScroll
-								allowClear
-								filterOption={false}
-								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
-							/>
-						</Col>
-						<Col span={5}>
-							<Field
-								component={SelectField}
-								placeholder={t('loc:Priradený Notino používateľ')}
-								name={'assignedUserID'}
-								size={'large'}
-								showSearch
-								onSearch={searchNotinoUsers}
-								loading={notinoUsers.isLoading}
-								allowInfinityScroll
-								allowClear
-								filterOption={false}
-								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
 							/>
 						</Col>
 					</Row>

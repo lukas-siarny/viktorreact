@@ -99,6 +99,7 @@ const SalonsPage = (props: Props) => {
 					initialize(FORM.SALONS_FILTER_DELETED, {
 						search: query.search,
 						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+						categoryThirdLevelIDs: query.categoryThirdLevelIDs,
 						countryCode: salonsQueries.countryCode,
 						enabledReservationsSetting: query.enabledReservationsSetting,
 						hasAvailableReservationSystem: query.hasAvailableReservationSystem
@@ -120,6 +121,7 @@ const SalonsPage = (props: Props) => {
 						statuses_published: query.statuses_published,
 						statuses_changes: query.statuses_changes,
 						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+						categoryThirdLevelIDs: query.categoryThirdLevelIDs,
 						countryCode: salonsQueries.countryCode,
 						createType: query.createType,
 						dateFromTo: {
@@ -148,6 +150,7 @@ const SalonsPage = (props: Props) => {
 		query.search,
 		query.order,
 		query.categoryFirstLevelIDs,
+		query.categoryThirdLevelIDs,
 		query.statuses_all,
 		query.statuses_published,
 		query.statuses_changes,

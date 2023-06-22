@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
+import { debounce, filter, flatten, isArray, isEmpty, isNil, map, size } from 'lodash'
 
 // components
 import { useSelector } from 'react-redux'
@@ -61,6 +61,31 @@ const SalonsFilterDeleted = (props: Props) => {
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
+	const categoryThirdLevelIDsOptions = useMemo(
+		() =>
+			flatten(
+				map(categories.data, (industry) =>
+					map(industry.children, (category) => {
+						return {
+							label: category.name,
+							key: category.id,
+							children: map(category.children, (item) => {
+								return {
+									value: item.id,
+									label: item.name,
+									key: item.id,
+									extra: {
+										image: industry.image?.resizedImages.thumbnail || industry.image?.original
+									}
+								}
+							})
+						}
+					})
+				)
+			),
+		[categories.data]
+	)
+
 	const searchInput = useMemo(
 		() => (
 			<Field
@@ -81,7 +106,7 @@ const SalonsFilterDeleted = (props: Props) => {
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_DELETED}>
 				<Row gutter={ROW_GUTTER_X_M}>
-					<Col span={8}>
+					<Col span={4}>
 						<Field
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
@@ -89,27 +114,41 @@ const SalonsFilterDeleted = (props: Props) => {
 							placeholder={t('loc:Krajina')}
 							allowClear
 							size={'large'}
-							filterOptions
-							onDidMountSearch
 							options={countries?.enumerationsOptions}
 							loading={countries?.isLoading}
 							disabled={countries?.isLoading}
 						/>
 					</Col>
-					<Col span={8}>
+					<Col span={10}>
 						<Field
 							component={SelectField}
-							name={'categoryFirstLevelIDs'}
-							mode={'multiple'}
 							placeholder={t('loc:Odvetvie')}
-							allowClear
+							name={'categoryFirstLevelIDs'}
 							size={'large'}
-							filterOptions
-							onDidMountSearch
-							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
-							options={categories?.enumerationsOptions}
+							mode={'multiple'}
+							showSearch
 							loading={categories?.isLoading}
 							disabled={categories?.isLoading}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+							allowClear
+							filterOption
+							options={categories?.enumerationsOptions}
+						/>
+					</Col>
+					<Col span={10}>
+						<Field
+							component={SelectField}
+							placeholder={t('loc:Služby')}
+							name={'categoryThirdLevelIDs'}
+							mode={'multiple'}
+							size={'large'}
+							showSearch
+							loading={categories?.isLoading}
+							disabled={categories?.isLoading}
+							allowClear
+							filterOption
+							options={categoryThirdLevelIDsOptions}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
 						/>
 					</Col>
 				</Row>

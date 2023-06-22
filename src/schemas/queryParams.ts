@@ -44,6 +44,7 @@ export type ISearchableParams = z.infer<typeof searchableSchema>
 // actions query params
 const salonsQueryParamsSchema = searchableSchema.extend({
 	categoryFirstLevelIDs: z.string().array().nullish(),
+	categoryThirdLevelIDs: z.string().array().nullish(),
 	statuses_all: z.boolean().nullish(),
 	statuses_published: z.enum([SALON_FILTER_STATES.PUBLISHED, SALON_FILTER_STATES.NOT_PUBLISHED]).nullish(),
 	statuses_changes: z.enum([SALON_FILTER_STATES.PENDING_PUBLICATION, SALON_FILTER_STATES.DECLINED]).nullish(),
@@ -78,6 +79,7 @@ export const salonsPageURLQueryParamsSchema = salonsQueryParamsSchema.pick({
 	order: true,
 	search: true,
 	categoryFirstLevelIDs: true,
+	categoryThirdLevelIDs: true,
 	statuses_all: true,
 	statuses_published: true,
 	statuses_changes: true,

@@ -1318,3 +1318,12 @@ export const handleAuthorizedDownload = (event: any, downloadUrl: string, fileNa
 			console.error(error)
 		})
 }
+
+export const arrayBufferToBase64 = (arrayBuffer: ArrayBuffer): string => {
+	const uint8Array = new Uint8Array(arrayBuffer)
+	let binaryString = ''
+	for (let i = 0; i < uint8Array.length; i += 1) {
+		binaryString += String.fromCharCode(uint8Array[i])
+	}
+	return window.btoa(binaryString)
+}

@@ -6250,7 +6250,7 @@ declare namespace Paths {
             export type Ext = "png";
             export type SalonID = string; // uuid
             export type T = string;
-            export type Type = "digi";
+            export type Type = "digi" | "banner";
         }
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
@@ -11248,7 +11248,7 @@ declare namespace Paths {
             export type Ext = "png";
             export type SalonID = string; // uuid
             export type T = string;
-            export type Type = "digi";
+            export type Type = "digi" | "banner";
         }
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
@@ -13289,6 +13289,8 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AvResTimeSlotDate = string; // date-time
+            export type AvResTimeSlotDateFrom = string; // date-time
+            export type AvResTimeSlotDateTo = string; // date-time
             export type AvResTimeSlotDayPart = ("ANY" | "MORNING" | "AFTERNOON" | "EVENING");
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
@@ -13329,6 +13331,8 @@ declare namespace Paths {
             createType?: Parameters.CreateType;
             hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             avResTimeSlotDate?: Parameters.AvResTimeSlotDate /* date-time */;
+            avResTimeSlotDateFrom?: Parameters.AvResTimeSlotDateFrom /* date-time */;
+            avResTimeSlotDateTo?: Parameters.AvResTimeSlotDateTo /* date-time */;
             avResTimeSlotDayPart?: Parameters.AvResTimeSlotDayPart;
             order?: /**
              * Order attributes: distance, rating, priceLevel
@@ -13709,6 +13713,8 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AvResTimeSlotDate = string; // date-time
+            export type AvResTimeSlotDateFrom = string; // date-time
+            export type AvResTimeSlotDateTo = string; // date-time
             export type AvResTimeSlotDayPart = ("ANY" | "MORNING" | "AFTERNOON" | "EVENING");
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
@@ -13749,6 +13755,8 @@ declare namespace Paths {
             createType?: Parameters.CreateType;
             hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             avResTimeSlotDate?: Parameters.AvResTimeSlotDate /* date-time */;
+            avResTimeSlotDateFrom?: Parameters.AvResTimeSlotDateFrom /* date-time */;
+            avResTimeSlotDateTo?: Parameters.AvResTimeSlotDateTo /* date-time */;
             avResTimeSlotDayPart?: Parameters.AvResTimeSlotDayPart;
         }
         namespace Responses {
@@ -13790,6 +13798,8 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AvResTimeSlotDate = string; // date-time
+            export type AvResTimeSlotDateFrom = string; // date-time
+            export type AvResTimeSlotDateTo = string; // date-time
             export type AvResTimeSlotDayPart = ("ANY" | "MORNING" | "AFTERNOON" | "EVENING");
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
@@ -13826,6 +13836,8 @@ declare namespace Paths {
             createType?: Parameters.CreateType;
             hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             avResTimeSlotDate?: Parameters.AvResTimeSlotDate /* date-time */;
+            avResTimeSlotDateFrom?: Parameters.AvResTimeSlotDateFrom /* date-time */;
+            avResTimeSlotDateTo?: Parameters.AvResTimeSlotDateTo /* date-time */;
             avResTimeSlotDayPart?: Parameters.AvResTimeSlotDayPart;
         }
         namespace Responses {
@@ -16452,6 +16464,8 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AvResTimeSlotDate = string; // date-time
+            export type AvResTimeSlotDateFrom = string; // date-time
+            export type AvResTimeSlotDateTo = string; // date-time
             export type AvResTimeSlotDayPart = ("ANY" | "MORNING" | "AFTERNOON" | "EVENING");
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
@@ -16492,6 +16506,8 @@ declare namespace Paths {
             createType?: Parameters.CreateType;
             hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             avResTimeSlotDate?: Parameters.AvResTimeSlotDate /* date-time */;
+            avResTimeSlotDateFrom?: Parameters.AvResTimeSlotDateFrom /* date-time */;
+            avResTimeSlotDateTo?: Parameters.AvResTimeSlotDateTo /* date-time */;
             avResTimeSlotDayPart?: Parameters.AvResTimeSlotDayPart;
             order?: /**
              * Order attributes: distance, rating, priceLevel
@@ -16872,6 +16888,8 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AvResTimeSlotDate = string; // date-time
+            export type AvResTimeSlotDateFrom = string; // date-time
+            export type AvResTimeSlotDateTo = string; // date-time
             export type AvResTimeSlotDayPart = ("ANY" | "MORNING" | "AFTERNOON" | "EVENING");
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
@@ -16912,6 +16930,8 @@ declare namespace Paths {
             createType?: Parameters.CreateType;
             hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             avResTimeSlotDate?: Parameters.AvResTimeSlotDate /* date-time */;
+            avResTimeSlotDateFrom?: Parameters.AvResTimeSlotDateFrom /* date-time */;
+            avResTimeSlotDateTo?: Parameters.AvResTimeSlotDateTo /* date-time */;
             avResTimeSlotDayPart?: Parameters.AvResTimeSlotDayPart;
         }
         namespace Responses {
@@ -16953,6 +16973,8 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AvResTimeSlotDate = string; // date-time
+            export type AvResTimeSlotDateFrom = string; // date-time
+            export type AvResTimeSlotDateTo = string; // date-time
             export type AvResTimeSlotDayPart = ("ANY" | "MORNING" | "AFTERNOON" | "EVENING");
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
@@ -16989,6 +17011,8 @@ declare namespace Paths {
             createType?: Parameters.CreateType;
             hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             avResTimeSlotDate?: Parameters.AvResTimeSlotDate /* date-time */;
+            avResTimeSlotDateFrom?: Parameters.AvResTimeSlotDateFrom /* date-time */;
+            avResTimeSlotDateTo?: Parameters.AvResTimeSlotDateTo /* date-time */;
             avResTimeSlotDayPart?: Parameters.AvResTimeSlotDayPart;
         }
         namespace Responses {

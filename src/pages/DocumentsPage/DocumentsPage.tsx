@@ -76,7 +76,7 @@ const DocumentsPage = () => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === documents?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

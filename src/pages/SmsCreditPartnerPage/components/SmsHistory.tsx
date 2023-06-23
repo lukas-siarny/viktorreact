@@ -47,7 +47,7 @@ const SmsHistory: FC<Props> = (props) => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === smsHistory?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

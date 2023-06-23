@@ -6,24 +6,41 @@ import { FORM, VALIDATION_MAX_LENGTH, PARAMETER_TYPE } from '../utils/enums'
 // eslint-disable-next-line import/no-cycle
 import { arePriceAndDurationDataEmpty } from '../pages/ServicesPage/serviceUtils'
 
-const validatePriceAndDurationData = (value: z.infer<typeof priceAndDurationSchema>, ctx: z.RefinementCtx, paths: any[] = []) => {
+const validatePriceAndDurationData = (value: z.infer<typeof priceAndDurationSchema>, ctx: z.RefinementCtx, paths: any[] = [], validateDuration = true) => {
 	let isError = false
 
-	if (isNil(value.durationFrom)) {
-		isError = true
-		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
-			message: serializeValidationMessage('loc:Toto pole je povinné'),
-			path: [...paths, 'durationFrom']
-		})
-	}
-	if (value.variableDuration && isNil(value.durationTo)) {
-		isError = true
-		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
-			message: serializeValidationMessage('loc:Toto pole je povinné'),
-			path: [...paths, 'durationTo']
-		})
+	if (validateDuration) {
+		if (isNil(value.durationFrom)) {
+			isError = true
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: [...paths, 'durationFrom']
+			})
+		}
+		if (value.variableDuration && isNil(value.durationTo)) {
+			isError = true
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: [...paths, 'durationTo']
+			})
+		}
+
+		if (value.variableDuration && !isNil(value.durationTo) && (value.durationFrom || 0) > value.durationTo) {
+			isError = true
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Chybný rozsah'),
+				path: [...paths, 'durationFrom']
+			})
+
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Chybný rozsah'),
+				path: [...paths, 'durationTo']
+			})
+		}
 	}
 
 	if (isNil(value.priceFrom)) {
@@ -41,21 +58,6 @@ const validatePriceAndDurationData = (value: z.infer<typeof priceAndDurationSche
 			code: z.ZodIssueCode.custom,
 			message: serializeValidationMessage('loc:Toto pole je povinné'),
 			path: [...paths, 'priceTo']
-		})
-	}
-
-	if (value.variableDuration && !isNil(value.durationTo) && (value.durationFrom || 0) > value.durationTo) {
-		isError = true
-		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
-			message: serializeValidationMessage('loc:Chybný rozsah'),
-			path: [...paths, 'durationFrom']
-		})
-
-		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
-			message: serializeValidationMessage('loc:Chybný rozsah'),
-			path: [...paths, 'durationTo']
 		})
 	}
 
@@ -102,7 +104,8 @@ const employeeServiceSchema = z
 		useCategoryParameter: z.boolean().optional(),
 		employeePriceAndDurationData: priceAndDurationSchema.optional(),
 		hasOverriddenPricesAndDurationData: z.boolean().optional(),
-		serviceCategoryParameter: employeeServiceCategoryParameter.array().optional()
+		serviceCategoryParameter: employeeServiceCategoryParameter.array().optional(),
+		serviceCategoryParameterType: z.nativeEnum(PARAMETER_TYPE).optional()
 	})
 	.superRefine((values, ctx) => {
 		const priceAndDurationData = values?.employeePriceAndDurationData
@@ -113,16 +116,18 @@ const employeeServiceSchema = z
 			}
 		} else {
 			const areAllEmpty = !values.serviceCategoryParameter?.some((parameterValue) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
+			const validateDuration = values.serviceCategoryParameterType !== PARAMETER_TYPE.TIME
 
 			if (!areAllEmpty) {
 				let serviceCategoryParameterError = false
 				values.serviceCategoryParameter?.forEach((parameterValue, parameterValueIndex) => {
 					if (parameterValue.employeePriceAndDurationData) {
-						const isPriceAndDurationDataError = validatePriceAndDurationData(parameterValue.employeePriceAndDurationData, ctx, [
-							'serviceCategoryParameter',
-							parameterValueIndex,
-							'employeePriceAndDurationData'
-						])
+						const isPriceAndDurationDataError = validatePriceAndDurationData(
+							parameterValue.employeePriceAndDurationData,
+							ctx,
+							['serviceCategoryParameter', parameterValueIndex, 'employeePriceAndDurationData'],
+							validateDuration
+						)
 
 						// show error msg if there is at least one error
 						if (!serviceCategoryParameterError) {
@@ -163,6 +168,7 @@ const serviceSchema = priceAndDurationSchema
 			autoApproveReservations: z.boolean()
 		}),
 		serviceCategoryParameter: parameterValueSchema.array(),
+		serviceCategoryParameterType: z.nativeEnum(PARAMETER_TYPE).optional(),
 		descriptionLocalizations: z.object({
 			use: z.boolean(),
 			defualtLanguage: z.string().nullish(),
@@ -181,6 +187,8 @@ const serviceSchema = priceAndDurationSchema
 		if (!val.useCategoryParameter) {
 			validatePriceAndDurationData(val, ctx)
 		} else {
+			const validateDuration = val.serviceCategoryParameterType !== PARAMETER_TYPE.TIME
+
 			if (val.useCategoryParameter && isEmpty(val.serviceCategoryParameter?.filter((value) => value.useParameter))) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
@@ -191,7 +199,7 @@ const serviceSchema = priceAndDurationSchema
 
 			val.serviceCategoryParameter.forEach((parameter, index) => {
 				if (parameter.useParameter) {
-					const isPriceAndDurationDataError = validatePriceAndDurationData(parameter, ctx, ['serviceCategoryParameter', index])
+					const isPriceAndDurationDataError = validatePriceAndDurationData(parameter, ctx, ['serviceCategoryParameter', index], validateDuration)
 
 					if (isPriceAndDurationDataError) {
 						ctx.addIssue({
@@ -227,7 +235,6 @@ export type IEmployeeServiceEditForm = Omit<z.infer<typeof employeeServiceSchema
 	category?: string
 	image?: string
 	salonPriceAndDurationData?: FormPriceAndDurationData
-	serviceCategoryParameterType?: PARAMETER_TYPE
 	serviceCategoryParameterName?: string
 	serviceCategoryParameterId?: string
 	serviceCategoryParameter?: (z.infer<typeof employeeServiceCategoryParameter> & {
@@ -244,7 +251,6 @@ export type IParameterValue = Omit<z.infer<typeof parameterValueSchema>, 'servic
 
 export type IServiceForm = z.infer<typeof serviceSchema> & {
 	id: string
-	serviceCategoryParameterType?: PARAMETER_TYPE
 	serviceCategoryParameterName?: string
 	employees: IEmployeeServiceEditForm[]
 	serviceCategoryParameter?: IParameterValue[]

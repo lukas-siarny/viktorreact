@@ -832,8 +832,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const initSubmitEventData = (values: ICalendarEventForm) => setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.EVENT, values })
 
-	const initDeleteEventData = (eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE) =>
-		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT, eventId, calendarBulkEventID, eventType })
+	const initDeleteEventData = (eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE, isReservationCanceled?: boolean) =>
+		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT, eventId, calendarBulkEventID, eventType, isReservationCanceled })
 
 	const initUpdateReservationStateData: HandleUpdateReservationStateFunc = (calendarEventID, state, reason, paymentMethod, data) => {
 		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, calendarEventID, state, reason, paymentMethod, data })

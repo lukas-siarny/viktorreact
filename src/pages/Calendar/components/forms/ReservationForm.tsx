@@ -19,7 +19,8 @@ import {
 	PERMISSION,
 	CREATE_EVENT_PERMISSIONS,
 	UPDATE_EVENT_PERMISSIONS,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	RESERVATION_STATE
 } from '../../../../utils/enums'
 
 // types
@@ -158,8 +159,15 @@ const ReservationForm: FC<Props> = (props) => {
 		)
 	)
 
+	const disabledForm = !!(
+		eventId &&
+		(eventDetail.data?.reservationData?.state === RESERVATION_STATE.CANCEL_BY_CUSTOMER ||
+			eventDetail.data?.reservationData?.state === RESERVATION_STATE.CANCEL_BY_SALON ||
+			eventDetail.data?.reservationData?.state === RESERVATION_STATE.DECLINED)
+	)
+
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
-	const disabledSubmitButton = !!(eventId && pristine) || submitting || loadingData
+	const disabledSubmitButton = !!(eventId && pristine) || submitting || loadingData || disabledForm
 
 	const searchCustomers = useCallback(
 		async (search: string, page: number) => {
@@ -361,7 +369,7 @@ const ReservationForm: FC<Props> = (props) => {
 										showSearch
 										labelInValue
 										required
-										disabled={eventDetail?.data?.reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE}
+										disabled={eventDetail?.data?.reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE || disabledForm}
 										onSearch={searchCustomers}
 										actions={[
 											{
@@ -392,6 +400,7 @@ const ReservationForm: FC<Props> = (props) => {
 							labelInValue
 							showSearch
 							filterOption
+							disabled={disabledForm}
 							onChange={onChangeService}
 						/>
 						<Field
@@ -405,6 +414,7 @@ const ReservationForm: FC<Props> = (props) => {
 							dropdownAlign={{ points: ['tr', 'br'] }}
 							size={'large'}
 							suffixIcon={<DateSuffixIcon className={'text-notino-grayDark'} />}
+							disabled={disabledForm}
 							required
 						/>
 						<Fields
@@ -417,6 +427,7 @@ const ReservationForm: FC<Props> = (props) => {
 							itemClassName={'m-0 pb-0'}
 							minuteStep={15}
 							suffixIcon={isSettingTime ? <LoadingIcon className={'animate-spin-2s'} /> : <TimerIcon className={'text-notino-grayDark'} />}
+							disabled={disabledForm}
 							size={'large'}
 						/>
 						<Field
@@ -434,8 +445,9 @@ const ReservationForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							onChange={onChangeEmployee}
+							disabled={disabledForm}
 						/>
-						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
+						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} disabled={disabledForm} />
 					</Form>
 				</Spin>
 			</div>

@@ -217,7 +217,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 					)}
 					{/* Statistics */}
 					<h2 className='mt-10'>{t('loc:Štatistiky')}</h2>
-					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>
+					<div className='grid grid-cols-2 lg:grid-cols-4 gap-4 3xl:gap-8'>
 						<Statistics
 							title={t('loc:Rezervácie čakajúce na schválenie')}
 							count={pendingReservationsCount.count}

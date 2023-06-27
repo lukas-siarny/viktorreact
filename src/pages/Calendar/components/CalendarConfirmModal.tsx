@@ -144,7 +144,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 		}
 	}
 
-	const handleDeleteEventWrapper = (eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE) => {
+	const handleDeleteEventWrapper = (eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE, isReservationCanceled?: boolean) => {
 		// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
 		// v tomto pripade zatial vyskoci vzdy konfirmacny modal
 		let modalProps: IConfirmModalState = {} as IConfirmModalState
@@ -170,7 +170,9 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 						? getConfirmModalText(
 								deleteMessage,
 								[CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED_CUSTOMER, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED_EMPLOYEE],
-								disabledNotifications
+								disabledNotifications,
+								isReservationCanceled,
+								isReservationCanceled
 						  )
 						: deleteMessage,
 				onOk: () => handleDeleteEvent(eventId, calendarBulkEventID)
@@ -246,7 +248,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				handleSubmitEventWrapper(data?.values)
 				break
 			case CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT: {
-				handleDeleteEventWrapper(data?.eventId, data?.calendarBulkEventID, data?.eventType)
+				handleDeleteEventWrapper(data?.eventId, data?.calendarBulkEventID, data?.eventType, data?.isReservationCanceled)
 				break
 			}
 			case CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE: {

@@ -49,6 +49,7 @@ type ComponentProps = {
 	sidebarView?: CALENDAR_EVENT_TYPE
 	employeesOptions: ICalendarEmployeesPayload['options']
 	employeesLoading?: boolean
+	isSubmittingForm?: boolean
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps

@@ -986,6 +986,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							calendarEmployees={calendarEmployees}
 							scrollToTime={scrollToTime}
 							initOnDemand={scrollToTimeAndResourceOnDeman.current}
+							loadingData={loadingData}
 						/>
 					)}
 				</Layout>

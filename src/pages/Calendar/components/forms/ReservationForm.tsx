@@ -122,7 +122,8 @@ const getCategoryById = (category: any, serviceCategoryID?: string): EmployeeSer
 }
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, eventId, phonePrefix, pristine, submitting, loadingData, sidebarView, employeesOptions, employeesLoading } = props
+	const { handleSubmit, salonID, eventId, phonePrefix, pristine, loadingData, sidebarView, employeesOptions, employeesLoading } = props
+
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerCreateModal, setVisibleCustomerCreateModal] = useState(false)
@@ -133,6 +134,7 @@ const ReservationForm: FC<Props> = (props) => {
 	const formValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 	const services = useSelector((state: RootState) => state.service.services)
 	const isDeletedEmployee = !!formValues?.employee?.extra?.isDeleted
+
 	const servicesOptions = flatten(
 		map(services?.data?.groupedServicesByCategory, (industry) =>
 			map(industry.category?.children, (category) => {
@@ -167,7 +169,7 @@ const ReservationForm: FC<Props> = (props) => {
 	)
 
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
-	const disabledSubmitButton = !!(eventId && pristine) || submitting || loadingData || disabledForm
+	const disabledSubmitButton = !!(eventId && pristine) || loadingData || disabledForm
 
 	const searchCustomers = useCallback(
 		async (search: string, page: number) => {

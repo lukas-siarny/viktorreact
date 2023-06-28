@@ -13,8 +13,9 @@ import { ICalendarReservationForm } from '../../schemas/reservation'
 import { ICalendarEventForm } from '../../schemas/event'
 
 // utils
-import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, NEW_ID_PREFIX, CALENDAR_DATE_FORMAT } from '../../utils/enums'
+import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, NEW_ID_PREFIX, CALENDAR_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
 import { getDateTime } from '../../utils/helper'
+import { CALENDAR_ALLOWED_RESERVATION_STATES } from '../calendar/calendarActions'
 // import { createBaseEvent } from '../../pages/Calendar/calendarHelpers'
 
 export type IVirtualEventActions = IResetStore | IChangeVirtualEvents
@@ -93,7 +94,13 @@ export const addOrUpdateEvent =
 		}
 		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData, note, noteFromB2CCustomer, isImported } = formData
 
-		if (date && timeFrom && employee && eventType) {
+		// pri prekliku zo zoznamu rezervacii moze nastat situacia, ze sa dotiahne detail so stavmi, ktore v kalendari nechceme zobrazovat
+		let isAllowedReservationState = true
+		if (formData.eventId && eventType === CALENDAR_EVENT_TYPE.RESERVATION && reservationData?.state) {
+			isAllowedReservationState = CALENDAR_ALLOWED_RESERVATION_STATES.includes(reservationData.state as RESERVATION_STATE)
+		}
+
+		if (date && timeFrom && employee && eventType && isAllowedReservationState) {
 			let { eventId } = formData
 
 			if (!eventId) {

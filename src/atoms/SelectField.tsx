@@ -227,11 +227,10 @@ const handleChange = async (data: any) => {
 			return valInput
 		})
 	} else if (typeof value === 'object') {
-		const andtOption = find(antdOptions, (item) => item?.value === (val as any)?.value)
 		let extra
-
-		if (andtOption?.extra) {
-			extra = andtOption.extra
+		// NOTE: ak je objekt tak antdOptions neni pole ale objekt
+		if (antdOptions?.extra) {
+			extra = antdOptions.extra
 		} else {
 			// NOTE: v niektorych pripadoch Antd odfiltruje extra objekt z antdOptions
 			const nodeFromOptions = findNodeInTree({ children: options }, value?.value)
@@ -607,7 +606,7 @@ const SelectField = (props: Props) => {
 			allowClear={allowClear}
 			showSearch={showSearch}
 			// NOTE: set to FALSE when we expect filtering on BE
-			filterOption={filterOption && localFilterOption}
+			filterOption={typeof filterOption === 'function' ? filterOption : filterOption && localFilterOption}
 			onSearch={showSearch ? onSearchDebounced : undefined}
 			suffixIcon={suffIcon}
 			labelInValue={labelInValue}

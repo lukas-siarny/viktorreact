@@ -70,7 +70,8 @@ import {
 	QUERY_LIMIT,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE,
-	RESERVATION_STATE
+	RESERVATION_STATE,
+	FILE_FILTER_DATA_TYPE
 } from './enums'
 import { LOCALES } from '../components/LanguagePicker'
 import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress, NameLocalizationsItem } from '../types/interfaces'
@@ -247,6 +248,84 @@ export const translateMessageType = (msgType: MSG_TYPE) => {
 		default:
 			return ''
 	}
+}
+
+export const getMimeTypeName = (mimeTypes?: string[], fileType?: FILE_FILTER_DATA_TYPE) => {
+	// mapped for those values: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+	if (mimeTypes?.length) {
+		const names: { mimeType: string; name: string }[] = []
+		mimeTypes?.forEach((mimeType) => {
+			switch (mimeType) {
+				case 'image/bmp':
+					names.push({ mimeType, name: '.bmp' })
+					break
+				case 'text/csv':
+					names.push({ mimeType, name: '.csv' })
+					break
+				case 'application/msword':
+					names.push({ mimeType, name: '.msword' })
+					break
+				case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+					names.push({ mimeType, name: '.xml' })
+					break
+				case 'image/vnd.microsoft.icon':
+					names.push({ mimeType, name: '.icon' })
+					break
+				case 'image/jpeg':
+					names.push({ mimeType, name: '.jpg, .jpeg' })
+					break
+				case 'application/json':
+					names.push({ mimeType, name: '.json' })
+					break
+				case 'font/otf':
+					names.push({ mimeType, name: '.otf' })
+					break
+				case 'image/png':
+					names.push({ mimeType, name: '.png' })
+					break
+				case 'application/pdf':
+					names.push({ mimeType, name: '.pdf' })
+					break
+				case 'application/rtf':
+					names.push({ mimeType, name: '.rtf' })
+					break
+				case 'image/tiff':
+					names.push({ mimeType, name: '.tiff' })
+					break
+				case 'text/plain':
+					names.push({ mimeType, name: '.txt' })
+					break
+				case 'image/webp':
+					names.push({ mimeType, name: '.webp' })
+					break
+				case 'application/vnd.ms-excel':
+					names.push({ mimeType, name: '.ms-excel' })
+					break
+				case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+					names.push({ mimeType, name: '.sheet' })
+					break
+				default:
+					names.push({ mimeType: 'application/pdf', name: '.pdf' })
+					break
+			}
+		})
+
+		const formattedNames: string[] = []
+		const formattedMimeTypes: string[] = []
+
+		names.forEach((name) => {
+			formattedNames.push(name.name)
+			formattedMimeTypes.push(name.mimeType)
+		})
+
+		return {
+			fileType,
+			names,
+			formattedNames: formattedNames.join(', '),
+			formattedMimeTypes: formattedMimeTypes.join(', ')
+		}
+	}
+	return null
 }
 
 export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?: boolean) => {
@@ -1238,4 +1317,13 @@ export const handleAuthorizedDownload = (event: any, downloadUrl: string, fileNa
 			// eslint-disable-next-line no-console
 			console.error(error)
 		})
+}
+
+export const arrayBufferToBase64 = (arrayBuffer: ArrayBuffer): string => {
+	const uint8Array = new Uint8Array(arrayBuffer)
+	let binaryString = ''
+	for (let i = 0; i < uint8Array.length; i += 1) {
+		binaryString += String.fromCharCode(uint8Array[i])
+	}
+	return window.btoa(binaryString)
 }

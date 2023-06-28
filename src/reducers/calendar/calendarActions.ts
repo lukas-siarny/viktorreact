@@ -43,7 +43,7 @@ import {
 
 // utils
 import { getReq } from '../../utils/request'
-import { formatDateByLocale, getDateTime, normalizeDataById, normalizeQueryParams, transalteReservationSourceType } from '../../utils/helper'
+import { formatDateByLocale, getAssignedUserLabel, getDateTime, normalizeDataById, normalizeQueryParams, transalteReservationSourceType } from '../../utils/helper'
 import { compareAndSortDayEvents, compareMonthlyReservations, getMonthlyReservationCalendarEventId } from '../../pages/Calendar/calendarHelpers'
 
 // redux
@@ -123,21 +123,39 @@ interface ISalonReservationsTableData {
 	service: any
 	paymentMethod: RESERVATION_PAYMENT_METHOD
 }
-
-interface INotinoReservationsTableData {
+export interface INotinoReservationsTableData {
+	key: string
 	id: string
 	salon: {
-		name?: string
-		id?: string
+		name: string
+		id: string
+		deletedAt?: string
 	}
 	createdAt: string
 	startDate: string
 	time: string
-	customer: any
-	service: any
+	customer: {
+		name: string
+		thumbnail?: string
+		originalImage?: string
+		deletedAt?: string
+	}
+	service: {
+		name: string
+		thumbnail?: string
+		originalImage?: string
+		deletedAt?: string
+	}
+	employee: {
+		name: string
+		thumbnail?: string
+		originalImage?: string
+		deletedAt?: string
+	}
 	createSourceType: string
-	state: string
-	paymentMethod: string
+	state?: RESERVATION_STATE
+	paymentMethod?: RESERVATION_PAYMENT_METHOD
+	deletedAt?: string
 }
 
 export interface IGetSalonReservations {
@@ -151,7 +169,7 @@ const storedPreviousParams: any = {
 	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
 }
 
-const RESERVATION_STATES = [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
+export const CALENDAR_ALLOWED_RESERVATION_STATES = [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
 
 export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
 
@@ -383,7 +401,7 @@ export const getCalendarReservations = (
 		{
 			...queryParams,
 			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, RESERVATION_FROM_IMPORT],
-			reservationStates: RESERVATION_STATES
+			reservationStates: CALENDAR_ALLOWED_RESERVATION_STATES
 		},
 		splitMultidayEventsIntoOneDayEvents,
 		clearVirtualEvent,
@@ -433,7 +451,7 @@ export const getCalendarMonthlyViewReservations =
 				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, RESERVATION_FROM_IMPORT],
 				dateFrom: queryParams.start,
 				dateTo: queryParams.end,
-				reservationStates: RESERVATION_STATES
+				reservationStates: CALENDAR_ALLOWED_RESERVATION_STATES
 			}
 
 			dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_START })
@@ -653,20 +671,42 @@ export const getNotinoReservations =
 				...(normalizeQueryParams(queryParamsEditedForRequest) as any)
 			})
 			const tableData: INotinoReservationsTableData[] = map(data.reservations, (reservation) => {
-				return {
+				const item: INotinoReservationsTableData = {
 					key: reservation.id,
 					id: reservation.id,
-					salon: reservation.salon,
-					createdAt: formatDateByLocale(reservation.createdAt) as string,
-					startDate: formatDateByLocale(reservation.start.date, true) as string,
+					salon: {
+						id: reservation.salon.id || '',
+						name: reservation.salon.name || '-',
+						deletedAt: reservation.salon.deletedAt
+					},
+					createdAt: formatDateByLocale(reservation.createdAt) || '-',
+					startDate: formatDateByLocale(reservation.start.date, true) || '-',
 					time: `${reservation.start.time} - ${reservation.end.time}`,
-					customer: reservation.customer,
-					service: reservation.service,
-					employee: reservation.employee,
+					customer: {
+						name: getAssignedUserLabel(reservation.customer),
+						thumbnail: reservation.customer?.profileImage?.resizedImages?.thumbnail,
+						originalImage: reservation.customer?.profileImage?.original,
+						deletedAt: reservation.customer?.deletedAt
+					},
+					service: {
+						name: reservation.service?.name || '-',
+						thumbnail: reservation.service?.icon?.resizedImages?.thumbnail,
+						originalImage: reservation.service?.icon?.original,
+						deletedAt: reservation.service?.deletedAt
+					},
+					employee: {
+						name: getAssignedUserLabel(reservation.employee),
+						thumbnail: reservation.employee?.image?.resizedImages?.thumbnail,
+						originalImage: reservation.employee?.image?.original,
+						deletedAt: reservation.employee?.deletedAt
+					},
 					createSourceType: transalteReservationSourceType(reservation.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
 					state: reservation.reservationData?.state as RESERVATION_STATE,
-					paymentMethod: reservation.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD
+					paymentMethod: reservation.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD,
+					deletedAt: formatDateByLocale(reservation.deletedAt) || undefined
 				}
+
+				return item
 			})
 			payload = {
 				data,

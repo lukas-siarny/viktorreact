@@ -26,6 +26,7 @@
   "invite": "/invite",
   "languages-in-salons": "/languages-in-salons",
   "login": "/login",
+  "loyalty-program": "/loyalty-program",
   "my-account": "/my-account",
   "my-documents": "/my-documents",
   "my-documents/{{documentID}}": "/my-documents/{{documentID}}",

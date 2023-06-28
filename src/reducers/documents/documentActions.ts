@@ -45,7 +45,6 @@ export const getDocuments =
 		try {
 			dispatch({ type: DOCUMENTS.DOCUMENTS_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/documents/', { ...normalizeQueryParams(queryParams) })
-
 			payload = {
 				data
 			}
@@ -87,11 +86,14 @@ export const getAssetTypes = (): ThunkResult<Promise<IAssetTypesPayload>> => asy
 	try {
 		dispatch({ type: ASSET_TYPES.ASSET_TYPES_LOAD_START })
 		const { data } = await getReq('/api/b2b/admin/enums/asset-types/', undefined, undefined, undefined, undefined, true)
-
 		const options: ISelectOptionItem[] = data.assetTypes.map((assetType) => ({
 			key: assetType.key,
 			label: assetType.name || assetType.key,
-			value: assetType.key
+			value: assetType.key,
+			extra: {
+				mimeTypes: assetType.mimeTypes,
+				fileType: assetType.fileType
+			}
 		}))
 
 		payload = { data, options }

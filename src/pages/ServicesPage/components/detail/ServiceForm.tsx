@@ -21,18 +21,7 @@ import ServiceBreadcrumbs from './ServiceBreadcrumbs'
 
 // utils
 import { formFieldID, showErrorNotification, validationNumberMin, validationString } from '../../../../utils/helper'
-import {
-	DELETE_BUTTON_ID,
-	FILTER_ENTITY,
-	FORM,
-	LANGUAGE,
-	NOTIFICATION_TYPE,
-	PARAMETER_TYPE,
-	PERMISSION,
-	STRINGS,
-	SUBMIT_BUTTON_ID,
-	VALIDATION_MAX_LENGTH
-} from '../../../../utils/enums'
+import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { deleteReq } from '../../../../utils/request'
 import searchWrapper from '../../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
@@ -52,7 +41,6 @@ import { ReactComponent as SettingIcon } from '../../../../assets/icons/setting-
 
 // schema
 import { validationServiceFn, IServiceForm } from '../../../../schemas/service'
-import { LOCALES } from '../../../../components/LanguagePicker'
 
 const numberMin0 = validationNumberMin(0)
 const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)
@@ -75,18 +63,10 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const formValues = form?.values as IServiceForm
-	const initialFormValues = (form as any)?.initial as IServiceForm
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const categories = useSelector((state: RootState) => state.categories)
-	const categoryData = categories.category.data
-
-	const descriptionDefaultLng = categoryData?.descriptionLocalizations.find((desc) => {
-		return LOCALES[desc.language?.toLowerCase() as LANGUAGE]?.countryCode?.toLowerCase() === salon.data?.address?.countryCode?.toLowerCase()
-	})?.value
-
-	const descriptionEnLng = categoryData?.descriptionLocalizations.find((desc) => desc.language?.toLowerCase() === LANGUAGE.EN.toLowerCase())?.value
 
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
@@ -95,8 +75,15 @@ const ServiceForm: FC<Props> = (props) => {
 	const variableDuration = formValues?.variableDuration
 	const variablePrice = formValues?.variablePrice
 
-	const { hasDurationFilledIn, hasPriceFilledIn, hasEmployee } = checkConditions(initialFormValues)
-	const disabledRsSettings = !(hasDurationFilledIn && hasPriceFilledIn && hasEmployee)
+	const ignoreDurationCheck = formValues?.serviceCategoryParameterType === PARAMETER_TYPE.TIME && formValues?.useCategoryParameter
+	const { hasDurationFilledIn, hasPriceFilledIn, hasEmployee } = checkConditions(formValues, ignoreDurationCheck)
+	let disabledRsSettings = false
+
+	if (ignoreDurationCheck) {
+		disabledRsSettings = !(hasPriceFilledIn && hasEmployee)
+	} else {
+		disabledRsSettings = !(hasPriceFilledIn && hasEmployee && hasDurationFilledIn)
+	}
 
 	const onConfirmDelete = async () => {
 		if (isRemoving || !serviceID) {
@@ -287,9 +274,8 @@ const ServiceForm: FC<Props> = (props) => {
 											<>
 												<Field
 													component={TextareaField}
-													className={cx({ 'noti-placeholder-dark': !!descriptionDefaultLng })}
 													label={`${t('loc:Vlastný popis')} ${salon.data?.address?.countryCode ? `(${salon.data.address.countryCode})` : ''}`.trim()}
-													placeholder={descriptionDefaultLng || t('loc:Vysvetlite, čo služba zahŕňa')}
+													placeholder={t('loc:Vysvetlite, čo služba zahŕňa')}
 													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
 													showLettersCount
 													name={'defualtLanguage'}
@@ -300,9 +286,9 @@ const ServiceForm: FC<Props> = (props) => {
 												/>
 												<Field
 													component={TextareaField}
-													className={cx({ 'noti-placeholder-dark': !!descriptionEnLng }, 'pb-0')}
+													className={'pb-0'}
 													label={`${t('loc:Vlastný popis')} (EN)`}
-													placeholder={descriptionEnLng || t('loc:Vysvetlite, čo služba zahŕňa')}
+													placeholder={t('loc:Vysvetlite, čo služba zahŕňa')}
 													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
 													showLettersCount
 													name={'enLanguage'}
@@ -380,9 +366,11 @@ const ServiceForm: FC<Props> = (props) => {
 											</p>
 											<p className={'mb-2'}>{t('loc:Na zapnutie online rezervácie je najprv potrebné splniť a mať uložené nasledujúce')}:</p>
 											<ul className={'p-0 list-none'}>
-												<li className={'flex items-start gap-3'}>
-													{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
-												</li>
+												{!ignoreDurationCheck && (
+													<li className={'flex items-start gap-3'}>
+														{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
+													</li>
+												)}
 												<li className={'flex items-start gap-3'}>
 													{getConditionIcon(hasPriceFilledIn)}
 													{t('loc:Zadať cenu')}

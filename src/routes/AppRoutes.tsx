@@ -78,7 +78,7 @@ import MSRedirectPage from '../pages/MSRedirectPage/MSRedirectPage'
 
 // My documents page
 import MyDocumentsPage from '../pages/MyDocumentsPage/MyDocumentsPage'
-import MyDocumentPage from '../pages/MyDocumentsPage/MyDocumenPage'
+import MyDocumentPage from '../pages/MyDocumentsPage/MyDocumentPage'
 
 import AppInit from '../components/AppInit'
 

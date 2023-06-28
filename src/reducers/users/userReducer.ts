@@ -1,9 +1,9 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
-import { IUserActions, IUsersPayload, IPendingInvitesPayload, INotinoUsersPayload } from './userActions'
+import { IUserActions, IUsersPayload, IPendingInvitesPayload, INotinoUsersPayload, IUserDocumentsPayload } from './userActions'
 import { ILoadingAndFailure, IAuthUserPayload, IUserPayload } from '../../types/interfaces'
-import { AUTH_USER, USERS, USER, PENDING_INVITES, NOTINO_USERS } from './userTypes'
+import { AUTH_USER, USERS, USER, PENDING_INVITES, NOTINO_USERS, USER_DOCUMENTS } from './userTypes'
 
 export const initState = {
 	authUser: {
@@ -30,7 +30,12 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as INotinoUsersPayload & ILoadingAndFailure
+	} as INotinoUsersPayload & ILoadingAndFailure,
+	userDocuments: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IUserDocumentsPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -158,6 +163,31 @@ export default (state = initState, action: IUserActions) => {
 				...state,
 				pendingInvites: {
 					...initState.pendingInvites,
+					data: action.payload.data
+				}
+			}
+		// user documents
+		case USER_DOCUMENTS.USER_DOCUMENTS_LOAD_START:
+			return {
+				...state,
+				userDocuments: {
+					...state.userDocuments,
+					isLoading: true
+				}
+			}
+		case USER_DOCUMENTS.USER_DOCUMENTS_LOAD_FAIL:
+			return {
+				...state,
+				userDocuments: {
+					...initState.userDocuments,
+					isFailure: true
+				}
+			}
+		case USER_DOCUMENTS.USER_DOCUMENTS_LOAD_DONE:
+			return {
+				...state,
+				userDocuments: {
+					...initState.userDocuments,
 					data: action.payload.data
 				}
 			}

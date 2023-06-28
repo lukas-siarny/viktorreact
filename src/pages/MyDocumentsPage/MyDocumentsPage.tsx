@@ -1,82 +1,45 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin } from 'antd'
-import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
+import { Row, Spin } from 'antd'
 import { useNavigate } from 'react-router'
 import { ColumnProps } from 'antd/es/table'
+import { useDispatch, useSelector } from 'react-redux'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
+import { formatDateByLocale } from '../../utils/helper'
 
 // assets
 import { ReactComponent as DocumentIcon } from '../../assets/icons/document-icon.svg'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, MyDocumentDetail } from '../../types/interfaces'
 import CustomTable from '../../components/CustomTable'
-
-type TableDataItem = any
+import { RootState } from '../../reducers'
+import { getUserDocuments } from '../../reducers/users/userActions'
+import DocumentDetail from './components/DocumentDetail'
 
 const commonBadgeSyles = 'text-xs leading-4 font-medium h-6 px-2 inline-flex items-center truncate rounded-full'
 
 const MyDocumentsPage = () => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
-	const isLoading = false
+	const [documentDetail, setDocumentDetail] = useState<MyDocumentDetail | null>(null)
 
-	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
-		if (!(sorter instanceof Array)) {
-			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
-			/* const newQuery = {
-				...query,
-				order
-			}
-			setQuery(newQuery) */
+	const authUser = useSelector((state: RootState) => state.user.authUser)
+	const userDocuments = useSelector((state: RootState) => state.user.userDocuments)
+
+	useEffect(() => {
+		if (authUser?.data?.id) {
+			dispatch(getUserDocuments(authUser.data.id))
 		}
-	}
+	}, [dispatch, authUser?.data?.id])
 
-	const onChangePagination = (page: number, limit: number) => {
-		/* const newQuery = {
-			...query,
-			limit,
-			page
-		}
-		setQuery(newQuery) */
-	}
-
-	const dataSource = [
-		{
-			id: 'sdsds',
-			name: 'Ochrana osobných údajov',
-			state: new Date().toISOString(),
-			validFrom: new Date().toISOString()
-		},
-		{
-			id: 'sdsdssds',
-			name: 'Ochrana osobných údajov',
-			state: new Date().toISOString(),
-			validFrom: new Date().toISOString()
-		},
-		{
-			id: 'sdsdssdsd',
-			name: 'Ochrana osobných údajov',
-			state: new Date().toISOString(),
-			validFrom: new Date().toISOString()
-		},
-		{
-			id: 'sdsdssdsdsd',
-			name: 'Ochrana osobných údajov',
-			state: new Date().toISOString(),
-			validFrom: new Date().toISOString()
-		}
-	]
-
-	const columns: ColumnProps<TableDataItem>[] = [
+	const columns: ColumnProps<MyDocumentDetail>[] = [
 		{
 			title: t('loc:Názov dokumentu'),
 			dataIndex: 'name',
@@ -94,73 +57,95 @@ const MyDocumentsPage = () => {
 		},
 		{
 			title: t('loc:Stav'),
-			dataIndex: 'state',
-			key: 'state',
+			dataIndex: 'readAt',
+			key: 'readAt',
 			width: '40%',
 			ellipsis: true,
-			render: () => {
-				const isNew = Math.random() > 0.5
+			render: (_value, record) => {
+				const isNew = !record.readAt
 
 				return isNew ? (
 					<span className={`${commonBadgeSyles} bg-notino-pink text-notino-white`}>{t('loc:Nové')}</span>
 				) : (
-					<span className={`${commonBadgeSyles} bg-notino-grayLighter text-notino-gray-darker`}>{formatDateByLocale(new Date())}</span>
+					<span className={`${commonBadgeSyles} bg-notino-grayLighter text-notino-gray-darker`}>{formatDateByLocale(record.readAt)}</span>
 				)
 			}
 		},
 		{
 			title: t('loc:Platnosť od'),
-			dataIndex: 'validFrom',
-			key: 'validFrom',
+			dataIndex: 'createdAt',
+			key: 'createdAt',
 			align: 'right',
 			width: '20%',
 			ellipsis: true,
-			render: () => {
-				return <span className={'text-notino-grayDark'}>{formatDateByLocale(new Date(), true)}</span>
+			render: (_value, record) => {
+				return <span className={'text-notino-grayDark'}>{formatDateByLocale(record.createdAt, true)}</span>
 			}
 		}
 	]
 
 	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Dokumenty')
-			}
-		]
+		items: documentDetail
+			? [
+					{
+						name: t('loc:Dokumenty'),
+						link: t('paths:my-documents'),
+						action: () => setDocumentDetail(null)
+					},
+					{
+						name: documentDetail.name
+					}
+			  ]
+			: [{ name: t('loc:Dokumenty') }]
 	}
 
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
+				{documentDetail ? (
+					<Breadcrumbs
+						breadcrumbs={{
+							items: [
+								{
+									name: t('loc:Dokumenty'),
+									link: t('paths:my-documents'),
+									action: () => setDocumentDetail(null)
+								},
+								{
+									name: documentDetail.name
+								}
+							]
+						}}
+						backButtonPath={t('paths:my-documents')}
+						defaultBackButtonAction={() => setDocumentDetail(null)}
+					/>
+				) : (
+					<Breadcrumbs breadcrumbs={{ items: [{ name: t('loc:Dokumenty') }] }} backButtonPath={t('paths:index')} />
+				)}
 			</Row>
 
-			<div className='content-body medium no-padding overflow-hidden'>
-				<Spin spinning={isLoading}>
-					<CustomTable
-						className='table-my-documents'
-						onChange={onChangeTable}
-						columns={columns}
-						dataSource={dataSource}
-						rowClassName={'clickable-row'}
-						rowKey='id'
-						onRow={(record) => ({
-							onClick: () => {
-								navigate(t('paths:my-documents/{{documentID}}', { documentID: record.id }))
-							}
-						})}
-						pagination={false}
-						/* useCustomPagination
-								pagination={{
-									pageSize: customers?.data?.pagination?.limit,
-									total: customers?.data?.pagination?.totalCount,
-									current: customers?.data?.pagination?.page,
-									disabled: customers?.isLoading,
-									onChange: onChangePagination
-								}} */
-					/>
-				</Spin>
-			</div>
+			{documentDetail ? (
+				<DocumentDetail data={documentDetail} isLoading={userDocuments.isLoading} />
+			) : (
+				<div className='content-body medium no-padding overflow-hidden'>
+					<Spin spinning={userDocuments.isLoading}>
+						<CustomTable
+							className='table-my-documents'
+							columns={columns}
+							dataSource={userDocuments.data?.documents}
+							rowClassName={'clickable-row'}
+							rowKey='id'
+							onRow={(record) => ({
+								onClick: () => {
+									setDocumentDetail(record)
+									// navigate(t('paths:my-documents/{{documentID}}', { documentID: record.id }))
+								}
+							})}
+							pagination={false}
+						/>
+					</Spin>
+				</div>
+			)}
 		</>
 	)
 }

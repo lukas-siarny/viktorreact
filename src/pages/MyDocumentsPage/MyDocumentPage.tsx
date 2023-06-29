@@ -14,7 +14,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import { ReactComponent as AttachIcon } from '../../assets/icons/attach-icon.svg'
 import { formatDateByLocale } from '../../utils/helper'
 import { RootState } from '../../reducers'
-import { getUserDocuments } from '../../reducers/users/userActions'
+import { getCurrentUser, getUserDocuments } from '../../reducers/users/userActions'
 import { patchReq } from '../../utils/request'
 
 const MyDocumentPage = () => {
@@ -72,7 +72,10 @@ const MyDocumentPage = () => {
 		if (documentID && userID) {
 			try {
 				await patchReq('/api/b2b/admin/users/{userID}/documents/{documentID}/mark-as-read', { userID, documentID }, { fileIDs: [fileID] })
-				dispatch(getUserDocuments(userID))
+				// refresh documents to prevent another markAsRead action for already read document
+				await dispatch(getUserDocuments(userID))
+				// refresh current user to update badge in My profile menu
+				dispatch(getCurrentUser())
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -86,7 +89,7 @@ const MyDocumentPage = () => {
 				return <Result status='500' subTitle={<span className={'text-notino-black'}>{t('loc:Ups niečo sa pokazilo')}</span>} />
 			}
 			case 'not_found': {
-				return <Result status='500' subTitle={<span className={'text-notino-black'}>{t('loc:Ľutejeme! zvolený dokument neexistuje')}</span>} />
+				return <Result status='500' subTitle={<span className={'text-notino-black'}>{t('loc:Ľutejeme, zvolený dokument neexistuje')}</span>} />
 			}
 			case 'success':
 			default: {
@@ -125,7 +128,7 @@ const MyDocumentPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:my-documents')} />
 			</Row>
-			<Spin spinning={authUser.isLoading || isLoading}>
+			<Spin spinning={isLoading}>
 				<div className='content-body medium'>{renderContent()}</div>
 			</Spin>
 		</>

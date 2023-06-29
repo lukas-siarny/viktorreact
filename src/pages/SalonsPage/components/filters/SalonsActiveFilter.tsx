@@ -64,16 +64,16 @@ import SwitchField from '../../../../atoms/SwitchField'
 import useMedia from '../../../../hooks/useMedia'
 
 // schema
-import { ISalonsPageURLQueryParams } from '../../../../schemas/queryParams'
+import { ISalonsActivePageURLQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
 	onImportSalons: () => void
 	onDownloadReport: () => void
-	query: ISalonsPageURLQueryParams
+	hasAssignedUserId?: boolean
 }
 
-export type ISalonsFilterActive = Pick<
-	ISalonsPageURLQueryParams,
+export type ISalonsActiveFilter = Pick<
+	ISalonsActivePageURLQueryParams,
 	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType'
 > & {
 	dateFromTo: {
@@ -82,7 +82,7 @@ export type ISalonsFilterActive = Pick<
 	}
 }
 
-type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonsActiveFilter, ComponentProps> & ComponentProps
 
 const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
@@ -102,8 +102,8 @@ export const checkSalonFiltersSize = (formValues: any) =>
 		})
 	)
 
-const SalonsFilterActive = (props: Props) => {
-	const { handleSubmit, onImportSalons, onDownloadReport, query } = props
+const SalonsActiveFilter = (props: Props) => {
+	const { handleSubmit, onImportSalons, onDownloadReport, hasAssignedUserId } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -554,7 +554,7 @@ const SalonsFilterActive = (props: Props) => {
 								allowInfinityScroll
 								allowClear
 								filterOption={false}
-								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
+								onDidMountSearch={firstRender.current && hasAssignedUserId}
 							/>
 						</Col>
 					</Row>
@@ -574,6 +574,6 @@ const form = reduxForm({
 		}
 	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
-})(SalonsFilterActive)
+})(SalonsActiveFilter)
 
 export default form

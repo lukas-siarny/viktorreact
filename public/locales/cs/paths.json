@@ -41,6 +41,7 @@
   "salons/create": "/salons/create",
   "salons/deleted": "/salons/deleted",
   "salons/rejected": "/salons/rejected",
+  "salons/to-check": "/salons/to-check",
   "salons/{{salonID}}": "/salons/{{salonID}}",
   "salons/{{salonID}}/calendar": "/salons/{{salonID}}/calendar",
   "salons/{{salonID}}/history": "/salons/{{salonID}}/history",
@@ -54,6 +55,7 @@
   "support-contacts": "/support-contacts",
   "support-contacts/create": "/support-contacts/create",
   "support-contacts/{{supportContactID}}": "/support-contacts/{{supportContactID}}",
+  "to-check": "to-check",
   "users": "/users",
   "users/create": "/users/create",
   "users/{{userID}}": "/users/{{userID}}"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Row, Spin } from 'antd'
 import { useNavigate } from 'react-router'
@@ -19,7 +19,6 @@ import { IBreadcrumbs, MyDocumentDetail } from '../../types/interfaces'
 import CustomTable from '../../components/CustomTable'
 import { RootState } from '../../reducers'
 import { getUserDocuments } from '../../reducers/users/userActions'
-import DocumentDetail from './components/DocumentDetail'
 
 const commonBadgeSyles = 'text-xs leading-4 font-medium h-6 px-2 inline-flex items-center truncate rounded-full'
 
@@ -27,8 +26,6 @@ const MyDocumentsPage = () => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-
-	const [documentDetail, setDocumentDetail] = useState<MyDocumentDetail | null>(null)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const userDocuments = useSelector((state: RootState) => state.user.userDocuments)
@@ -85,67 +82,32 @@ const MyDocumentsPage = () => {
 	]
 
 	const breadcrumbs: IBreadcrumbs = {
-		items: documentDetail
-			? [
-					{
-						name: t('loc:Dokumenty'),
-						link: t('paths:my-documents'),
-						action: () => setDocumentDetail(null)
-					},
-					{
-						name: documentDetail.name
-					}
-			  ]
-			: [{ name: t('loc:Dokumenty') }]
+		items: [{ name: t('loc:Dokumenty') }]
 	}
 
 	return (
 		<>
 			<Row>
-				{documentDetail ? (
-					<Breadcrumbs
-						breadcrumbs={{
-							items: [
-								{
-									name: t('loc:Dokumenty'),
-									link: t('paths:my-documents'),
-									action: () => setDocumentDetail(null)
-								},
-								{
-									name: documentDetail.name
-								}
-							]
-						}}
-						backButtonPath={t('paths:my-documents')}
-						defaultBackButtonAction={() => setDocumentDetail(null)}
-					/>
-				) : (
-					<Breadcrumbs breadcrumbs={{ items: [{ name: t('loc:Dokumenty') }] }} backButtonPath={t('paths:index')} />
-				)}
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
 
-			{documentDetail ? (
-				<DocumentDetail data={documentDetail} isLoading={userDocuments.isLoading} />
-			) : (
-				<div className='content-body medium no-padding overflow-hidden'>
-					<Spin spinning={userDocuments.isLoading}>
-						<CustomTable
-							className='table-my-documents'
-							columns={columns}
-							dataSource={userDocuments.data?.documents}
-							rowClassName={'clickable-row'}
-							rowKey='id'
-							onRow={(record) => ({
-								onClick: () => {
-									setDocumentDetail(record)
-									// navigate(t('paths:my-documents/{{documentID}}', { documentID: record.id }))
-								}
-							})}
-							pagination={false}
-						/>
-					</Spin>
-				</div>
-			)}
+			<div className='content-body medium no-padding overflow-hidden'>
+				<Spin spinning={userDocuments.isLoading}>
+					<CustomTable
+						className='table-my-documents'
+						columns={columns}
+						dataSource={userDocuments.data?.documents}
+						rowClassName={'clickable-row'}
+						rowKey='id'
+						onRow={(record) => ({
+							onClick: () => {
+								navigate(t('paths:my-documents/{{documentID}}', { documentID: record.id }))
+							}
+						})}
+						pagination={false}
+					/>
+				</Spin>
+			</div>
 		</>
 	)
 }

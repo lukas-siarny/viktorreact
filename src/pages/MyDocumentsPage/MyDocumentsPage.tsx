@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
+import CustomTable from '../../components/CustomTable'
 
 // utils
 import { formatDateByLocale } from '../../utils/helper'
@@ -16,8 +17,9 @@ import { ReactComponent as DocumentIcon } from '../../assets/icons/document-icon
 
 // types
 import { IBreadcrumbs, MyDocumentDetail } from '../../types/interfaces'
-import CustomTable from '../../components/CustomTable'
 import { RootState } from '../../reducers'
+
+// redux
 import { getUserDocuments } from '../../reducers/users/userActions'
 
 const commonBadgeSyles = 'text-xs leading-4 font-medium h-6 px-2 inline-flex items-center truncate rounded-full'

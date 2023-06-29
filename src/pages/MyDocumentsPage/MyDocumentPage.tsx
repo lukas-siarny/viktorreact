@@ -6,16 +6,20 @@ import { useParams } from 'react-router-dom'
 
 // types
 import { IBreadcrumbs, MyDocumentDetail } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // assets
 import { ReactComponent as AttachIcon } from '../../assets/icons/attach-icon.svg'
+
+// utils
 import { formatDateByLocale } from '../../utils/helper'
-import { RootState } from '../../reducers'
-import { getCurrentUser, getUserDocuments } from '../../reducers/users/userActions'
 import { patchReq } from '../../utils/request'
+
+// redux
+import { getCurrentUser, getUserDocuments } from '../../reducers/users/userActions'
 
 const MyDocumentPage = () => {
 	const [t] = useTranslation()

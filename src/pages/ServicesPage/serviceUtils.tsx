@@ -416,22 +416,18 @@ const getHasPriceFilledIn = (values?: IServiceForm) => {
 
 const getHasDurationFilledIn = (values?: IServiceForm) => {
 	if (values?.useCategoryParameter) {
+		if (values?.serviceCategoryParameterType === PARAMETER_TYPE.TIME) {
+			return values?.serviceCategoryParameter?.some((parameterValue) => parameterValue.useParameter)
+		}
 		return values?.serviceCategoryParameter?.some((parameterValue) => parameterValue.useParameter && hasDuration(parameterValue))
 	}
 	return hasDuration({ durationFrom: values?.durationFrom, durationTo: values?.durationTo, variableDuration: values?.variableDuration })
 }
 
-export const checkConditions = (values?: IServiceForm, ignoreDuration = false): { hasDurationFilledIn?: boolean; hasPriceFilledIn: boolean; hasEmployee: boolean } => {
-	const result = {
-		hasPriceFilledIn: getHasPriceFilledIn(values),
-		hasEmployee: !!values?.employees.length
-	}
-
-	if (ignoreDuration) {
-		return result
-	}
+export const checkConditions = (values?: IServiceForm): { hasDurationFilledIn?: boolean; hasPriceFilledIn: boolean; hasEmployee: boolean } => {
 	return {
-		...result,
+		hasPriceFilledIn: getHasPriceFilledIn(values),
+		hasEmployee: !!values?.employees.length,
 		hasDurationFilledIn: getHasDurationFilledIn(values)
 	}
 }

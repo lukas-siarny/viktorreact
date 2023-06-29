@@ -130,6 +130,7 @@ const AppRoutes: FC = () => {
 					<Route index element={<SalonsPage tabKey={SALONS_TAB_KEYS.ACTIVE} />} />
 					<Route path={t('paths:deleted')} element={<SalonsPage tabKey={SALONS_TAB_KEYS.DELETED} />} />
 					<Route path={t('paths:rejected')} element={<SalonsPage tabKey={SALONS_TAB_KEYS.MISTAKES} />} />
+					<Route path={t('paths:to-check')} element={<SalonsPage tabKey={SALONS_TAB_KEYS.TO_CHECK} />} />
 					<Route path={t('paths:createEntity')} element={<SalonPage salonID={NEW_SALON_ID} />} />
 				</Route>
 				{/* // Salon view */}

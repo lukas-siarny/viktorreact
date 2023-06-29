@@ -47,19 +47,28 @@ const salonsQueryParamsSchema = searchableSchema.extend({
 	statuses_all: z.boolean().nullish(),
 	statuses_published: z.enum([SALON_FILTER_STATES.PUBLISHED, SALON_FILTER_STATES.NOT_PUBLISHED]).nullish(),
 	statuses_changes: z.enum([SALON_FILTER_STATES.PENDING_PUBLICATION, SALON_FILTER_STATES.DECLINED]).nullish(),
-	countryCode: z.string().nullish(),
+	countryCode: twoCharsConstraint.nullish(),
 	createType: z.nativeEnum(SALON_CREATE_TYPE).nullish(),
 	lastUpdatedAtFrom: z.string().nullish(),
 	lastUpdatedAtTo: z.string().nullish(),
 	hasSetOpeningHours: z.nativeEnum(SALON_FILTER_OPENING_HOURS).nullish(),
 	sourceType: z.nativeEnum(SALON_SOURCE_TYPE).nullish(),
-	assignedUserID: z.string().nullish(),
+	assignedUserID: uuidConstraint.nullish(),
 	premiumSourceUserType: z.nativeEnum(SALON_SOURCE_TYPE).nullish(),
 	hasAvailableReservationSystem: z.nativeEnum(SALON_FILTER_RS_AVAILABLE_ONLINE).nullish(),
 	enabledReservationsSetting: z.nativeEnum(SALON_FILTER_RS).nullish(),
 	walletAvailableBalanceFrom: z.number().nullish(),
 	walletAvailableBalanceTo: z.number().nullish(),
 	salonState: z.nativeEnum(SALONS_TAB_KEYS).nullish()
+})
+
+const salonsToCheckQueryParamsSchema = searchableSchema.omit({ order: true }).extend({
+	statuses_all: z.boolean().nullish(),
+	statuses_published: z.enum([SALON_FILTER_STATES.PUBLISHED, SALON_FILTER_STATES.NOT_PUBLISHED]).nullish(),
+	statuses_changes: z.enum([SALON_FILTER_STATES.PENDING_PUBLICATION, SALON_FILTER_STATES.DECLINED]).nullish(),
+	countryCode: twoCharsConstraint.nullish(),
+	createType: z.nativeEnum(SALON_CREATE_TYPE).nullish(),
+	assignedUserID: uuidConstraint.nullish()
 })
 
 const salonHistoryQueryParamsSchema = paginationSchema.omit({ order: true }).extend({
@@ -69,10 +78,11 @@ const salonHistoryQueryParamsSchema = paginationSchema.omit({ order: true }).ext
 })
 
 export type IGetSalonsHistoryQueryParams = z.infer<typeof salonHistoryQueryParamsSchema>
+export type IGetSalonsToCheckQueryParams = z.infer<typeof salonsToCheckQueryParamsSchema>
 export type IGetSalonsQueryParams = z.infer<typeof salonsQueryParamsSchema>
 
 // url query params
-export const salonsPageURLQueryParamsSchema = salonsQueryParamsSchema.pick({
+export const salonsActivePageURLQueryParamsSchema = salonsQueryParamsSchema.pick({
 	page: true,
 	limit: true,
 	order: true,
@@ -90,9 +100,21 @@ export const salonsPageURLQueryParamsSchema = salonsQueryParamsSchema.pick({
 	assignedUserID: true,
 	premiumSourceUserType: true,
 	hasAvailableReservationSystem: true,
-	enabledReservationsSetting: true,
-	salonState: true
+	enabledReservationsSetting: true
 })
+
+export const salonsDeletedPageURLQueryParamsSchema = salonsQueryParamsSchema.pick({
+	page: true,
+	limit: true,
+	order: true,
+	search: true,
+	categoryFirstLevelIDs: true,
+	countryCode: true
+})
+
+export const salonsToCheckPageURLQueryParamsSchema = salonsToCheckQueryParamsSchema
+
+export const salonsRejectedSuggestionsPageURLQueryParamsSchema = searchableSchema
 
 export const rechargeSmsCreditAdminPageSchema = salonsQueryParamsSchema
 	.pick({
@@ -111,9 +133,12 @@ export const rechargeSmsCreditAdminPageSchema = salonsQueryParamsSchema
 
 export const salonHistoryPageURLQueryParamsSchema = salonHistoryQueryParamsSchema.omit({ salonID: true })
 
-export type ISalonsPageURLQueryParams = z.infer<typeof salonsPageURLQueryParamsSchema>
+export type ISalonsActivePageURLQueryParams = z.infer<typeof salonsActivePageURLQueryParamsSchema>
+export type ISalonsDeletedPageURLQueryParams = z.infer<typeof salonsDeletedPageURLQueryParamsSchema>
+export type ISalonsRejectedSuggestionsPageURLQueryParams = z.infer<typeof salonsRejectedSuggestionsPageURLQueryParamsSchema>
 export type IRechargeSmsCreditAdminPageURLQueryParams = z.infer<typeof rechargeSmsCreditAdminPageSchema>
 export type ISalonHistoryPageURLQueryParams = z.infer<typeof salonHistoryPageURLQueryParamsSchema>
+export type ISalonToCheckPageURLQueryParams = z.infer<typeof salonsToCheckPageURLQueryParamsSchema>
 
 /**
  * Calendar

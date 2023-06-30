@@ -32,7 +32,8 @@ import {
 	STRINGS,
 	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_TIME_FORMAT,
-	CALENDAR_VIEW
+	CALENDAR_VIEW,
+	RESERVATION_STATE
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
 
@@ -58,7 +59,7 @@ type Props = {
 	onCloseSider: () => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE) => any
+	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE, isReservationCanceled?: boolean) => any
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	calendarApi?: CalendarApi
@@ -338,10 +339,16 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 									onClick={() => {
 										if (hasPermission) {
 											if (eventDetail.data?.id) {
+												const isReservationCanceled =
+													eventDetail?.data?.reservationData?.state === RESERVATION_STATE.CANCEL_BY_CUSTOMER ||
+													eventDetail?.data?.reservationData?.state === RESERVATION_STATE.CANCEL_BY_SALON ||
+													eventDetail?.data?.reservationData?.state === RESERVATION_STATE.DECLINED
+
 												handleDeleteEvent(
 													eventDetail.data?.id,
 													eventDetail.data?.calendarBulkEvent?.id,
-													eventDetail?.data?.eventType as CALENDAR_EVENT_TYPE
+													eventDetail?.data?.eventType as CALENDAR_EVENT_TYPE,
+													isReservationCanceled
 												)
 											}
 										} else {

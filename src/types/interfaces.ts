@@ -618,6 +618,7 @@ export type ConfirmModalDeleteEventData = {
 	eventId: string
 	calendarBulkEventID?: string
 	eventType?: CALENDAR_EVENT_TYPE
+	isReservationCanceled?: boolean
 }
 
 export type ConfirmModalUpdateReservationData = {

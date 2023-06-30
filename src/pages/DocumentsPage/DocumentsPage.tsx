@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { ColumnsType } from 'antd/lib/table'
 import { useNavigate } from 'react-router'
-import { initialize } from 'redux-form'
+import { destroy, initialize } from 'redux-form'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -173,6 +173,7 @@ const DocumentsPage = () => {
 				assetType: values?.assetType.value as ASSET_TYPE
 			})
 			setVisible(false)
+			dispatch(destroy(FORM.DOCUMENTS_FORM))
 			dispatch(getDocuments(query))
 		} catch (e) {
 			// eslint-disable-next-line no-console

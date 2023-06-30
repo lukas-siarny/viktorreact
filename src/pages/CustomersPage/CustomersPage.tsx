@@ -106,7 +106,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const columns: Columns = [
 		{
 			title: t('loc:Meno'),
-			dataIndex: 'lastlName',
+			dataIndex: 'lastName',
 			key: 'lastName',
 			ellipsis: true,
 			sorter: true,

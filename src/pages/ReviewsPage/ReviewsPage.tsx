@@ -131,7 +131,7 @@ const ReviewsPage = () => {
 			page: 1
 		}
 		// update selected country globally based on filter
-		dispatch(setSelectedCountry(values?.salonCountryCode))
+		dispatch(setSelectedCountry(values?.salonCountryCode || undefined))
 		setQuery(newQuery)
 	}
 

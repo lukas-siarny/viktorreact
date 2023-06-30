@@ -63,7 +63,6 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const formValues = form?.values as IServiceForm
-	const initialFormValues = (form as any)?.initial as IServiceForm
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
@@ -76,8 +75,9 @@ const ServiceForm: FC<Props> = (props) => {
 	const variableDuration = formValues?.variableDuration
 	const variablePrice = formValues?.variablePrice
 
-	const { hasDurationFilledIn, hasPriceFilledIn, hasEmployee } = checkConditions(initialFormValues)
-	const disabledRsSettings = !(hasDurationFilledIn && hasPriceFilledIn && hasEmployee)
+	const { hasDurationFilledIn, hasPriceFilledIn, hasEmployee } = checkConditions(formValues)
+
+	const disabledRsSettings = !(hasPriceFilledIn && hasEmployee && hasDurationFilledIn)
 
 	const onConfirmDelete = async () => {
 		if (isRemoving || !serviceID) {
@@ -361,11 +361,11 @@ const ServiceForm: FC<Props> = (props) => {
 											<p className={'mb-2'}>{t('loc:Na zapnutie online rezervácie je najprv potrebné splniť a mať uložené nasledujúce')}:</p>
 											<ul className={'p-0 list-none'}>
 												<li className={'flex items-start gap-3'}>
-													{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
-												</li>
-												<li className={'flex items-start gap-3'}>
 													{getConditionIcon(hasPriceFilledIn)}
 													{t('loc:Zadať cenu')}
+												</li>
+												<li className={'flex items-start gap-3'}>
+													{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
 												</li>
 												<li className={'flex items-start gap-3'}>
 													{getConditionIcon(hasEmployee)}

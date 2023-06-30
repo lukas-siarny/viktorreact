@@ -7,37 +7,41 @@ import { initialize } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
 
 // components
-import CustomTable from '../../../components/CustomTable'
-import RejectedSuggestionsFilter from './filters/RejectedSuggestionsFilter'
+import CustomTable from '../../components/CustomTable'
+import SalonsRejectedSuggestionsFilter from './components/filters/SalonsRejectedSuggestionsFilter'
 
 // utils
-import { FORM, ROW_BUTTON_WITH_ID, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
-import { formFieldID, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../../utils/helper'
-import { deleteReq } from '../../../utils/request'
+import { FORM, ROW_BUTTON_WITH_ID, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { formFieldID, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { deleteReq } from '../../utils/request'
 
 // reducers
-import { RootState } from '../../../reducers'
-import { getRejectedSuggestions } from '../../../reducers/salons/salonsActions'
+import { RootState } from '../../reducers'
+import { getRejectedSuggestions } from '../../reducers/salons/salonsActions'
 
 // types
-import { Columns, ISearchFilter } from '../../../types/interfaces'
+import { Columns, ISearchFilter } from '../../types/interfaces'
 
 // assets
-import { ReactComponent as IconCheck } from '../../../assets/icons/checker-icon.svg'
+import { ReactComponent as IconCheck } from '../../assets/icons/checker-icon.svg'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
-const RejectedSalonSuggestions = () => {
-	const [t] = useTranslation()
-	const navigate = useNavigate()
-	const dispatch = useDispatch()
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('userLastName:ASC')
+// schema
+import { salonsRejectedSuggestionsPageURLQueryParamsSchema } from '../../schemas/queryParams'
+import { SalonsPageCommonProps } from './components/salonUtils'
+
+type Props = SalonsPageCommonProps & {}
+
+const SalonsRejectedSuggestionsPage: React.FC<Props> = (props) => {
+	const { dispatch, t, navigate } = props
+
+	const [query, setQuery] = useQueryParams(salonsRejectedSuggestionsPageURLQueryParamsSchema, {
+		page: 1,
+		order: 'userLastName:ASC'
 	})
+
 	const salons = useSelector((state: RootState) => state.salons.rejectedSuggestions)
 	const [submitting, setSubmitting] = useState(false)
 
@@ -185,7 +189,7 @@ const RejectedSalonSuggestions = () => {
 			<Col span={24}>
 				<div className='content-body'>
 					<Spin spinning={loading}>
-						<RejectedSuggestionsFilter onSubmit={handleSubmit} total={salons?.data?.pagination?.totalCount} />
+						<SalonsRejectedSuggestionsFilter onSubmit={handleSubmit} total={salons?.data?.pagination?.totalCount} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}
@@ -215,4 +219,4 @@ const RejectedSalonSuggestions = () => {
 		</Row>
 	)
 }
-export default RejectedSalonSuggestions
+export default SalonsRejectedSuggestionsPage

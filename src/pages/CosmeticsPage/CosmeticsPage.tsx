@@ -181,7 +181,7 @@ const CosmeticsPage = () => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === query.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

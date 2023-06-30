@@ -50,7 +50,7 @@ const ActiveEmployeesTable = (props: Props) => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === activeEmployees?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

@@ -129,7 +129,7 @@ const SmsUnitPricesDetailPage = () => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === smsUnitPrices?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

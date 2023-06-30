@@ -164,7 +164,7 @@ const ReservationsPage = (props: Props) => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === reservations?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

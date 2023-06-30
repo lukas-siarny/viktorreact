@@ -119,7 +119,7 @@ const ReviewsPage = () => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === reviews?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

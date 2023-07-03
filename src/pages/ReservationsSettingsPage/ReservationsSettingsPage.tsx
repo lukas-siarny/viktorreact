@@ -10,7 +10,16 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE } from '../../utils/enums'
+import {
+	EXCLUDED_NOTIFICATIONS_B2B,
+	EXCLUDED_SMS_NOTIFICATIONS_FOR_B2C,
+	FORM,
+	NOTIFICATION_TYPES,
+	PERMISSION,
+	ROW_GUTTER_X_DEFAULT,
+	RS_NOTIFICATION,
+	RS_NOTIFICATION_TYPE
+} from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
@@ -29,11 +38,7 @@ import {
 	SalonSubPageProps
 } from '../../types/interfaces'
 
-const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
-
 const NOTIFICATIONS = Object.keys(RS_NOTIFICATION) as RS_NOTIFICATION[]
-
-const disabledSmsNotificationsForB2C = [RS_NOTIFICATION.RESERVATION_AWAITING_APPROVAL, RS_NOTIFICATION.RESERVATION_CANCELLED]
 
 type InitDisabledNotifications = {
 	[key in RS_NOTIFICATION]: IReservationsSettingsNotification
@@ -68,10 +73,10 @@ const getNotificationFormName = (notification?: string) => {
 }
 
 const setDefualtNotification = (rsType: RS_NOTIFICATION) => {
-	const hasDisabledSMS = includes(disabledSmsNotificationsForB2C, rsType)
+	const hasExcludedSMSNotification = includes(EXCLUDED_SMS_NOTIFICATIONS_FOR_B2C, rsType)
 	// NOTE: vyfiltruje SMS pre B2b vsetky + B2C channel podla rsType. Treba zabezpecit ze odstrani cez compact aj undefined hodnoty lebo switch by takuto hodnotu vyrenderoval ako false
 	return {
-		b2cChannels: compact(NOTIFICATION_TYPES.map((type) => (type === RS_NOTIFICATION_TYPE.SMS && hasDisabledSMS ? undefined : { [type]: true }))),
+		b2cChannels: compact(NOTIFICATION_TYPES.map((type) => (type === RS_NOTIFICATION_TYPE.SMS && hasExcludedSMSNotification ? undefined : { [type]: true }))),
 		b2bChannels: compact(
 			NOTIFICATION_TYPES.flatMap((type) => (EXCLUDED_NOTIFICATIONS_B2B.includes(type) ? [] : [type === RS_NOTIFICATION_TYPE.SMS ? undefined : { [type]: true }]))
 		)
@@ -88,7 +93,7 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 		const notificationFormName = getNotificationFormName(item.eventType)
 		if (notificationFormName) {
 			if (isB2CChannel) {
-				const hasDisabledSMS = includes(disabledSmsNotificationsForB2C, notificationFormName)
+				const hasExcludedSMSNotification = includes(EXCLUDED_SMS_NOTIFICATIONS_FOR_B2C, notificationFormName)
 				return {
 					...data,
 					[notificationFormName]: {
@@ -96,7 +101,7 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 						b2bChannels: data[notificationFormName]?.b2bChannels || setDefualtNotification(notificationFormName).b2bChannels,
 						b2cChannels: compact(
 							NOTIFICATION_TYPES.map((type) =>
-								type === RS_NOTIFICATION_TYPE.SMS && hasDisabledSMS ? undefined : { [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }
+								type === RS_NOTIFICATION_TYPE.SMS && hasExcludedSMSNotification ? undefined : { [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }
 							)
 						)
 					}

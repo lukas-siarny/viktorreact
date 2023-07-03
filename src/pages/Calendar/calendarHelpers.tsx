@@ -34,9 +34,13 @@ import {
 	CALENDAR_VIEW,
 	CANCEL_TOKEN_MESSAGES,
 	DAY,
+	EXCLUDED_NOTIFICATIONS_B2B,
+	EXCLUDED_SMS_NOTIFICATIONS_FOR_B2C,
 	MONTHLY_RESERVATIONS_KEY,
 	NEW_ID_PREFIX,
-	NOTIFICATION_TYPES
+	NOTIFICATION_TYPES,
+	RS_NOTIFICATION,
+	RS_NOTIFICATION_TYPE
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 import { cancelGetTokens } from '../../utils/request'
@@ -273,6 +277,10 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
  *  Return base notification text including information whether employee, customer, both or none of them will be notified
  *
  */
+
+// common notifications types
+const commonNotificationTypes = [RS_NOTIFICATION_TYPE.PUSH, RS_NOTIFICATION_TYPE.EMAIL]
+
 export const getConfirmModalText = (
 	baseNotificationText: string,
 	disabledNotificationTypesToCheck: CALENDAR_DISABLED_NOTIFICATION_TYPE[],
@@ -283,15 +291,31 @@ export const getConfirmModalText = (
 	let isCustomerNotified = !ignoreCustomerNotification
 	let isEmployeeNotified = !ignoreEmployeeNotification
 
-	if (ignoreCustomerNotification && ignoreEmployeeNotification) {
+	if (!ignoreCustomerNotification || !ignoreEmployeeNotification) {
 		disabledNotificationTypesToCheck.forEach((notificationToCheck) => {
 			const disabledNotificationSource = disabledNotificationsSource?.find((notificationSource) => notificationSource.eventType === notificationToCheck)
-			// when array length is equal to NOTIFICATION_TYPES length it means all notifications are disabled for entity
-			if (disabledNotificationSource && disabledNotificationSource?.channels?.length === NOTIFICATION_TYPES.length) {
-				if (disabledNotificationSource?.eventType?.endsWith('CUSTOMER')) {
+
+			let notificationTypesLength = commonNotificationTypes.length
+
+			if (disabledNotificationSource && disabledNotificationSource.eventType?.endsWith('CUSTOMER')) {
+				// not all notification event types get SMS notification
+				if (!EXCLUDED_SMS_NOTIFICATIONS_FOR_B2C.includes(disabledNotificationSource.eventType as RS_NOTIFICATION)) {
+					notificationTypesLength += 1
+				}
+				// when array length is equal to notificationTypesLength it means all notifications are disabled for entity
+				if (disabledNotificationSource?.channels?.length === notificationTypesLength) {
 					isCustomerNotified = false
 				}
-				if (disabledNotificationSource?.eventType?.endsWith('EMPLOYEE')) {
+			}
+
+			// employees don't get SMS notification at all
+			if (disabledNotificationSource?.eventType?.endsWith('EMPLOYEE')) {
+				// when array length is equal to notificationTypesLength it means all notifications are disabled for entity
+				// or when the notification event type is excluded from notifications
+				if (
+					EXCLUDED_NOTIFICATIONS_B2B.includes(disabledNotificationSource.eventType as RS_NOTIFICATION) ||
+					disabledNotificationSource?.channels?.length === notificationTypesLength
+				) {
 					isEmployeeNotified = false
 				}
 			}

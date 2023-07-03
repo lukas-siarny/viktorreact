@@ -278,8 +278,8 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
  *
  */
 
-// common notifications types
-const commonNotificationTypes = [RS_NOTIFICATION_TYPE.PUSH, RS_NOTIFICATION_TYPE.EMAIL]
+// notificationTypesLength
+let notificationTypesLength = Object.keys(RS_NOTIFICATION_TYPE).length
 
 export const getConfirmModalText = (
 	baseNotificationText: string,
@@ -295,12 +295,10 @@ export const getConfirmModalText = (
 		disabledNotificationTypesToCheck.forEach((notificationToCheck) => {
 			const disabledNotificationSource = disabledNotificationsSource?.find((notificationSource) => notificationSource.eventType === notificationToCheck)
 
-			let notificationTypesLength = commonNotificationTypes.length
-
 			if (disabledNotificationSource && disabledNotificationSource.eventType?.endsWith('CUSTOMER')) {
 				// not all notification event types get SMS notification
-				if (!EXCLUDED_SMS_NOTIFICATIONS_FOR_B2C.includes(disabledNotificationSource.eventType as RS_NOTIFICATION)) {
-					notificationTypesLength += 1
+				if (EXCLUDED_SMS_NOTIFICATIONS_FOR_B2C.includes(disabledNotificationSource.eventType as RS_NOTIFICATION)) {
+					notificationTypesLength -= 1
 				}
 				// when array length is equal to notificationTypesLength it means all notifications are disabled for entity
 				if (disabledNotificationSource?.channels?.length === notificationTypesLength) {
@@ -308,8 +306,9 @@ export const getConfirmModalText = (
 				}
 			}
 
-			// employees don't get SMS notification at all
 			if (disabledNotificationSource?.eventType?.endsWith('EMPLOYEE')) {
+				// employees don't get SMS notification at all
+				notificationTypesLength -= 1
 				// when array length is equal to notificationTypesLength it means all notifications are disabled for entity
 				// or when the notification event type is excluded from notifications
 				if (

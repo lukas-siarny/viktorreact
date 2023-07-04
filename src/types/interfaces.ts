@@ -694,3 +694,5 @@ export type MSRedirectMessage = {
 	status: 'idle' | 'success' | 'error' | 'loading'
 	messages?: IErrorMessage[]
 }
+
+export type MyDocumentDetail = Paths.GetApiB2BAdminUsersUserIdDocuments.Responses.$200['documents'][0]

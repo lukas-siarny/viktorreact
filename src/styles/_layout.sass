@@ -221,13 +221,14 @@ $inner-padding: 16px
 // Content
 .content-body
 	background: $backgroundColor-white
-	padding: 24px
 	margin-top: 8px
 	border-radius: 4px
 	// box-shadow: $boxShadow-xl
 	box-shadow: $content-box-shadow
 	margin-bottom: 24px
 	width: 100%
+	&:not(.no-padding)
+		padding: 24px
 	&.floating // cena sirka aj vyska bez marginov / paddingov so sedym pozadim na ktore idu biele formy a ine informacie (eg: dokoncenie-rezervacie)
 		min-height: calc(100vh - #{$header-height} - 80px - 56px) // 100vh - header - breadcrumbs - footer
 		margin-bottom: 0
@@ -252,10 +253,11 @@ $inner-padding: 16px
 		padding: 0 0 16px 0
 		background: transparent
 		box-shadow: none
-	> .ant-spin-nested-loading
-		margin: -24px
-		> .ant-spin-container
-			padding: 24px
+	&:not(.no-padding)
+		> .ant-spin-nested-loading
+			margin: -24px
+			> .ant-spin-container
+				padding: 24px
 	@media (max-width: 1700px)
 		&.small
 			width: 75%

@@ -157,7 +157,6 @@
 					button.noti-table-btn
 						visibility: hidden
 						transition: none
-
 				&.disable-hover-row
 					cursor: auto
 					&:hover
@@ -297,9 +296,30 @@
 							transform: translateX(-32px)
 							width: calc(100% + 32px)
 
-.ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody >tr:last-child>td
-	border: none
 
+	&.table-my-documents
+		table
+			border-spacing: 0
+			thead
+				tr
+					th
+						height: 40px
+						&:first-of-type
+							padding-left: 48px
+						&:last-of-type
+							padding-right: 48px
+			tbody
+				tr.ant-table-row
+					height: 64px
+					td
+						border-radius: 0
+						&:first-of-type
+							padding-left: 12px
+						&:last-of-type
+							padding-right: 48px
+					&:not(:last-of-type)
+						td
+							border-bottom: 1px solid $borderColor-notino-grayLighter
 .table-footer-custom-pagination
 	position: sticky
 	bottom: 0

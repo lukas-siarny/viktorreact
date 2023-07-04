@@ -76,6 +76,10 @@ import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReserv
 // MS redirect page
 import MSRedirectPage from '../pages/MSRedirectPage/MSRedirectPage'
 
+// My documents page
+import MyDocumentsPage from '../pages/MyDocumentsPage/MyDocumentsPage'
+import MyDocumentPage from '../pages/MyDocumentsPage/MyDocumentPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403, Error pages
@@ -122,6 +126,10 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:my-account')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_ACCOUNT} />}>
 					<Route index element={<MyProfilePage />} />
+				</Route>
+				<Route errorElement={<ErrorBoundary />} path={t('paths:my-documents')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_DOCUMENTS} />}>
+					<Route index element={<MyDocumentsPage />} />
+					<Route path={':documentID'} element={<MyDocumentPage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:activation')} element={<AuthRoute layout={MainLayout} page={PAGE.ACTIVATION} />}>
 					<Route index element={<ActivationPage />} />

@@ -6,7 +6,7 @@ import { get, map, flatten, uniq, includes } from 'lodash'
 // types
 import { ThunkResult } from '../index'
 import { IJwtPayload, ISelectOptionItem, ISearchable, IAuthUserPayload, IUserPayload } from '../../types/interfaces'
-import { AUTH_USER, USER, USERS, PENDING_INVITES, NOTINO_USERS } from './userTypes'
+import { AUTH_USER, USER, USERS, PENDING_INVITES, NOTINO_USERS, USER_DOCUMENTS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 import { IGetUsersQueryParams } from '../../schemas/queryParams'
@@ -22,7 +22,7 @@ import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
 import { setSelectedCountry } from '../selectedCountry/selectedCountryActions'
 import { NOT_ALLOWED_REDIRECT_PATHS } from '../../utils/enums'
 
-export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites | IGetNotinoUsers
+export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites | IGetNotinoUsers | IGetUserDocuments
 
 interface IGetAuthUser {
 	type: AUTH_USER
@@ -49,12 +49,21 @@ interface IGetPendingInvites {
 	payload: IPendingInvitesPayload
 }
 
+interface IGetUserDocuments {
+	type: USER_DOCUMENTS
+	payload: IUserDocumentsPayload
+}
+
 export interface IUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsers.Responses.$200> {}
 
 export interface INotinoUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200> {}
 
 export interface IPendingInvitesPayload {
 	data: Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200 | null
+}
+
+export interface IUserDocumentsPayload {
+	data: Paths.GetApiB2BAdminUsersUserIdDocuments.Responses.$200 | null
 }
 
 export const processAuthorizationResult =
@@ -271,6 +280,29 @@ export const getPendingInvites =
 			dispatch({ type: PENDING_INVITES.PENDING_INVITES_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: PENDING_INVITES.PENDING_INVITES_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getUserDocuments =
+	(userID: string): ThunkResult<Promise<IUserDocumentsPayload>> =>
+	// eslint-disable-next-line consistent-return
+	async (dispatch) => {
+		let payload = {} as IUserDocumentsPayload
+		try {
+			dispatch({ type: USER_DOCUMENTS.USER_DOCUMENTS_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/users/{userID}/documents/', { userID })
+
+			payload = {
+				data
+			}
+
+			dispatch({ type: USER_DOCUMENTS.USER_DOCUMENTS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: USER_DOCUMENTS.USER_DOCUMENTS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

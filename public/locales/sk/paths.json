@@ -28,6 +28,8 @@
   "login": "/login",
   "loyalty-program": "/loyalty-program",
   "my-account": "/my-account",
+  "my-documents": "/my-documents",
+  "my-documents/{{documentID}}": "/my-documents/{{documentID}}",
   "recharge": "recharge",
   "rejected": "rejected",
   "reservations": "/reservations",

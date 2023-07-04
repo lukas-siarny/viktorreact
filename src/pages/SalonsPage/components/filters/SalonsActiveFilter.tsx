@@ -28,9 +28,7 @@ import {
 	FORM,
 	PERMISSION,
 	ROW_GUTTER_X_M,
-	SALON_CREATE_TYPE,
 	SALON_FILTER_OPENING_HOURS,
-	SALON_FILTER_STATES,
 	SALON_SOURCE_TYPE,
 	FILTER_ENTITY,
 	CHANGE_DEBOUNCE_TIME,
@@ -52,7 +50,7 @@ import {
 } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import searchWrapper from '../../../../utils/filters'
-import { getCheckerIcon } from '../salonUtils'
+import { getCategoryThirdLevelIDsOptions, getCheckerIcon, publisedSalonOptions, salonChangesOptions, salonCreateTypesOptions } from '../salonUtils'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
@@ -69,12 +67,12 @@ import { ISalonsActivePageURLQueryParams } from '../../../../schemas/queryParams
 type ComponentProps = {
 	onImportSalons: () => void
 	onDownloadReport: () => void
-	hasAssignedUserId?: boolean
+	query: ISalonsActivePageURLQueryParams
 }
 
-export type ISalonsActiveFilter = Pick<
+export type ISalonsFilterActive = Pick<
 	ISalonsActivePageURLQueryParams,
-	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType'
+	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType' | 'categoryThirdLevelIDs'
 > & {
 	dateFromTo: {
 		dateFrom: string
@@ -82,7 +80,7 @@ export type ISalonsActiveFilter = Pick<
 	}
 }
 
-type Props = InjectedFormProps<ISalonsActiveFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps
 
 const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
@@ -102,8 +100,8 @@ export const checkSalonFiltersSize = (formValues: any) =>
 		})
 	)
 
-const SalonsActiveFilter = (props: Props) => {
-	const { handleSubmit, onImportSalons, onDownloadReport, hasAssignedUserId } = props
+const SalonsFilterActive = (props: Props) => {
+	const { handleSubmit, onImportSalons, onDownloadReport, query } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -126,27 +124,6 @@ const SalonsActiveFilter = (props: Props) => {
 		[dispatch]
 	)
 
-	const publishedOptions = useMemo(
-		() => [
-			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, tagClassName: 'bg-status-published' },
-			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, tagClassName: 'bg-status-notPublished' }
-		],
-		[t]
-	)
-
-	const changesOptions = useMemo(
-		() => [
-			{
-				label: t('loc:Na schválenie'),
-				value: SALON_FILTER_STATES.PENDING_PUBLICATION,
-				key: SALON_FILTER_STATES.PENDING_PUBLICATION,
-				tagClassName: 'bg-status-pending'
-			},
-			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, tagClassName: 'bg-status-declined' }
-		],
-		[t]
-	)
-
 	const premiumSourceOptions = useMemo(
 		() => [
 			{ label: t('loc:Notino'), value: SALON_SOURCE_TYPE.NOTINO, key: SALON_SOURCE_TYPE.NOTINO, tagClassName: 'bg-source-notino' },
@@ -158,14 +135,6 @@ const SalonsActiveFilter = (props: Props) => {
 	const sourceOptions = useMemo(
 		() => [...premiumSourceOptions, { label: t('loc:Import'), value: SALON_SOURCE_TYPE.IMPORT, key: SALON_SOURCE_TYPE.IMPORT, tagClassName: 'bg-source-import' }],
 		[t, premiumSourceOptions]
-	)
-
-	const createTypesOptions = useMemo(
-		() => [
-			{ label: t('loc:BASIC'), value: SALON_CREATE_TYPE.BASIC, key: SALON_CREATE_TYPE.BASIC, tagClassName: 'bg-status-basic' },
-			{ label: t('loc:PREMIUM'), value: SALON_CREATE_TYPE.NON_BASIC, key: SALON_CREATE_TYPE.NON_BASIC, tagClassName: 'bg-status-premium' }
-		],
-		[t]
 	)
 
 	const openingHoursOptions = useMemo(
@@ -388,9 +357,7 @@ const SalonsActiveFilter = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									filterOptions
-									onDidMountSearch
-									options={publishedOptions}
+									options={publisedSalonOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -402,9 +369,7 @@ const SalonsActiveFilter = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									filterOptions
-									onDidMountSearch
-									options={changesOptions}
+									options={salonChangesOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -416,9 +381,7 @@ const SalonsActiveFilter = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									filterOptions
-									onDidMountSearch
-									options={createTypesOptions}
+									options={salonCreateTypesOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -436,30 +399,46 @@ const SalonsActiveFilter = (props: Props) => {
 								placeholder={t('loc:Krajina')}
 								allowClear
 								size={'large'}
-								filterOptions
-								onDidMountSearch
 								options={countries?.enumerationsOptions}
 								loading={countries?.isLoading}
 								disabled={countries?.isLoading}
 							/>
 						</Col>
-						<Col span={5}>
+						<Col span={10}>
 							<Field
 								component={SelectField}
-								name={'categoryFirstLevelIDs'}
-								mode={'multiple'}
 								placeholder={t('loc:Odvetvie')}
-								allowClear
+								name={'categoryFirstLevelIDs'}
 								size={'large'}
-								filterOptions
-								onDidMountSearch
-								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
-								options={categories?.enumerationsOptions}
+								mode={'multiple'}
+								showSearch
 								loading={categories?.isLoading}
 								disabled={categories?.isLoading}
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+								allowClear
+								filterOption
+								options={categories?.enumerationsOptions}
 							/>
 						</Col>
-						<Col span={5}>
+						<Col span={10}>
+							<Field
+								component={SelectField}
+								placeholder={t('loc:Služby')}
+								name={'categoryThirdLevelIDs'}
+								mode={'multiple'}
+								size={'large'}
+								showSearch
+								loading={categories?.isLoading}
+								disabled={categories?.isLoading}
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+								allowClear
+								filterOption
+								options={getCategoryThirdLevelIDsOptions(categories.data)}
+							/>
+						</Col>
+					</Row>
+					<Row gutter={ROW_GUTTER_X_M}>
+						<Col span={6}>
 							<Field
 								component={SelectField}
 								name={'sourceType'}
@@ -467,13 +446,11 @@ const SalonsActiveFilter = (props: Props) => {
 								className={'select-with-tag-options'}
 								allowClear
 								size={'large'}
-								filterOptions
-								onDidMountSearch
 								options={sourceOptions}
 								optionRender={optionRenderWithTag}
 							/>
 						</Col>
-						<Col span={5}>
+						<Col span={6}>
 							<Field
 								component={SelectField}
 								name={'premiumSourceUserType'}
@@ -481,13 +458,61 @@ const SalonsActiveFilter = (props: Props) => {
 								className={'select-with-tag-options'}
 								allowClear
 								size={'large'}
-								filterOptions
-								onDidMountSearch
 								options={premiumSourceOptions}
 								optionRender={optionRenderWithTag}
 							/>
 						</Col>
-						<Col span={5}>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'enabledReservationsSetting'}
+								placeholder={t('loc:Rezervačný systém')}
+								allowClear
+								size={'large'}
+								options={rsOptions}
+								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'hasAvailableReservationSystem'}
+								placeholder={t('loc:Dostupné pre online rezervácie')}
+								allowClear
+								size={'large'}
+								options={rsAvailableOnlineOptions}
+								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+							/>
+						</Col>
+					</Row>
+					<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_M}>
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								name={'hasSetOpeningHours'}
+								placeholder={t('loc:Otváracie hodiny')}
+								allowClear
+								size={'large'}
+								filterOption
+								options={openingHoursOptions}
+							/>
+						</Col>
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								placeholder={t('loc:Priradený Notino používateľ')}
+								name={'assignedUserID'}
+								size={'large'}
+								showSearch
+								onSearch={searchNotinoUsers}
+								loading={notinoUsers.isLoading}
+								allowInfinityScroll
+								allowClear
+								filterOption={false}
+								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
+							/>
+						</Col>
+						<Col span={8}>
 							<Field
 								className={'w-full'}
 								rangePickerClassName={'w-full'}
@@ -500,61 +525,6 @@ const SalonsActiveFilter = (props: Props) => {
 								dropdownAlign={{ points: ['tr', 'br'] }}
 								allowEmpty={[false, false]}
 								size={'large'}
-							/>
-						</Col>
-					</Row>
-					<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_M}>
-						<Col span={6}>
-							<Field
-								component={SelectField}
-								name={'enabledReservationsSetting'}
-								placeholder={t('loc:Rezervačný systém')}
-								allowClear
-								size={'large'}
-								filterOptions
-								onDidMountSearch
-								options={rsOptions}
-								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
-							/>
-						</Col>
-						<Col span={6}>
-							<Field
-								component={SelectField}
-								name={'hasAvailableReservationSystem'}
-								placeholder={t('loc:Dostupné pre online rezervácie')}
-								allowClear
-								size={'large'}
-								filterOptions
-								onDidMountSearch
-								options={rsAvailableOnlineOptions}
-								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
-							/>
-						</Col>
-						<Col span={6}>
-							<Field
-								component={SelectField}
-								name={'hasSetOpeningHours'}
-								placeholder={t('loc:Otváracie hodiny')}
-								allowClear
-								size={'large'}
-								filterOptions
-								onDidMountSearch
-								options={openingHoursOptions}
-							/>
-						</Col>
-						<Col span={6}>
-							<Field
-								component={SelectField}
-								placeholder={t('loc:Priradený Notino používateľ')}
-								name={'assignedUserID'}
-								size={'large'}
-								showSearch
-								onSearch={searchNotinoUsers}
-								loading={notinoUsers.isLoading}
-								allowInfinityScroll
-								allowClear
-								filterOption={false}
-								onDidMountSearch={firstRender.current && hasAssignedUserId}
 							/>
 						</Col>
 					</Row>
@@ -574,6 +544,6 @@ const form = reduxForm({
 		}
 	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
-})(SalonsActiveFilter)
+})(SalonsFilterActive)
 
 export default form

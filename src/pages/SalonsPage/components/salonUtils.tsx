@@ -1,5 +1,5 @@
 import React, { Dispatch } from 'react'
-import { isEmpty, map } from 'lodash'
+import { flatten, isEmpty, map } from 'lodash'
 import { Tag, Tooltip, Image } from 'antd'
 import i18next, { TFunction } from 'i18next'
 import { NavigateFunction } from 'react-router'
@@ -12,7 +12,7 @@ import { Paths } from '../../../types/api'
 import { ICategoriesPayload } from '../../../reducers/categories/categoriesActions'
 
 // enums
-import { SALON_STATES, SALON_CREATE_TYPE, SALON_SOURCE_TYPE } from '../../../utils/enums'
+import { SALON_STATES, SALON_CREATE_TYPE, SALON_SOURCE_TYPE, SALON_FILTER_STATES } from '../../../utils/enums'
 
 // components
 import {
@@ -506,3 +506,45 @@ export const getSalonsColumns = (order?: string, categories?: ICategoriesPayload
 	}
 	return tableColumns
 }
+
+export const getCategoryThirdLevelIDsOptions = (categories: ICategoriesPayload['data']) =>
+	flatten(
+		map(categories, (industry) =>
+			map(industry.children, (category) => {
+				return {
+					label: category.name,
+					key: category.id,
+					children: map(category.children, (item) => {
+						return {
+							value: item.id,
+							label: item.name,
+							key: item.id,
+							extra: {
+								image: industry.image?.resizedImages.thumbnail || industry.image?.original
+							}
+						}
+					})
+				}
+			})
+		)
+	)
+
+export const publisedSalonOptions = [
+	{ label: i18next.t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, tagClassName: 'bg-status-published' },
+	{ label: i18next.t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, tagClassName: 'bg-status-notPublished' }
+]
+
+export const salonChangesOptions = [
+	{
+		label: i18next.t('loc:Na schválenie'),
+		value: SALON_FILTER_STATES.PENDING_PUBLICATION,
+		key: SALON_FILTER_STATES.PENDING_PUBLICATION,
+		tagClassName: 'bg-status-pending'
+	},
+	{ label: i18next.t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, tagClassName: 'bg-status-declined' }
+]
+
+export const salonCreateTypesOptions = [
+	{ label: i18next.t('loc:BASIC'), value: SALON_CREATE_TYPE.BASIC, key: SALON_CREATE_TYPE.BASIC, tagClassName: 'bg-status-basic' },
+	{ label: i18next.t('loc:PREMIUM'), value: SALON_CREATE_TYPE.NON_BASIC, key: SALON_CREATE_TYPE.NON_BASIC, tagClassName: 'bg-status-premium' }
+]

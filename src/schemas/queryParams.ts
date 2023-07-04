@@ -43,7 +43,8 @@ export type ISearchableParams = z.infer<typeof searchableSchema>
  */
 // actions query params
 const salonsQueryParamsSchema = searchableSchema.extend({
-	categoryFirstLevelIDs: z.string().array().nullish(),
+	categoryFirstLevelIDs: uuidConstraint.array().nullish(),
+	categoryThirdLevelIDs: uuidConstraint.array().nullish(),
 	statuses_all: z.boolean().nullish(),
 	statuses_published: z.enum([SALON_FILTER_STATES.PUBLISHED, SALON_FILTER_STATES.NOT_PUBLISHED]).nullish(),
 	statuses_changes: z.enum([SALON_FILTER_STATES.PENDING_PUBLICATION, SALON_FILTER_STATES.DECLINED]).nullish(),
@@ -88,6 +89,7 @@ export const salonsActivePageURLQueryParamsSchema = salonsQueryParamsSchema.pick
 	order: true,
 	search: true,
 	categoryFirstLevelIDs: true,
+	categoryThirdLevelIDs: true,
 	statuses_all: true,
 	statuses_published: true,
 	statuses_changes: true,
@@ -109,6 +111,7 @@ export const salonsDeletedPageURLQueryParamsSchema = salonsQueryParamsSchema.pic
 	order: true,
 	search: true,
 	categoryFirstLevelIDs: true,
+	categoryThirdLevelIDs: true,
 	countryCode: true
 })
 

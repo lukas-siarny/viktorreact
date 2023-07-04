@@ -157,6 +157,7 @@ export const getSalons =
 			order: queryParams.order,
 			search: queryParams.search,
 			categoryFirstLevelIDs: queryParams.categoryFirstLevelIDs,
+			categoryThirdLevelIDs: queryParams.categoryThirdLevelIDs,
 			countryCode: queryParams.countryCode,
 			lastUpdatedAtFrom: queryParams.lastUpdatedAtFrom,
 			lastUpdatedAtTo: queryParams.lastUpdatedAtTo,

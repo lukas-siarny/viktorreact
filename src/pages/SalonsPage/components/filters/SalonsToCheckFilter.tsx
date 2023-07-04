@@ -15,19 +15,10 @@ import { RootState } from '../../../../reducers'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-icon.svg'
 
 // utils
-import {
-	ENUMERATIONS_KEYS,
-	FIELD_MODE,
-	FORM,
-	ROW_GUTTER_X_M,
-	SALON_CREATE_TYPE,
-	SALON_FILTER_STATES,
-	FILTER_ENTITY,
-	CHANGE_DEBOUNCE_TIME,
-	VALIDATION_MAX_LENGTH
-} from '../../../../utils/enums'
+import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_M, FILTER_ENTITY, CHANGE_DEBOUNCE_TIME, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { optionRenderWithImage, validationString, optionRenderWithTag } from '../../../../utils/helper'
 import searchWrapper from '../../../../utils/filters'
+import { publisedSalonOptions, salonChangesOptions, salonCreateTypesOptions } from '../salonUtils'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
@@ -38,7 +29,7 @@ import SwitchField from '../../../../atoms/SwitchField'
 import { IGetSalonsToCheckQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
-	hasAssignedUserId?: boolean
+	query: IGetSalonsToCheckQueryParams
 }
 
 export type ISalonsToCheckFilter = Pick<IGetSalonsToCheckQueryParams, 'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'countryCode' | 'createType'> & {
@@ -69,7 +60,7 @@ export const checkSalonFiltersSize = (formValues: any) =>
 	)
 
 const SalonsToCheckFilter = (props: Props) => {
-	const { handleSubmit, hasAssignedUserId } = props
+	const { handleSubmit, query } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -88,35 +79,6 @@ const SalonsToCheckFilter = (props: Props) => {
 			return searchWrapper(dispatch, { page, search, limit: 100 }, FILTER_ENTITY.NOTINO_USER)
 		},
 		[dispatch]
-	)
-
-	const publishedOptions = useMemo(
-		() => [
-			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, tagClassName: 'bg-status-published' },
-			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, tagClassName: 'bg-status-notPublished' }
-		],
-		[t]
-	)
-
-	const changesOptions = useMemo(
-		() => [
-			{
-				label: t('loc:Na schválenie'),
-				value: SALON_FILTER_STATES.PENDING_PUBLICATION,
-				key: SALON_FILTER_STATES.PENDING_PUBLICATION,
-				tagClassName: 'bg-status-pending'
-			},
-			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, tagClassName: 'bg-status-declined' }
-		],
-		[t]
-	)
-
-	const createTypesOptions = useMemo(
-		() => [
-			{ label: t('loc:BASIC'), value: SALON_CREATE_TYPE.BASIC, key: SALON_CREATE_TYPE.BASIC, tagClassName: 'bg-status-basic' },
-			{ label: t('loc:PREMIUM'), value: SALON_CREATE_TYPE.NON_BASIC, key: SALON_CREATE_TYPE.NON_BASIC, tagClassName: 'bg-status-premium' }
-		],
-		[t]
 	)
 
 	const searchInput = useMemo(
@@ -160,7 +122,7 @@ const SalonsToCheckFilter = (props: Props) => {
 									size={'large'}
 									filterOptions
 									onDidMountSearch
-									options={publishedOptions}
+									options={publisedSalonOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -174,7 +136,7 @@ const SalonsToCheckFilter = (props: Props) => {
 									size={'large'}
 									filterOptions
 									onDidMountSearch
-									options={changesOptions}
+									options={salonChangesOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -188,7 +150,7 @@ const SalonsToCheckFilter = (props: Props) => {
 									size={'large'}
 									filterOptions
 									onDidMountSearch
-									options={createTypesOptions}
+									options={salonCreateTypesOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -225,7 +187,7 @@ const SalonsToCheckFilter = (props: Props) => {
 								allowInfinityScroll
 								allowClear
 								filterOption={false}
-								onDidMountSearch={firstRender.current && hasAssignedUserId}
+								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
 							/>
 						</Col>
 					</Row>

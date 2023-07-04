@@ -6,7 +6,7 @@ import { initialize, isPristine } from 'redux-form'
 
 // components
 import CustomTable from '../../components/CustomTable'
-import SalonsActiveFilter, { ISalonsActiveFilter } from './components/filters/SalonsActiveFilter'
+import SalonsActiveFilter, { ISalonsFilterActive } from './components/filters/SalonsActiveFilter'
 import SalonsReportModal, { ALL_COUNTRIES_OPTION } from './components/modals/SalonsReportModal'
 import ImportForm from '../../components/ImportForm'
 
@@ -82,6 +82,7 @@ const SalonsActivePage: React.FC<Props> = (props) => {
 				statuses_published: query.statuses_published,
 				statuses_changes: query.statuses_changes,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+				categoryThirdLevelIDs: query.categoryThirdLevelIDs,
 				countryCode,
 				createType: query.createType,
 				dateFromTo: {
@@ -119,7 +120,8 @@ const SalonsActivePage: React.FC<Props> = (props) => {
 				assignedUserID: query.assignedUserID,
 				hasAvailableReservationSystem: query.hasAvailableReservationSystem,
 				enabledReservationsSetting: query.enabledReservationsSetting,
-				salonState: SALONS_TAB_KEYS.ACTIVE
+				salonState: SALONS_TAB_KEYS.ACTIVE,
+				categoryThirdLevelIDs: query.categoryThirdLevelIDs
 			})
 		)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,10 +145,11 @@ const SalonsActivePage: React.FC<Props> = (props) => {
 		query.assignedUserID,
 		query.hasAvailableReservationSystem,
 		query.enabledReservationsSetting,
+		query.categoryThirdLevelIDs,
 		selectedCountry
 	])
 
-	const handleSubmitActive = (values: ISalonsActiveFilter) => {
+	const handleSubmitActive = (values: ISalonsFilterActive) => {
 		const { dateFromTo, ...restValues } = values
 
 		// update selected country globally based on filter
@@ -223,7 +226,7 @@ const SalonsActivePage: React.FC<Props> = (props) => {
 								onSubmit={handleSubmitActive}
 								onImportSalons={() => setSalonImportsModalVisible(true)}
 								onDownloadReport={() => setSalonsReportModalVisible(true)}
-								hasAssignedUserId={!!query.assignedUserID}
+								query={query}
 							/>
 							<CustomTable
 								className='table-fixed'

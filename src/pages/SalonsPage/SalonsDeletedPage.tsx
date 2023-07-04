@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine } from 'redux-form'
-import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -63,6 +61,7 @@ const SalonsDeletedPage: React.FC<Props> = (props) => {
 			initialize(FORM.SALONS_FILTER_DELETED, {
 				search: query.search,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+				categoryThirdLevelIDs: query.categoryThirdLevelIDs,
 				countryCode
 			})
 		)
@@ -74,11 +73,12 @@ const SalonsDeletedPage: React.FC<Props> = (props) => {
 				order: query.order,
 				countryCode,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+				categoryThirdLevelIDs: query.categoryThirdLevelIDs,
 				salonState: SALONS_TAB_KEYS.DELETED
 			})
 		)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelIDs, query.countryCode, selectedCountry])
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelIDs, query.countryCode, query.categoryThirdLevelIDs, selectedCountry])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {

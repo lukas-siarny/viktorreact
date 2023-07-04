@@ -29,7 +29,7 @@ import SwitchField from '../../../../atoms/SwitchField'
 import { IGetSalonsToCheckQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
-	hasAssignedUserId?: boolean
+	query: IGetSalonsToCheckQueryParams
 }
 
 export type ISalonsToCheckFilter = Pick<IGetSalonsToCheckQueryParams, 'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'countryCode' | 'createType'> & {
@@ -60,7 +60,7 @@ export const checkSalonFiltersSize = (formValues: any) =>
 	)
 
 const SalonsToCheckFilter = (props: Props) => {
-	const { handleSubmit, hasAssignedUserId } = props
+	const { handleSubmit, query } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -187,7 +187,7 @@ const SalonsToCheckFilter = (props: Props) => {
 								allowInfinityScroll
 								allowClear
 								filterOption={false}
-								onDidMountSearch={firstRender.current && hasAssignedUserId}
+								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
 							/>
 						</Col>
 					</Row>

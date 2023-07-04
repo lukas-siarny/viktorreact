@@ -226,7 +226,7 @@ const SalonsActivePage: React.FC<Props> = (props) => {
 								onSubmit={handleSubmitActive}
 								onImportSalons={() => setSalonImportsModalVisible(true)}
 								onDownloadReport={() => setSalonsReportModalVisible(true)}
-								hasAssignedUserId={!!query.assignedUserID}
+								query={query}
 							/>
 							<CustomTable
 								className='table-fixed'

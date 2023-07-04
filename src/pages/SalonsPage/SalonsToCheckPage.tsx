@@ -8,7 +8,7 @@ import { initialize, isPristine } from 'redux-form'
 import { Link } from 'react-router-dom'
 import CustomTable from '../../components/CustomTable'
 
-// utils
+// utils<
 import { FORM, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys } from '../../utils/helper'
 import { SalonsPageCommonProps, getSalonsColumns } from './components/salonUtils'
@@ -172,7 +172,7 @@ const SalonsToCheckPage: React.FC<Props> = (props) => {
 			<Col span={24}>
 				<Spin spinning={salons?.isLoading}>
 					<div className='content-body'>
-						<SalonsToCheckFilter onSubmit={handleSubmitFilter} />
+						<SalonsToCheckFilter onSubmit={handleSubmitFilter} query={query} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}

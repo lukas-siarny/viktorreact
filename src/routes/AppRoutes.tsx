@@ -127,7 +127,7 @@ const AppRoutes: FC = () => {
 				<Route errorElement={<ErrorBoundary />} path={t('paths:my-account')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_ACCOUNT} />}>
 					<Route index element={<MyProfilePage />} />
 				</Route>
-				<Route errorElement={<ErrorBoundary />} path={t('paths:my-documents')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_ACCOUNT} />}>
+				<Route errorElement={<ErrorBoundary />} path={t('paths:my-documents')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_DOCUMENTS} />}>
 					<Route index element={<MyDocumentsPage />} />
 					<Route path={':documentID'} element={<MyDocumentPage />} />
 				</Route>

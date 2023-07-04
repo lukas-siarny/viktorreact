@@ -16,7 +16,8 @@ import { getPendingReservationsCount } from '../../../reducers/calendar/calendar
 // utils
 import { PERMISSION, RESERVATION_STATE, RESERVATIONS_STATE, SALON_STATES } from '../../../utils/enums'
 import Permissions, { checkPermissions } from '../../../utils/Permissions'
-import { handleAuthorizedDownload } from '../../../utils/helper'
+import { arrayBufferToBase64, handleAuthorizedDownload } from '../../../utils/helper'
+import { getReq } from '../../../utils/request'
 
 // components
 import Alert from '../../../components/Dashboards/Alert'
@@ -31,7 +32,6 @@ import { ReactComponent as SettingIcon } from '../../../assets/icons/setting-ico
 import { ReactComponent as DownloadIcon } from '../../../assets/icons/download-icon.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 import { ReactComponent as QrCodeIcon } from '../../../assets/icons/qr-code-icon.svg'
-import qrCodeTemplate from '../../../assets/images/qrcode-big-template.png'
 
 // schema
 import { ISalonReservationsPageURLQueryParams } from '../../../schemas/queryParams'
@@ -71,12 +71,28 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 
 	const getPath = useCallback((pathSuffix: string) => `${basePath}${pathSuffix}`, [basePath])
 
+	const [qrCodeImage, setQrCodeImage] = useState('')
+
 	useEffect(() => {
 		if (selectedSalon?.data?.id) {
 			dispatch(getServices({ salonID: selectedSalon.data.id }, true))
 			dispatch(getCustomers({ salonID: selectedSalon.data.id, page: 1 }))
 			dispatch(getActiveEmployees({ salonID: selectedSalon.data.id, page: 1 }))
 			dispatch(getPendingReservationsCount(selectedSalon.data.id))
+			;(async () => {
+				try {
+					const { data } = await getReq(
+						'/api/b2b/admin/salons/{salonID}/qr-code',
+						{ salonID: selectedSalon?.data?.id as string, type: 'banner', ext: 'png' },
+						{ responseType: 'arraybuffer' }
+					)
+
+					setQrCodeImage(`data:image/png;base64,${arrayBufferToBase64(data)}`)
+				} catch (e) {
+					// eslint-disable-next-line no-console
+					console.error(e)
+				}
+			})()
 		}
 	}, [dispatch, selectedSalon?.data?.id])
 
@@ -151,10 +167,10 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 					)}
 
-					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative h-[420px] overflow-hidden'}>
+					<div className={'w-full bg-notino-white shadow-lg mb-6 p-12 relative lg:min-h-[420px] overflow-hidden'}>
 						<div
 							className='hidden absolute top-0 right-0 h-full lg:block w-[700px] 2xl:w-[920px] bg-contain bg-no-repeat bg-bottom'
-							style={{ backgroundImage: `url(${qrCodeTemplate})` }}
+							style={{ backgroundImage: `url(${qrCodeImage})` }}
 						/>
 						<div className={'w-full lg:w-1/2'}>
 							<h1>{t('loc:Naskenuj a rezervuj!')}</h1>
@@ -166,7 +182,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 									'loc:Po naskenovaní QR kódu sa vaši zákazníci dostanú priamo na váš profil v zákazníckej aplikácii Notino, vďaka čomu si u vás rezervujú termín ešte rýchlejšie a pohodlnejšie.'
 								)}
 							</p>
-							{selectedSalon.data.qrCodes.map((item, index) => (
+							{selectedSalon.data?.qrCodes?.map((item, index) => (
 								<div className={'flex mr-2 flex-wrap'} key={index}>
 									<Button
 										className={'noti-btn w-min mr-2 mb-2'}
@@ -201,7 +217,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 					)}
 					{/* Statistics */}
 					<h2 className='mt-10'>{t('loc:Štatistiky')}</h2>
-					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>
+					<div className='grid grid-cols-2 lg:grid-cols-4 gap-4 3xl:gap-8'>
 						<Statistics
 							title={t('loc:Rezervácie čakajúce na schválenie')}
 							count={pendingReservationsCount.count}

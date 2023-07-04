@@ -62,10 +62,10 @@ const ServiceEditPage = (props: Props) => {
 			navigate('/404')
 		}
 
-		const { data: dataCategory } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
+		const { data: dataCategory, categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
-			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, dataCategory as any, 'categoryParameterValueID')
+			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
 			const descDefaultLng = data.service.descriptionLocalizations.find((v) => v.language === SERVICE_DESCRIPTION_LNG.DEFAULT)
 			const descEnLng = data.service.descriptionLocalizations.find((v) => v.language === SERVICE_DESCRIPTION_LNG.EN)
 

@@ -169,7 +169,7 @@ const storedPreviousParams: any = {
 	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
 }
 
-const RESERVATION_STATES = [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
+export const CALENDAR_ALLOWED_RESERVATION_STATES = [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
 
 export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
 
@@ -401,7 +401,7 @@ export const getCalendarReservations = (
 		{
 			...queryParams,
 			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, RESERVATION_FROM_IMPORT],
-			reservationStates: RESERVATION_STATES
+			reservationStates: CALENDAR_ALLOWED_RESERVATION_STATES
 		},
 		splitMultidayEventsIntoOneDayEvents,
 		clearVirtualEvent,
@@ -451,7 +451,7 @@ export const getCalendarMonthlyViewReservations =
 				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, RESERVATION_FROM_IMPORT],
 				dateFrom: queryParams.start,
 				dateTo: queryParams.end,
-				reservationStates: RESERVATION_STATES
+				reservationStates: CALENDAR_ALLOWED_RESERVATION_STATES
 			}
 
 			dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_START })

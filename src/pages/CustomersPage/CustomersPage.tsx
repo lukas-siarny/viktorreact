@@ -89,7 +89,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === customers?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}
@@ -106,7 +106,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const columns: Columns = [
 		{
 			title: t('loc:Meno'),
-			dataIndex: 'lastlName',
+			dataIndex: 'lastName',
 			key: 'lastName',
 			ellipsis: true,
 			sorter: true,

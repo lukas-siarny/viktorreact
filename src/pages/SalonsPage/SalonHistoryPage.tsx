@@ -109,7 +109,7 @@ const SalonHistoryPage: FC<ComponentProps> = (props) => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === salonHistory?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}
@@ -162,7 +162,7 @@ const SalonHistoryPage: FC<ComponentProps> = (props) => {
 						onChange={onChangePagination}
 						total={salonHistory.data?.pagination.totalCount}
 						showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-						pageSize={salonHistory.data?.pagination.limit || 0}
+						pageSize={salonHistory.data?.pagination.limit || 25}
 						current={salonHistory.data?.pagination.page}
 						showSizeChanger
 						pageSizeOptions={[25, 50, 100, 1000]}

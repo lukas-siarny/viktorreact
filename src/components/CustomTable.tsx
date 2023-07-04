@@ -194,7 +194,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				{...props}
 				columns={columns}
 				loading={loadingWrap}
-				defaultExpandAllRows
 				className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows, 'noti-draggable-table': !!dndDrop })}
 				onRow={onRow}
 				components={componentsWrap}

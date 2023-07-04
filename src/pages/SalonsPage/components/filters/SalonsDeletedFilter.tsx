@@ -24,16 +24,17 @@ import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 
 // schema
-import { ISalonsPageURLQueryParams } from '../../../../schemas/queryParams'
+import { ISalonsDeletedPageURLQueryParams } from '../../../../schemas/queryParams'
+import { getCategoryThirdLevelIDsOptions } from '../salonUtils'
 
 type ComponentProps = {
 	onImportSalons: () => void
 	activeSalons?: boolean
 }
 
-export type ISalonsFilterDeleted = Pick<ISalonsPageURLQueryParams, 'search' | 'categoryFirstLevelIDs' | 'countryCode'>
+export type ISalonsDeletedFilter = Pick<ISalonsDeletedPageURLQueryParams, 'search' | 'categoryFirstLevelIDs' | 'countryCode' | 'categoryThirdLevelIDs'>
 
-type Props = InjectedFormProps<ISalonsFilterDeleted, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonsDeletedFilter, ComponentProps> & ComponentProps
 
 const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
@@ -60,31 +61,6 @@ const SalonsFilterDeleted = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_DELETED])
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-
-	const categoryThirdLevelIDsOptions = useMemo(
-		() =>
-			flatten(
-				map(categories.data, (industry) =>
-					map(industry.children, (category) => {
-						return {
-							label: category.name,
-							key: category.id,
-							children: map(category.children, (item) => {
-								return {
-									value: item.id,
-									label: item.name,
-									key: item.id,
-									extra: {
-										image: industry.image?.resizedImages.thumbnail || industry.image?.original
-									}
-								}
-							})
-						}
-					})
-				)
-			),
-		[categories.data]
-	)
 
 	const searchInput = useMemo(
 		() => (
@@ -147,7 +123,7 @@ const SalonsFilterDeleted = (props: Props) => {
 							disabled={categories?.isLoading}
 							allowClear
 							filterOption
-							options={categoryThirdLevelIDsOptions}
+							options={getCategoryThirdLevelIDsOptions(categories.data)}
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
 						/>
 					</Col>

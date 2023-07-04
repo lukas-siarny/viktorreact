@@ -3,7 +3,7 @@ import React, { useMemo, useCallback, useRef, useEffect } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Dropdown, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { debounce, filter, flatten, isArray, isEmpty, isNil, map, size } from 'lodash'
+import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -52,7 +52,7 @@ import {
 } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import searchWrapper from '../../../../utils/filters'
-import { getCheckerIcon } from '../salonUtils'
+import { getCategoryThirdLevelIDsOptions, getCheckerIcon, publisedSalonOptions, salonChangesOptions, salonCreateTypesOptions } from '../salonUtils'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
@@ -64,16 +64,16 @@ import SwitchField from '../../../../atoms/SwitchField'
 import useMedia from '../../../../hooks/useMedia'
 
 // schema
-import { ISalonsPageURLQueryParams } from '../../../../schemas/queryParams'
+import { ISalonsActivePageURLQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
 	onImportSalons: () => void
 	onDownloadReport: () => void
-	query: ISalonsPageURLQueryParams
+	query: ISalonsActivePageURLQueryParams
 }
 
 export type ISalonsFilterActive = Pick<
-	ISalonsPageURLQueryParams,
+	ISalonsActivePageURLQueryParams,
 	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType' | 'categoryThirdLevelIDs'
 > & {
 	dateFromTo: {
@@ -126,27 +126,6 @@ const SalonsFilterActive = (props: Props) => {
 		[dispatch]
 	)
 
-	const publishedOptions = useMemo(
-		() => [
-			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, tagClassName: 'bg-status-published' },
-			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, tagClassName: 'bg-status-notPublished' }
-		],
-		[t]
-	)
-
-	const changesOptions = useMemo(
-		() => [
-			{
-				label: t('loc:Na schválenie'),
-				value: SALON_FILTER_STATES.PENDING_PUBLICATION,
-				key: SALON_FILTER_STATES.PENDING_PUBLICATION,
-				tagClassName: 'bg-status-pending'
-			},
-			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, tagClassName: 'bg-status-declined' }
-		],
-		[t]
-	)
-
 	const premiumSourceOptions = useMemo(
 		() => [
 			{ label: t('loc:Notino'), value: SALON_SOURCE_TYPE.NOTINO, key: SALON_SOURCE_TYPE.NOTINO, tagClassName: 'bg-source-notino' },
@@ -158,14 +137,6 @@ const SalonsFilterActive = (props: Props) => {
 	const sourceOptions = useMemo(
 		() => [...premiumSourceOptions, { label: t('loc:Import'), value: SALON_SOURCE_TYPE.IMPORT, key: SALON_SOURCE_TYPE.IMPORT, tagClassName: 'bg-source-import' }],
 		[t, premiumSourceOptions]
-	)
-
-	const createTypesOptions = useMemo(
-		() => [
-			{ label: t('loc:BASIC'), value: SALON_CREATE_TYPE.BASIC, key: SALON_CREATE_TYPE.BASIC, tagClassName: 'bg-status-basic' },
-			{ label: t('loc:PREMIUM'), value: SALON_CREATE_TYPE.NON_BASIC, key: SALON_CREATE_TYPE.NON_BASIC, tagClassName: 'bg-status-premium' }
-		],
-		[t]
 	)
 
 	const openingHoursOptions = useMemo(
@@ -200,31 +171,6 @@ const SalonsFilterActive = (props: Props) => {
 			}
 		],
 		[t]
-	)
-
-	const categoryThirdLevelIDsOptions = useMemo(
-		() =>
-			flatten(
-				map(categories.data, (industry) =>
-					map(industry.children, (category) => {
-						return {
-							label: category.name,
-							key: category.id,
-							children: map(category.children, (item) => {
-								return {
-									value: item.id,
-									label: item.name,
-									key: item.id,
-									extra: {
-										image: industry.image?.resizedImages.thumbnail || industry.image?.original
-									}
-								}
-							})
-						}
-					})
-				)
-			),
-		[categories.data]
 	)
 
 	const isLargerScreen = useMedia(['(max-width: 1280px)'], [true], false)
@@ -413,7 +359,7 @@ const SalonsFilterActive = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									options={publishedOptions}
+									options={publisedSalonOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -425,7 +371,7 @@ const SalonsFilterActive = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									options={changesOptions}
+									options={salonChangesOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -437,7 +383,7 @@ const SalonsFilterActive = (props: Props) => {
 									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
-									options={createTypesOptions}
+									options={salonCreateTypesOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
@@ -489,7 +435,7 @@ const SalonsFilterActive = (props: Props) => {
 								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
 								allowClear
 								filterOption
-								options={categoryThirdLevelIDsOptions}
+								options={getCategoryThirdLevelIDsOptions(categories.data)}
 							/>
 						</Col>
 					</Row>

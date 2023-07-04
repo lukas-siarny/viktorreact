@@ -139,7 +139,7 @@ const NotinoReservationsPage = () => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === notinoReservations?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

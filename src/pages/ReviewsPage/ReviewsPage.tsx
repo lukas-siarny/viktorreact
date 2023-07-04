@@ -119,7 +119,7 @@ const ReviewsPage = () => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === reviews?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}
@@ -131,7 +131,7 @@ const ReviewsPage = () => {
 			page: 1
 		}
 		// update selected country globally based on filter
-		dispatch(setSelectedCountry(values?.salonCountryCode))
+		dispatch(setSelectedCountry(values?.salonCountryCode || undefined))
 		setQuery(newQuery)
 	}
 

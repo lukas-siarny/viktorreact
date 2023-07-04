@@ -75,15 +75,9 @@ const ServiceForm: FC<Props> = (props) => {
 	const variableDuration = formValues?.variableDuration
 	const variablePrice = formValues?.variablePrice
 
-	const ignoreDurationCheck = formValues?.serviceCategoryParameterType === PARAMETER_TYPE.TIME && formValues?.useCategoryParameter
-	const { hasDurationFilledIn, hasPriceFilledIn, hasEmployee } = checkConditions(formValues, ignoreDurationCheck)
-	let disabledRsSettings = false
+	const { hasDurationFilledIn, hasPriceFilledIn, hasEmployee } = checkConditions(formValues)
 
-	if (ignoreDurationCheck) {
-		disabledRsSettings = !(hasPriceFilledIn && hasEmployee)
-	} else {
-		disabledRsSettings = !(hasPriceFilledIn && hasEmployee && hasDurationFilledIn)
-	}
+	const disabledRsSettings = !(hasPriceFilledIn && hasEmployee && hasDurationFilledIn)
 
 	const onConfirmDelete = async () => {
 		if (isRemoving || !serviceID) {
@@ -366,14 +360,12 @@ const ServiceForm: FC<Props> = (props) => {
 											</p>
 											<p className={'mb-2'}>{t('loc:Na zapnutie online rezervácie je najprv potrebné splniť a mať uložené nasledujúce')}:</p>
 											<ul className={'p-0 list-none'}>
-												{!ignoreDurationCheck && (
-													<li className={'flex items-start gap-3'}>
-														{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
-													</li>
-												)}
 												<li className={'flex items-start gap-3'}>
 													{getConditionIcon(hasPriceFilledIn)}
 													{t('loc:Zadať cenu')}
+												</li>
+												<li className={'flex items-start gap-3'}>
+													{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
 												</li>
 												<li className={'flex items-start gap-3'}>
 													{getConditionIcon(hasEmployee)}

@@ -41,7 +41,7 @@ const DeletedEmployeesTable = (props: Props) => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === deletedEmployees?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

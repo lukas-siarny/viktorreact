@@ -386,7 +386,7 @@ export type ISmsUnitPricesDetailPageQueryParams = z.infer<typeof smsUnitPricesDe
 const reviewsQueryParamsSchema = searchableSchema.extend({
 	verificationStatus: z.nativeEnum(REVIEW_VERIFICATION_STATUS).optional(),
 	deleted: z.boolean().optional(),
-	salonCountryCode: twoCharsConstraint.optional(),
+	salonCountryCode: twoCharsConstraint.nullish(),
 	toxicityScoreFrom: z.number().optional(),
 	toxicityScoreTo: z.number().optional()
 })

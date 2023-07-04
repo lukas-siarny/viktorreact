@@ -9,7 +9,7 @@ export const reviewSchema = z
 	.object({
 		toxicityScoreFrom: z.number().positive().finite().optional(),
 		toxicityScoreTo: z.number().positive().finite().optional(),
-		salonCountryCode: twoCharsConstraint.optional(),
+		salonCountryCode: twoCharsConstraint.nullish(),
 		search: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255)
 	})
 	.superRefine((values, ctx) => {

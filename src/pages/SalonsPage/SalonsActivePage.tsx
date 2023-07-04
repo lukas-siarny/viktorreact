@@ -178,7 +178,7 @@ const SalonsActivePage: React.FC<Props> = (props) => {
 		const newQuery = {
 			...query,
 			limit,
-			page
+			page: limit === salons?.data?.pagination?.limit ? page : 1
 		}
 		setQuery(newQuery)
 	}

@@ -30,14 +30,11 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 import { ICalendarEventForm } from '../schemas/event'
 import { ICalendarReservationForm } from '../schemas/reservation'
 import {
-	ICalendarPageURLQueryParams, IDocumentsPageURLQueryParams,
+	ICalendarPageURLQueryParams,
 	INotinoReservationsPageURLQueryParams,
-	IRechargeSmsCreditAdminPageURLQueryParams,
-	IReviewsPageURLQueryParams,
 	ISalonReservationsPageURLQueryParams,
 	IServicesPageURLQueryParams
 } from '../schemas/queryParams'
-import { AxiosError } from 'axios'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -659,8 +656,6 @@ export type ISalonReservationsFilter = Omit<ISalonReservationsPageURLQueryParams
 
 export type INotinoReservationsFilter = Omit<INotinoReservationsPageURLQueryParams, 'state' | 'page' | 'limit'>
 
-export type IDocumentsFilter = Omit<IDocumentsPageURLQueryParams, 'order' | 'page' | 'limit'>
-
 export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
 
 export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
@@ -684,6 +679,8 @@ export type IServicesSelectionData = {
 		orderIndex: number
 	}
 }
+
+export type DocumentsActiveKeys = string[]
 
 export interface IIndustryFilter {
 	search?: string

@@ -122,7 +122,7 @@ const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
 
 	return (
 		<CustomTable<IServicesListService>
-			className={cx('table-fixed noti-services-settings-table', { 'disabled-rs': disabledRS })}
+			className={cx('table-fixed noti-collapse-panel-table', { 'disabled-rs': disabledRS })}
 			wrapperClassName={'overflow-hidden'}
 			columns={getTableColumns(t, disabledRS)}
 			dataSource={category.services.data}

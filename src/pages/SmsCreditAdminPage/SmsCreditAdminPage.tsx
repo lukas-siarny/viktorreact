@@ -184,7 +184,7 @@ const SmsCreditAdiminPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<div className='content-body dashboard-content'>
+			<div className='content-body transparent-background'>
 				<div className={'w-full flex justify-end'}>
 					<Permissions
 						allowed={[PERMISSION.NOTINO]}

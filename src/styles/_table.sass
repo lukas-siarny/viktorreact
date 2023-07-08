@@ -224,13 +224,13 @@
 		margin-top: 16px
 		padding: 0
 
-	&.noti-services-settings-table
+	&.noti-collapse-panel-table
 		.ant-table
 			table
 				border-collapse: collapse
 				thead
 					tr
-						th
+						th, td
 							border-bottom: 1px solid $borderColor-notino-gray
 				tbody
 					tr.ant-table-row
@@ -295,8 +295,13 @@
 							padding-left: 0
 							transform: translateX(-32px)
 							width: calc(100% + 32px)
-
-
+	&.bordered
+		.ant-table
+			table
+				tbody
+					tr.ant-table-row
+						&:not(:last-of-type) td
+							border-bottom: 1px solid $borderColor-notino-grayLight
 	&.table-my-documents
 		table
 			border-spacing: 0
@@ -361,3 +366,9 @@
 			@include baseOutlineStyle()
 			&:not(:disabled):focus-visible + .ant-checkbox-inner
 				@include focusOutlineStyle()
+
+.noti-collapse-panel-table-wrapper
+	.table-footer-custom-pagination
+		margin-top: 0
+		width: 100%
+		margin-left: 0

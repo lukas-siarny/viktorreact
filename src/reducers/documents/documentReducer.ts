@@ -2,11 +2,13 @@
 import { RESET_STORE } from '../generalTypes'
 import { IAssetTypesPayload, IDocumentsByAssetTypePayload, IDocumentsActions, IDocumentsPayload } from './documentActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { DOCUMENTS, DOCUMENTS_BY_ASSET_TYPE, ASSET_TYPES } from './documentTypes'
+import { DOCUMENTS, DOCUMENTS_BY_ASSET_TYPE, ASSET_TYPES, SET_DOCUMENTS_ACTIVE_KEYS } from './documentTypes'
 
 export const initState = {
 	documents: {
 		data: null,
+		tableData: null,
+		documentsActiveKeys: [],
 		isLoading: false,
 		isFailure: false
 	} as IDocumentsPayload & ILoadingAndFailure,
@@ -48,7 +50,9 @@ export default (state = initState, action: IDocumentsActions) => {
 				...state,
 				documents: {
 					...initState.documents,
-					data: action.payload.data
+					data: action.payload.data,
+					tableData: action.payload.tableData,
+					documentsActiveKeys: action.payload.documentsActiveKeys
 				}
 			}
 		// Documents by asset type
@@ -100,6 +104,15 @@ export default (state = initState, action: IDocumentsActions) => {
 					...initState.assetTypes,
 					data: action.payload.data,
 					options: action.payload.options
+				}
+			}
+		// set active keys
+		case SET_DOCUMENTS_ACTIVE_KEYS:
+			return {
+				...state,
+				documents: {
+					...state.documents,
+					documentsActiveKeys: action.payload
 				}
 			}
 		case RESET_STORE:

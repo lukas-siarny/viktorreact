@@ -215,8 +215,8 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	)
 
 	return (
-		<div className={'services-setttings-wrapper'}>
-			<div className={'services-setttings-inner-wrapper'}>
+		<div className={'collapsed-tables-list'}>
+			<div className={'collapsed-tables-list-inner-wrapper'}>
 				<Spin spinning={loading} />
 				<Row>
 					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />

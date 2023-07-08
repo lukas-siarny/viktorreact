@@ -1327,3 +1327,27 @@ export const arrayBufferToBase64 = (arrayBuffer: ArrayBuffer): string => {
 	}
 	return window.btoa(binaryString)
 }
+
+export const getRelativeTimeValue = (createdAt?: string) => {
+	if (!createdAt) {
+		return ''
+	}
+
+	let relativeTime = ''
+
+	const diff = dayjs().diff(dayjs(createdAt), 'minute')
+
+	if (diff < 60) {
+		relativeTime = `${diff}${i18next.t('loc:m')}`
+	} else if (diff < 1440) {
+		relativeTime = `${Math.floor(diff / 60)}${i18next.t('loc:h')}`
+	} else if (diff < 10080) {
+		relativeTime = `${Math.floor(diff / 1440)}${i18next.t('loc:d')}`
+	} else if (diff < 525600) {
+		relativeTime = `${Math.floor(diff / 10080)}${i18next.t('loc:t')}`
+	} else {
+		relativeTime = `${Math.floor(diff / 525600)}${i18next.t('loc:r')}`
+	}
+
+	return relativeTime
+}

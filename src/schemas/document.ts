@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-import { stringConstraint, zodErrorsToFormErrors, twoCharsConstraint, selectObjConstraint } from './baseSchema'
-import { VALIDATION_MAX_LENGTH, FORM, ASSET_TYPE, FILE_FILTER_DATA_TYPE } from '../utils/enums'
+import { stringConstraint, zodErrorsToFormErrors, twoCharsConstraint } from './baseSchema'
+import { VALIDATION_MAX_LENGTH, FORM, FILE_FILTER_DATA_TYPE } from '../utils/enums'
 import { ISelectOptionItem } from '../types/interfaces'
 
 export const documentSchema = z.object({
@@ -20,6 +20,7 @@ export type IDocumentForm = z.infer<typeof documentSchema> & {
 	assetType: ISelectOptionItem<{
 		fileType: FILE_FILTER_DATA_TYPE
 		mimeTypes: string[]
+		maxFilesCount: number
 	}>
 }
 

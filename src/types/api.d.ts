@@ -22,6 +22,18 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
         }
+        export interface RequestBody {
+            /**
+             * Enum defining type of calendar
+             * example:
+             * GOOGLE
+             */
+            calendarType: "GOOGLE" | "MICROSOFT";
+            salonIDs: [
+                string,
+                ...string[]
+            ];
+        }
         namespace Responses {
             export interface $200 {
                 messages: {
@@ -49,6 +61,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             customerID: Parameters.CustomerID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -81,6 +95,8 @@ declare namespace Paths {
         export interface PathParameters {
             employeeID: Parameters.EmployeeID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 employee: {
@@ -112,6 +128,8 @@ declare namespace Paths {
         export interface PathParameters {
             categoryID: Parameters.CategoryID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 category: {
@@ -142,6 +160,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             categoryParameterID: Parameters.CategoryParameterID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -176,6 +196,8 @@ declare namespace Paths {
             categoryParameterID: Parameters.CategoryParameterID /* uuid */;
             categoryParameterValueID: Parameters.CategoryParameterValueID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 categoryParameterValue: {
@@ -206,6 +228,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             contactID: Parameters.ContactID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -238,6 +262,8 @@ declare namespace Paths {
         export interface PathParameters {
             cosmeticID: Parameters.CosmeticID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 cosmetic: {
@@ -268,6 +294,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             languageID: Parameters.LanguageID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -300,6 +328,8 @@ declare namespace Paths {
         export interface PathParameters {
             smsUnitPriceID: Parameters.SmsUnitPriceID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 smsUnitPrice: {
@@ -330,6 +360,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             supportContactID: Parameters.SupportContactID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -362,6 +394,8 @@ declare namespace Paths {
         export interface PathParameters {
             reviewID: Parameters.ReviewID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 review?: {
@@ -392,6 +426,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -426,6 +462,8 @@ declare namespace Paths {
             salonID: Parameters.SalonID /* uuid */;
             calendarBulkEventID: Parameters.CalendarBulkEventID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 messages: {
@@ -455,6 +493,8 @@ declare namespace Paths {
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
             calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -486,6 +526,8 @@ declare namespace Paths {
             salonID: Parameters.SalonID /* uuid */;
             calendarEventID: Parameters.CalendarEventID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 messages: {
@@ -514,6 +556,8 @@ declare namespace Paths {
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 messages: {
@@ -541,6 +585,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             serviceID: Parameters.ServiceID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -573,6 +619,8 @@ declare namespace Paths {
         export interface PathParameters {
             userID: Parameters.UserID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 user: {
@@ -604,6 +652,10 @@ declare namespace Paths {
         export interface PathParameters {
             userID: Parameters.UserID /* uuid */;
         }
+        export interface RequestBody {
+            deleteAll: boolean;
+            notificationID?: string /* uuid */ | string /* uuid */ // uuid; // uuid
+        }
         namespace Responses {
             export type $200 = "";
         }
@@ -626,6 +678,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             customerID: Parameters.CustomerID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -658,6 +712,8 @@ declare namespace Paths {
         export interface PathParameters {
             employeeID: Parameters.EmployeeID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 employee: {
@@ -685,6 +741,8 @@ declare namespace Paths {
              */
             Parameters.DeviceID;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export type $200 = "";
         }
@@ -707,6 +765,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -741,6 +801,8 @@ declare namespace Paths {
             salonID: Parameters.SalonID /* uuid */;
             calendarBulkEventID: Parameters.CalendarBulkEventID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 messages: {
@@ -770,6 +832,8 @@ declare namespace Paths {
         export interface PathParameters {
             salonID: Parameters.SalonID /* uuid */;
             calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -801,6 +865,8 @@ declare namespace Paths {
             salonID: Parameters.SalonID /* uuid */;
             calendarEventID: Parameters.CalendarEventID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 messages: {
@@ -828,6 +894,8 @@ declare namespace Paths {
         }
         export interface PathParameters {
             serviceID: Parameters.ServiceID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -860,6 +928,8 @@ declare namespace Paths {
         export interface PathParameters {
             userID: Parameters.UserID /* uuid */;
         }
+        export interface RequestBody {
+        }
         namespace Responses {
             export interface $200 {
                 user: {
@@ -891,6 +961,10 @@ declare namespace Paths {
         export interface PathParameters {
             userID: Parameters.UserID /* uuid */;
         }
+        export interface RequestBody {
+            deleteAll: boolean;
+            notificationID?: string /* uuid */ | string /* uuid */ // uuid; // uuid
+        }
         namespace Responses {
             export type $200 = "";
         }
@@ -909,6 +983,8 @@ declare namespace Paths {
              * 12DXXS
              */
             Parameters.DeviceID;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export type $200 = "";
@@ -1345,7 +1421,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type AssetType = "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
+            export type AssetType = "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2B_HANDBOOK" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
             export type LanguageCode = string;
             export type Limit = number;
             export type Page = number;
@@ -1381,7 +1457,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     })[];
                     assetType: {
-                        key: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
+                        key: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2B_HANDBOOK" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
                         name: string;
                         mimeTypes: string[];
                         fileType: "DOC" | "IMAGE";
@@ -1448,7 +1524,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     })[];
                     assetType: {
-                        key: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
+                        key: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2B_HANDBOOK" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
                         name: string;
                     };
                 }[];
@@ -1475,6 +1551,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type Language = "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
             export type Limit = number;
             /**
              * Order attributes: createdAt
@@ -1485,6 +1562,7 @@ declare namespace Paths {
             export type Page = number;
         }
         export interface QueryParameters {
+            language?: Parameters.Language;
             order?: /**
              * Order attributes: createdAt
              * example:
@@ -1503,6 +1581,16 @@ declare namespace Paths {
                         ...("sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it")[]
                     ];
                     titleLocalizations: [
+                        {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string;
+                        },
+                        ...{
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string;
+                        }[]
+                    ];
+                    contentLocalizations: [
                         {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string;
@@ -1971,6 +2059,7 @@ declare namespace Paths {
                         salons: {
                             id: string; // uuid
                             name?: string;
+                            state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                             logo?: {
                                 id: string; // uuid
                                 original: string;
@@ -2026,10 +2115,11 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 assetTypes: {
-                    key: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
+                    key: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2B_HANDBOOK" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
                     fileType: "DOC" | "IMAGE";
                     name?: string;
                     mimeTypes: string[];
+                    maxFilesCount: number;
                 }[];
             }
         }
@@ -4082,6 +4172,7 @@ declare namespace Paths {
                         note: string;
                     };
                     address?: {
+                        id: string; // uuid
                         /**
                          * example:
                          * SK
@@ -4095,6 +4186,7 @@ declare namespace Paths {
                         longitude?: number; // float
                     };
                     phones: {
+                        id: string; // uuid
                         /**
                          * example:
                          * SK
@@ -4642,6 +4734,7 @@ declare namespace Paths {
                         }?
                     ];
                     companyContactPerson?: {
+                        id: string; // uuid
                         email?: string;
                         firstName?: string;
                         lastName?: string;
@@ -4657,6 +4750,7 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddress?: {
+                        id: string; // uuid
                         /**
                          * example:
                          * SK
@@ -4668,6 +4762,7 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     companyInfo?: {
+                        id: string; // uuid
                         businessID?: string;
                         taxID?: string;
                         vatID?: string;
@@ -4677,6 +4772,7 @@ declare namespace Paths {
                         name?: string;
                         aboutUsFirst?: string;
                         address?: {
+                            id: string; // uuid
                             /**
                              * example:
                              * SK
@@ -4690,6 +4786,7 @@ declare namespace Paths {
                             longitude?: number; // float
                         };
                         phones: {
+                            id: string; // uuid
                             /**
                              * example:
                              * SK
@@ -7186,6 +7283,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -7287,6 +7385,7 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type Limit = number;
+            export type OnlyUnread = boolean;
             export type Page = number;
             export type UserID = string; // uuid
         }
@@ -7296,6 +7395,7 @@ declare namespace Paths {
         export interface QueryParameters {
             limit?: Parameters.Limit;
             page?: Parameters.Page;
+            onlyUnread?: Parameters.OnlyUnread;
         }
         namespace Responses {
             export interface $200 {
@@ -7642,6 +7742,71 @@ declare namespace Paths {
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
+    namespace GetApiB2BV1Documents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type AssetType = "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2B_HANDBOOK" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
+            export type LanguageCode = string;
+            export type Limit = number;
+            export type Page = number;
+        }
+        export interface QueryParameters {
+            languageCode?: Parameters.LanguageCode;
+            assetType?: Parameters.AssetType;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                documents: {
+                    id: string; // uuid
+                    message?: string;
+                    languageCode: string;
+                    createdAt: string; // date-time
+                    files: ({
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        isAutogenerated: boolean;
+                    } | {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    })[];
+                    assetType: {
+                        key: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2B_HANDBOOK" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
+                        name: string;
+                        mimeTypes: string[];
+                        fileType: "DOC" | "IMAGE";
+                    };
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
                 };
             }
         }
@@ -8021,6 +8186,7 @@ declare namespace Paths {
                         salons: {
                             id: string; // uuid
                             name?: string;
+                            state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                             logo?: {
                                 id: string; // uuid
                                 original: string;
@@ -12103,6 +12269,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -12204,6 +12371,7 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type Limit = number;
+            export type OnlyUnread = boolean;
             export type Page = number;
             export type UserID = string; // uuid
         }
@@ -12213,6 +12381,7 @@ declare namespace Paths {
         export interface QueryParameters {
             limit?: Parameters.Limit;
             page?: Parameters.Page;
+            onlyUnread?: Parameters.OnlyUnread;
         }
         namespace Responses {
             export interface $200 {
@@ -13083,6 +13252,7 @@ declare namespace Paths {
                     };
                     languageCode: string;
                 }[];
+                defaultCategoryID?: string; // uuid
             }
         }
     }
@@ -13775,6 +13945,7 @@ declare namespace Paths {
                         message: string;
                     };
                     liked?: boolean;
+                    availableReservationType: "ONLINE_RESERVATION" | "PHONE_RESERVATION";
                 }[];
                 groupedRatings: {
                     ZERO: number;
@@ -13871,6 +14042,7 @@ declare namespace Paths {
                         message: string;
                     };
                     liked?: boolean;
+                    availableReservationType: "ONLINE_RESERVATION" | "PHONE_RESERVATION";
                 }[];
                 likedSalons: {
                     id: string; // uuid
@@ -13927,6 +14099,7 @@ declare namespace Paths {
                         message: string;
                     };
                     liked?: boolean;
+                    availableReservationType: "ONLINE_RESERVATION" | "PHONE_RESERVATION";
                 }[];
             }
         }
@@ -14273,6 +14446,7 @@ declare namespace Paths {
                             message: string;
                         };
                         liked?: boolean;
+                        availableReservationType: "ONLINE_RESERVATION" | "PHONE_RESERVATION";
                     };
                 }[];
             }
@@ -16948,6 +17122,7 @@ declare namespace Paths {
                         message: string;
                     };
                     liked?: boolean;
+                    availableReservationType: "ONLINE_RESERVATION" | "PHONE_RESERVATION";
                 }[];
                 groupedRatings: {
                     ZERO: number;
@@ -17044,6 +17219,7 @@ declare namespace Paths {
                         message: string;
                     };
                     liked?: boolean;
+                    availableReservationType: "ONLINE_RESERVATION" | "PHONE_RESERVATION";
                 }[];
                 likedSalons: {
                     id: string; // uuid
@@ -17100,6 +17276,7 @@ declare namespace Paths {
                         message: string;
                     };
                     liked?: boolean;
+                    availableReservationType: "ONLINE_RESERVATION" | "PHONE_RESERVATION";
                 }[];
             }
         }
@@ -17446,6 +17623,7 @@ declare namespace Paths {
                             message: string;
                         };
                         liked?: boolean;
+                        availableReservationType: "ONLINE_RESERVATION" | "PHONE_RESERVATION";
                     };
                 }[];
             }
@@ -19558,6 +19736,7 @@ declare namespace Paths {
                         salons: {
                             id: string; // uuid
                             name?: string;
+                            state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                             logo?: {
                                 id: string; // uuid
                                 original: string;
@@ -19884,6 +20063,7 @@ declare namespace Paths {
                         salons: {
                             id: string; // uuid
                             name?: string;
+                            state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                             logo?: {
                                 id: string; // uuid
                                 original: string;
@@ -24584,10 +24764,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
             export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID /* uuid */;
+            salonID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -46014,6 +46202,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -46790,6 +46979,7 @@ declare namespace Paths {
                         salons: {
                             id: string; // uuid
                             name?: string;
+                            state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                             logo?: {
                                 id: string; // uuid
                                 original: string;
@@ -47116,6 +47306,7 @@ declare namespace Paths {
                         salons: {
                             id: string; // uuid
                             name?: string;
+                            state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                             logo?: {
                                 id: string; // uuid
                                 original: string;
@@ -62970,6 +63161,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -63569,6 +63761,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -63725,6 +63918,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -64020,7 +64214,7 @@ declare namespace Paths {
              * example:
              * B2B_APP_TERMS_CONDITIONS
              */
-            assetType: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
+            assetType: "B2B_PRIVACY_POLICY" | "B2B_APP_TERMS_CONDITIONS" | "B2B_HANDBOOK" | "B2C_PRIVACY_POLICY" | "B2C_RESERVATIONS_TERMS" | "B2C_PLACEHOLDER_HOMESCREEN";
             /**
              * example:
              * test
@@ -64566,6 +64760,7 @@ declare namespace Paths {
                         salons: {
                             id: string; // uuid
                             name?: string;
+                            state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                             logo?: {
                                 id: string; // uuid
                                 original: string;
@@ -67644,6 +67839,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -67814,6 +68010,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -68999,6 +69196,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -69165,6 +69363,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -69774,6 +69973,7 @@ declare namespace Paths {
                         salons: {
                             id: string; // uuid
                             name?: string;
+                            state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                             logo?: {
                                 id: string; // uuid
                                 original: string;
@@ -72643,6 +72843,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -72813,6 +73014,7 @@ declare namespace Paths {
                     salons: {
                         id: string; // uuid
                         name?: string;
+                        state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                         logo?: {
                             id: string; // uuid
                             original: string;
@@ -73714,6 +73916,11 @@ declare namespace Paths {
                     salonID: string; // uuid
                     customerName: string;
                     cancelReservationToken: string;
+                    icalEvent: {
+                        method: "request" | "cancel";
+                        filename?: string;
+                        content: any;
+                    };
                 } | {
                     date: string;
                     time: string;
@@ -73728,6 +73935,11 @@ declare namespace Paths {
                     salonID: string; // uuid
                     customerName: string;
                     cancelReservationToken: string;
+                    icalEvent: {
+                        method: "request" | "cancel";
+                        filename?: string;
+                        content: any;
+                    };
                 } | {
                     date: string;
                     time: string;
@@ -73747,6 +73959,11 @@ declare namespace Paths {
                     newEmployeeName: string;
                     newNote: string;
                     cancelReservationToken: string;
+                    icalEvent: {
+                        method: "request" | "cancel";
+                        filename?: string;
+                        content: any;
+                    };
                 } | {
                     date: string;
                     time: string;
@@ -73766,6 +73983,11 @@ declare namespace Paths {
                     newEmployeeName: string;
                     newNote: string;
                     cancelReservationToken: string;
+                    icalEvent: {
+                        method: "request" | "cancel";
+                        filename?: string;
+                        content: any;
+                    };
                 } | {
                     date: string;
                     time: string;
@@ -73780,6 +74002,11 @@ declare namespace Paths {
                     salonID: string; // uuid
                     customerName: string;
                     cancelReservationToken: string;
+                    icalEvent: {
+                        method: "request" | "cancel";
+                        filename?: string;
+                        content: any;
+                    };
                 } | {
                     date: string;
                     time: string;
@@ -73794,6 +74021,11 @@ declare namespace Paths {
                     salonID: string; // uuid
                     customerName: string;
                     cancelReservationToken: string;
+                    icalEvent: {
+                        method: "request" | "cancel";
+                        filename?: string;
+                        content: any;
+                    };
                 } | {
                     date: string;
                     time: string;
@@ -73808,6 +74040,11 @@ declare namespace Paths {
                     salonID: string; // uuid
                     customerName: string;
                     cancelReservationToken: string;
+                    icalEvent: {
+                        method: "request" | "cancel";
+                        filename?: string;
+                        content: any;
+                    };
                 } | {
                     date: string;
                     time: string;
@@ -73822,6 +74059,11 @@ declare namespace Paths {
                     salonID: string; // uuid
                     customerName: string;
                     cancelReservationToken: string;
+                    icalEvent: {
+                        method: "request" | "cancel";
+                        filename?: string;
+                        content: any;
+                    };
                 } | {
                     date: string;
                     time: string;
@@ -74075,7 +74317,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
@@ -74115,7 +74357,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEnumsCosmeticsCosmeticId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
   /**
@@ -74155,7 +74397,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEnumsLanguagesLanguageId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
   /**
@@ -74195,7 +74437,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEnumsSupportContactsSupportContactId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
   /**
@@ -74235,7 +74477,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
   /**
@@ -74275,7 +74517,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEnumsContactsContactId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsContactsContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsContactsContactId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEnumsContactsContactId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsContactsContactId.Responses.$200>
   /**
@@ -74339,7 +74581,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.PathParameters & Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
   /**
@@ -74358,6 +74600,22 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminConfig.Responses.$200>
+  /**
+   * getApiB2BAdminDocuments - Endpoint is used for getting an array of documents. It is possible to use pagination., permissions: NO
+   */
+  'getApiB2BAdminDocuments'(
+    parameters?: Parameters<Paths.GetApiB2BAdminDocuments.QueryParameters & Paths.GetApiB2BAdminDocuments.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminDocuments.Responses.$200>
+  /**
+   * postApiB2BAdminDocuments - Endpoint is used for creating document., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
+   */
+  'postApiB2BAdminDocuments'(
+    parameters?: Parameters<Paths.PostApiB2BAdminDocuments.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminDocuments.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminDocuments.Responses.$200>
   /**
    * postApiB2BV1AuthLogin - Endpoint is used for login., permissions: NO
    */
@@ -74523,7 +74781,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1PushNotificationsUnsubscribeDeviceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
   /**
@@ -74550,6 +74808,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Config.Responses.$200>
+  /**
+   * getApiB2BV1Documents - Endpoint is used for getting an array of documents. It is possible to use pagination., permissions: NO
+   */
+  'getApiB2BV1Documents'(
+    parameters?: Parameters<Paths.GetApiB2BV1Documents.QueryParameters & Paths.GetApiB2BV1Documents.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Documents.Responses.$200>
   /**
    * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
    */
@@ -75067,7 +75333,7 @@ export interface OperationMethods {
    */
   'deleteApiB2CV1PushNotificationsUnsubscribeDeviceId'(
     parameters?: Parameters<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
   /**
@@ -75203,7 +75469,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminUsersUserIdNotifications'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserIdNotifications.PathParameters & Paths.DeleteApiB2BAdminUsersUserIdNotifications.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminUsersUserIdNotifications.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserIdNotifications.Responses.$200>
   /**
@@ -75251,7 +75517,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1UsersUserIdNotifications'(
     parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserIdNotifications.PathParameters & Paths.DeleteApiB2BV1UsersUserIdNotifications.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1UsersUserIdNotifications.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1UsersUserIdNotifications.Responses.$200>
   /**
@@ -75283,7 +75549,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1UsersUserId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
   /**
@@ -75315,7 +75581,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminUsersUserId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   /**
@@ -75387,7 +75653,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
@@ -75465,7 +75731,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminSalonsSalonId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   /**
@@ -75553,7 +75819,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminSalonsSalonIdRejectedSuggestions'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.Responses.$200>
   /**
@@ -75585,7 +75851,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminServicesServiceId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   /**
@@ -75625,7 +75891,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminCustomersCustomerId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminCustomersCustomerId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
@@ -75665,7 +75931,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEmployeesEmployeeId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEmployeesEmployeeId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
   /**
@@ -75713,7 +75979,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminCalendarSyncSyncToken'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminCalendarSyncSyncToken.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminCalendarSyncSyncToken.Responses.$200>
   /**
@@ -75777,7 +76043,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
@@ -75829,7 +76095,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   * patchApiB2BV1SalonsSalonId - Endpoint is used for updating salon informations., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
    */
   'patchApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -75841,7 +76107,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1SalonsSalonId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
   /**
@@ -75921,7 +76187,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1ServicesServiceId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   /**
@@ -75961,7 +76227,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1CustomersCustomerId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
   /**
@@ -76001,7 +76267,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1EmployeesEmployeeId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
@@ -76074,7 +76340,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId.Responses.$200>
   /**
@@ -76106,7 +76372,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
   /**
@@ -76130,7 +76396,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   /**
@@ -76335,7 +76601,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BAdminReviewsReviewId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminReviewsReviewId.PathParameters & Paths.DeleteApiB2BAdminReviewsReviewId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BAdminReviewsReviewId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminReviewsReviewId.Responses.$200>
   /**
@@ -76362,22 +76628,6 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminReportsSalons.Responses.$200>
-  /**
-   * getApiB2BAdminDocuments - Endpoint is used for getting an array of documents. It is possible to use pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
-   */
-  'getApiB2BAdminDocuments'(
-    parameters?: Parameters<Paths.GetApiB2BAdminDocuments.QueryParameters & Paths.GetApiB2BAdminDocuments.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminDocuments.Responses.$200>
-  /**
-   * postApiB2BAdminDocuments - Endpoint is used for creating document., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
-   */
-  'postApiB2BAdminDocuments'(
-    parameters?: Parameters<Paths.PostApiB2BAdminDocuments.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminDocuments.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminDocuments.Responses.$200>
   /**
    * getApiB2BAdminDocumentsAssetTypesAssetType - Endpoint is used for getting an array of documents for specified assetType and country. It is possible to use pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
    */
@@ -76439,7 +76689,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
   /**
@@ -76463,7 +76713,7 @@ export interface OperationMethods {
    */
   'deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-    data?: any,
+    data?: Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   /**
@@ -76741,7 +76991,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   }
@@ -76785,7 +77035,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
   }
@@ -76829,7 +77079,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
   }
@@ -76873,7 +77123,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
   }
@@ -76917,7 +77167,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
   }
@@ -76961,7 +77211,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsContactsContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsContactsContactId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEnumsContactsContactId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsContactsContactId.Responses.$200>
   }
@@ -77035,7 +77285,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.PathParameters & Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
   }
@@ -77058,6 +77308,24 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminConfig.Responses.$200>
+  }
+  ['/api/b2b/admin/documents/']: {
+    /**
+     * getApiB2BAdminDocuments - Endpoint is used for getting an array of documents. It is possible to use pagination., permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminDocuments.QueryParameters & Paths.GetApiB2BAdminDocuments.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminDocuments.Responses.$200>
+    /**
+     * postApiB2BAdminDocuments - Endpoint is used for creating document., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminDocuments.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminDocuments.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminDocuments.Responses.$200>
   }
   ['/api/b2b/v1/auth/login']: {
     /**
@@ -77265,7 +77533,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
   }
@@ -77298,6 +77566,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Config.Responses.$200>
+  }
+  ['/api/b2b/v1/documents/']: {
+    /**
+     * getApiB2BV1Documents - Endpoint is used for getting an array of documents. It is possible to use pagination., permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Documents.QueryParameters & Paths.GetApiB2BV1Documents.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1Documents.Responses.$200>
   }
   ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/available']: {
     /**
@@ -77937,7 +78215,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
   }
@@ -78105,7 +78383,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserIdNotifications.PathParameters & Paths.DeleteApiB2BAdminUsersUserIdNotifications.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminUsersUserIdNotifications.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserIdNotifications.Responses.$200>
   }
@@ -78163,7 +78441,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserIdNotifications.PathParameters & Paths.DeleteApiB2BV1UsersUserIdNotifications.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1UsersUserIdNotifications.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1UsersUserIdNotifications.Responses.$200>
   }
@@ -78199,7 +78477,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1UsersUserId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
   }
@@ -78235,7 +78513,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminUsersUserId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   }
@@ -78319,7 +78597,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   }
@@ -78409,7 +78687,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminSalonsSalonId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   }
@@ -78519,7 +78797,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.Responses.$200>
   }
@@ -78555,7 +78833,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminServicesServiceId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   }
@@ -78599,7 +78877,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminCustomersCustomerId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
   }
@@ -78643,7 +78921,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEmployeesEmployeeId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
   }
@@ -78701,7 +78979,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminCalendarSyncSyncToken.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminCalendarSyncSyncToken.Responses.$200>
   }
@@ -78775,7 +79053,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   }
@@ -78837,7 +79115,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
     /**
-     * patchApiB2BV1SalonsSalonId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     * patchApiB2BV1SalonsSalonId - Endpoint is used for updating salon informations., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -78849,7 +79127,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1SalonsSalonId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
   }
@@ -78945,7 +79223,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1ServicesServiceId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   }
@@ -78989,7 +79267,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1CustomersCustomerId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
   }
@@ -79033,7 +79311,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1EmployeesEmployeeId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
   }
@@ -79120,7 +79398,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterIdValuesCategoryParameterValueId.Responses.$200>
   }
@@ -79158,7 +79436,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
   }
@@ -79186,7 +79464,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   }
@@ -79439,7 +79717,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminReviewsReviewId.PathParameters & Paths.DeleteApiB2BAdminReviewsReviewId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BAdminReviewsReviewId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminReviewsReviewId.Responses.$200>
   }
@@ -79472,24 +79750,6 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminReportsSalons.Responses.$200>
-  }
-  ['/api/b2b/admin/documents/']: {
-    /**
-     * getApiB2BAdminDocuments - Endpoint is used for getting an array of documents. It is possible to use pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminDocuments.QueryParameters & Paths.GetApiB2BAdminDocuments.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminDocuments.Responses.$200>
-    /**
-     * postApiB2BAdminDocuments - Endpoint is used for creating document., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminDocuments.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminDocuments.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminDocuments.Responses.$200>
   }
   ['/api/b2b/admin/documents/asset-types/{assetType}']: {
     /**
@@ -79563,7 +79823,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
   }
@@ -79591,7 +79851,7 @@ export interface PathsDictionary {
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-      data?: any,
+      data?: Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   }

@@ -19,6 +19,7 @@ import TextareaField from '../../../atoms/TextareaField'
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-icon.svg'
+import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -55,7 +56,7 @@ const DocumentsForm: FC<Props> = (props) => {
 				setVisible(false)
 			}}
 			closeIcon={<CloseIcon />}
-			width={394}
+			width={500}
 			maskClosable={false}
 			keyboard={false}
 		>
@@ -66,7 +67,6 @@ const DocumentsForm: FC<Props> = (props) => {
 						name={'assetType'}
 						label={t('loc:Vyberte typ dokumentu')}
 						placeholder={t('loc:Typ dokumentu')}
-						allowClear
 						size={'large'}
 						required
 						labelInValue
@@ -81,7 +81,6 @@ const DocumentsForm: FC<Props> = (props) => {
 						name={'languageCode'}
 						label={t('loc:Vyberte jazyk')}
 						placeholder={t('loc:Jazyk')}
-						allowClear
 						size={'large'}
 						required
 						readOnly={formValues?.id}
@@ -98,7 +97,7 @@ const DocumentsForm: FC<Props> = (props) => {
 						signUrl={URL_UPLOAD_FILE}
 						disabled={submitting || !formValues?.assetType}
 						multiple
-						maxCount={UPLOAD.MAX_COUNT}
+						maxCount={formValues?.assetType?.extra?.maxFilesCount || UPLOAD.MAX_COUNT}
 						required
 						validate={validationRequired}
 						category={mimeType?.fileType === FILE_FILTER_DATA_TYPE.DOC ? UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE : UPLOAD_IMG_CATEGORIES.ASSET_IMAGE_TYPE}
@@ -118,13 +117,13 @@ const DocumentsForm: FC<Props> = (props) => {
 					)}
 					<Button
 						id={formFieldID(FORM.DOCUMENTS_FORM, SUBMIT_BUTTON_ID)}
-						className='noti-btn'
-						block
+						className='noti-btn w-full'
 						size='large'
 						type='primary'
 						htmlType='submit'
 						disabled={disabledForm || submitting || pristine}
 						loading={submitting}
+						icon={<UploadIcon />}
 					>
 						{t('loc:Nahrať')}
 					</Button>

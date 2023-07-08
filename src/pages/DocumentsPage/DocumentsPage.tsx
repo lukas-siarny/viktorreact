@@ -1,35 +1,37 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Row } from 'antd'
-import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
+import { Button, Collapse, Row, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { ColumnsType } from 'antd/lib/table'
+import { ColumnProps } from 'antd/lib/table'
 import { useNavigate } from 'react-router'
 import { destroy, initialize } from 'redux-form'
+import cx from 'classnames'
 
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import FlagIcon from '../../components/FlagIcon'
-import DocumentsFilter from './components/DocumentsFilter'
 import DocumentsForm from './components/DocumentsForm'
+import CustomPagination from '../../components/CustomPagination'
 
 // utils
-import { ADMIN_PERMISSIONS, ASSET_TYPE, FORM, PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
+import { ADMIN_PERMISSIONS, ASSET_TYPE, FORM, LANGUAGE, PAGINATION } from '../../utils/enums'
+import { formatDateByLocale, getExpandIcon, getRelativeTimeValue } from '../../utils/helper'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
+import { LOCALES } from '../../components/LanguagePicker'
 
 // reducers
-import { getAssetTypes, getDocuments } from '../../reducers/documents/documentActions'
+import { getAssetTypes, getDocuments, IDocumentAssetTypeItem, IDocumentLangaugeItem, setDocumentsActiveKeys } from '../../reducers/documents/documentActions'
 
 // types
-import { Columns, IBreadcrumbs, IDocumentsFilter } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // assets
 import { ReactComponent as UploadIcon } from '../../assets/icons/upload-icon.svg'
+import { ReactComponent as RefreshIcon } from '../../assets/icons/refresh-icon.svg'
 
 // hooks
 import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
@@ -37,6 +39,8 @@ import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 // schemas
 import { documentsPageURLQueryParamsSchema, IDocumentsAssetTypesPageURLQueryParams } from '../../schemas/queryParams'
 import { IDocumentForm } from '../../schemas/document'
+
+const { Panel } = Collapse
 
 const DocumentsPage = () => {
 	const dispatch = useDispatch()
@@ -48,9 +52,7 @@ const DocumentsPage = () => {
 
 	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
 		page: 1,
-		limit: PAGINATION.limit,
-		languageCode: undefined,
-		assetType: undefined
+		limit: PAGINATION.limit
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -59,17 +61,6 @@ const DocumentsPage = () => {
 				name: t('loc:Prehľad dokumentov')
 			}
 		]
-	}
-
-	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
-		if (!(sorter instanceof Array)) {
-			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
-			const newQuery = {
-				...query,
-				order
-			}
-			setQuery(newQuery)
-		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
@@ -88,80 +79,93 @@ const DocumentsPage = () => {
 
 	useEffect(() => {
 		dispatch(getDocuments(query))
-		dispatch(
-			initialize(FORM.DOCUMENTS_FILTER, {
-				assetType: query.assetType,
-				languageCode: query.languageCode
-			})
-		)
 	}, [dispatch, query])
 
-	const columns: Columns = [
-		{
-			title: t('loc:Názov typu dokumentu'),
-			dataIndex: ['assetType', 'name'],
-			key: 'name',
-			ellipsis: true,
-			render: (value, record) => {
-				return (
-					<div className={'flex items-center'}>
-						<FlagIcon countryCode={record.languageCode?.toLowerCase()} />
-						<span className={'truncate'}>{value}</span>
-					</div>
-				)
+	const getColumns = useCallback(
+		(assetType: IDocumentAssetTypeItem['assetType']): ColumnProps<IDocumentLangaugeItem>[] => [
+			{
+				title: t('loc:Jazyk'),
+				dataIndex: 'languageCode',
+				key: 'languageCode',
+				width: '33.333%',
+				ellipsis: true,
+				render: (_value, record) => {
+					return (
+						<div className={cx('flex items-center gap-2 text-notino-black', { 'opacity-50': record.isEmpty })}>
+							<FlagIcon countryCode={record.languageCode.toLowerCase() as LANGUAGE} />
+							{LOCALES[record.languageCode as LANGUAGE]?.countryCode?.toUpperCase()}
+							{!record.isEmpty && <span className={'truncate text-xxs text-notino-grayDarker'}>{t('loc:pozrieť detail')}</span>}
+						</div>
+					)
+				}
+			},
+			{
+				title: t('loc:Dokument nahratý pred'),
+				dataIndex: 'createdAt',
+				key: 'createdAt',
+				width: '33.333%',
+				ellipsis: true,
+				render: (_value, record) =>
+					record.createdAt ? (
+						<span
+							className={
+								'text-xxs leading-3 font-medium h-4 px-2 min-w-11 justify-center inline-flex items-center truncate rounded-full bg-notino-grayLight text-notino-gray-darker'
+							}
+						>
+							{getRelativeTimeValue(record.createdAt)}
+						</span>
+					) : null
+			},
+			{
+				title: t('loc:Dátum poslednej aktualizácie'),
+				dataIndex: 'lastUpdatedAt',
+				key: 'lastUpdatedAt',
+				className: 'text-xs',
+				width: '33.333%',
+				ellipsis: true,
+				render: (_value, record) => (record.lastUpdatedAt ? formatDateByLocale(record.lastUpdatedAt) : null)
+			},
+			{
+				dataIndex: '',
+				align: 'right',
+				width: '240px',
+				render(val, record) {
+					return (
+						<Button
+							onClick={(e) => {
+								e.stopPropagation()
+								setVisible(true)
+								dispatch(
+									initialize(FORM.DOCUMENTS_FORM, {
+										assetType: {
+											key: assetType.key,
+											value: assetType.key,
+											label: assetType.name,
+											extra: {
+												mimeTypes: assetType.mimeTypes,
+												fileType: assetType.fileType
+												/* maxFilesCount: assetType.maxFilesCount // todo */
+											}
+										},
+										languageCode: record.languageCode,
+										id: record.id
+									})
+								)
+							}}
+							type='primary'
+							htmlType='button'
+							size={'small'}
+							className={'noti-btn w-full'}
+							icon={record.isEmpty ? <UploadIcon className={'w-4 h-4'} /> : <RefreshIcon className={'w-4 h-4'} />}
+						>
+							<span className={'pl-4'}>{record.isEmpty ? t('loc:Nahrať dokument') : t('loc:Aktualizovať dokument')}</span>
+						</Button>
+					)
+				}
 			}
-		},
-		{
-			title: t('loc:Dátum poslednej aktualizácie'),
-			dataIndex: 'createdAt',
-			key: 'createdAt',
-			width: '20%',
-			ellipsis: true,
-			render: (value) => (value ? formatDateByLocale(value) : '-')
-		}
-	]
-
-	const actions: ColumnsType<any> = [
-		{
-			dataIndex: '',
-			align: 'right',
-			width: '160px',
-			render(val, record) {
-				return (
-					<Button
-						onClick={(e) => {
-							e.stopPropagation()
-							setVisible(true)
-							dispatch(
-								initialize(FORM.DOCUMENTS_FORM, {
-									assetType: {
-										key: record.assetType.key,
-										value: record.assetType.key,
-										label: record.assetType.name,
-										extra: {
-											mimeTypes: record.assetType.mimeTypes,
-											fileType: record.assetType.fileType
-										}
-									},
-									languageCode: record.languageCode,
-									id: record.id
-								})
-							)
-						}}
-						type='primary'
-						htmlType='button'
-						size={'small'}
-						className={'noti-btn'}
-						icon={<UploadIcon className={'w-4 h-4'} />}
-					>
-						<span className={'pl-4'}>{t('loc:Aktualizovať dokument')}</span>
-					</Button>
-				)
-			}
-		}
-	]
-
-	const cols = [...columns, ...actions]
+		],
+		[dispatch, t]
+	)
 
 	const fileUploadSubmit = async (values: IDocumentForm) => {
 		try {
@@ -180,60 +184,68 @@ const DocumentsPage = () => {
 			console.error(e)
 		}
 	}
-	const handleSubmit = (values: IDocumentsFilter) => {
-		const newQuery = {
-			...query,
-			...values,
-			languageCode: values?.languageCode?.toLowerCase(),
-			page: 1
-		}
-		setQuery(newQuery)
-	}
-	const handleCreateDocument = () => {
-		setVisible(true)
-	}
 
 	return (
 		<>
-			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
-			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body small'>
-						<DocumentsForm visible={visible} setVisible={setVisible} onSubmit={fileUploadSubmit} />
-						<DocumentsFilter createDocument={handleCreateDocument} onSubmit={handleSubmit} />
-						<CustomTable
-							className='table-fixed table-expandable'
-							onChange={onChangeTable}
-							columns={cols}
-							rowClassName={'clickable-row'}
-							loading={isLoading}
-							dataSource={documents.data?.documents || []}
-							twoToneRows
-							rowKey='id'
-							onRow={(record) => ({
-								onClick: () => {
-									const redirectQuery: IDocumentsAssetTypesPageURLQueryParams = {
-										languageCode: record.languageCode
-									}
-									navigate({
-										pathname: t('paths:documents/{{assetType}}', { assetType: record.assetType.key }),
-										search: formatObjToQuery(redirectQuery)
-									})
-								}
-							})}
-							pagination={{
-								pageSize: documents?.data?.pagination?.limit,
-								total: documents?.data?.pagination?.totalCount,
-								current: documents?.data?.pagination?.page,
-								onChange: onChangePagination,
-								disabled: documents?.isLoading
-							}}
-						/>
+			<div className={'collapsed-tables-list'}>
+				<div className={'collapsed-tables-list-inner-wrapper'}>
+					<Spin spinning={isLoading} />
+					<Row>
+						<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
+					</Row>
+					<h2 className={'text-2xl mb-4 mt-8'}>{t('loc:Prehľad dokumentov')}</h2>
+					<div className={'content-body transparent-background'}>
+						<div className={'services-collapse-wrapper'}>
+							<Collapse
+								bordered={false}
+								activeKey={documents.documentsActiveKeys || []}
+								onChange={(newKeys) => dispatch(setDocumentsActiveKeys(typeof newKeys === 'string' ? [newKeys] : newKeys))}
+								expandIcon={(panelProps) => getExpandIcon(!!panelProps.isActive)}
+							>
+								{documents.tableData?.map((assetType) => {
+									return (
+										<Panel key={assetType.assetType.key} className={'panel panel-category'} header={<h4>{assetType.assetType.name}</h4>}>
+											<CustomTable<IDocumentLangaugeItem>
+												className={'table-fixed noti-collapse-panel-table bordered'}
+												wrapperClassName={'overflow-hidden'}
+												columns={getColumns(assetType.assetType)}
+												dataSource={assetType.langauges}
+												pagination={false}
+												rowKey={'id'}
+												rowClassName={(record) => cx('h-10', { 'clickable-row': !record.isEmpty })}
+												scroll={{ x: 800 }}
+												onRow={(record) => ({
+													onClick: () => {
+														if (!record.isEmpty) {
+															navigate({
+																pathname: t('paths:documents/{{assetType}}', { assetType: assetType.assetType.key }),
+																search: formatObjToQuery<IDocumentsAssetTypesPageURLQueryParams>({
+																	languageCode: record.languageCode
+																})
+															})
+														}
+													}
+												})}
+											/>
+										</Panel>
+									)
+								})}
+							</Collapse>
+						</div>
+						<div className={'content-footer collapsed-tables-list-footer'} id={'content-footer-container'}>
+							<CustomPagination
+								pageSize={documents?.data?.pagination?.limit}
+								total={documents?.data?.pagination?.totalCount}
+								current={documents?.data?.pagination?.page}
+								onChange={onChangePagination}
+								disabled={documents?.isLoading}
+								showSizeChanger={false}
+							/>
+						</div>
 					</div>
-				</Col>
-			</Row>
+				</div>
+				<DocumentsForm visible={visible} setVisible={setVisible} onSubmit={fileUploadSubmit} />
+			</div>
 		</>
 	)
 }

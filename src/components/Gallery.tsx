@@ -150,7 +150,7 @@ const GallerySection = () => {
 		<section className='gallery' id={sections.WORK}>
 			<div className='gallery-content container'>
 				{images.map((image, i) => (
-					<BlurImage key={index} image={image} handleClick={() => setIndex(i)} />
+					<BlurImage key={i} image={image} handleClick={() => setIndex(i)} />
 				))}
 				<Lightbox slides={slides} open={index >= 0} index={index} close={() => setIndex(-1)} />
 			</div>

@@ -1,0 +1,64 @@
+@import "variables";
+
+@keyframes blurImage {
+	0% {
+		filter: grayscale(1) blur(0);
+		transform: scale(1)
+	}
+
+	50% {
+		filter: grayscale(0) blur(5px);
+		transform: scale(1.05)
+	}
+
+	100% {
+		filter: grayscale(0) blur(0);
+		transform: scale(1.05)
+	}
+  }
+
+.gallery {
+	width: 100%;
+
+	.gallery-content {
+		display: grid;
+		grid-gap: 1px;
+		grid-template-columns: repeat(4,minmax(0,1fr));
+
+		@media (max-width: $medium) {
+			grid-template-columns: repeat(2,minmax(0,1fr));
+		}
+
+		@media (max-width: $small) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.blur-image-wrapper {
+		width: 100%;
+		overflow: hidden;
+		padding-bottom: 100%;
+		position: relative;
+		.blur-image {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			filter: grayscale(1);
+			transition: filter 200ms ease-in-out;
+			object-fit: cover;
+
+			&.is-loading {
+				filter: grayscale(1) blur(5px);
+				transform: scale(1.05);
+				transition: filter 500ms ease-in-out;
+			}
+
+			&:hover {
+				animation: blurImage 500ms ease-in-out forwards;
+			}
+		}
+	}
+}

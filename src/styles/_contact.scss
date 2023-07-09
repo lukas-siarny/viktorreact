@@ -1,0 +1,25 @@
+@import "variables";
+
+.contact-content {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-bottom: 1rem;
+
+	@media (max-width: $small) {
+		address {
+			margin-bottom: 2rem;
+			.list-divided {
+				flex-direction: column;
+
+				li {
+					&::after {
+						display: none;
+					}
+				}
+			}
+		}
+
+	}
+}

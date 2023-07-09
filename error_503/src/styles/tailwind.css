@@ -1,9 +1,0 @@
-/*@tailwind base; !* Zakladne CSS pre pracu roznych prehliadacoch - moze prepisat nieco z antu *!*/
-@tailwind components; /* dekorator pre custom css komponenty - apply css1 css2 css3.... */
-@tailwind utilities; /* utilky pre CSS classy - marginy, apdding, colors, spacing... */
-
-@layer components {
-	.flex-center {
-		@apply flex items-center justify-center
-	}
-}

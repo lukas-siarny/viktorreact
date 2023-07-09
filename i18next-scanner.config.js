@@ -6,19 +6,16 @@ module.exports = {
 	options: {
 		debug: false,
 		func: {
-			list: ['t', 'serializeValidationMessage'],
+			list: ['t'],
 			extensions: ['.js', '.jsx', '.ts', '.tsx']
 		},
 		sort: true,
 		trans: false,
 		fallbackNS: 'loc',
 		removeUnusedKeys: true,
-		lngs: ['sk', 'cs', 'en', 'hu', 'bg', 'ro'/* , it */],
-		fallbackLng: 'en', // NOTE: pouzije anglicky preklad ako fallback (nebude uz _NEPRELOZENE_)
-		ns: [
-			'paths',
-			'loc'
-		],
+		lngs: ['sk', 'en'],
+		fallbackLng: 'sk',
+		ns: ['loc'],
 		defaultLng: 'sk',
 		defaultNs: 'keep-empty',
 		defaultValue(lng, ns, key) {

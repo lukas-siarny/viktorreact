@@ -1,0 +1,32 @@
+@import "variables";
+
+.about-content {
+	.text-list {
+		font-size: 1rem;
+	}
+	ul.list-divided {
+		margin-bottom: 5rem;
+
+		&:last-of-type {
+			margin-bottom: 8rem;
+		}
+	}
+
+	> p {
+		margin-bottom: 5rem;
+	}
+
+	@media (max-width: $small) {
+		ul.list-divided {
+			margin-bottom: 3rem;
+
+			&:last-of-type {
+				margin-bottom: 5rem;
+			}
+		}
+
+		> p {
+			margin-bottom: 3rem;
+		}
+	}
+}

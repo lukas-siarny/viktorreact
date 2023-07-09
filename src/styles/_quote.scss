@@ -1,0 +1,24 @@
+@import "variables";
+
+.quote {
+	text-align: right;
+	margin-bottom: 1rem;
+	q {
+		font-size: 2rem;
+	}
+
+	p {
+		text-align: right;
+		font-size: 1rem;
+	}
+
+	@media (max-width: $small) {
+		q {
+			font-size: 1.5rem;
+		}
+
+		p {
+			font-size: 0.875rem;
+		}
+	}
+}

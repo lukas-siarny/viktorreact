@@ -1,9 +1,0 @@
-[{
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.notino.partner",
-      "sha256_cert_fingerprints":
-      ["67:0A:93:1C:22:05:4B:D1:63:47:72:88:89:FB:02:A2:20:AF:0F:BE:F6:0E:EB:67:0A:2F:83:B2:F9:70:D5:1F"]
-    }
-}]  

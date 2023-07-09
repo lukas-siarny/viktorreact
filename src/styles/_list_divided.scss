@@ -1,0 +1,21 @@
+@import "variables";
+
+ul.list-divided {
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 1rem;
+	li {
+		display: block;
+		list-style: none;
+		position: relative;
+
+		&:not(:last-of-type) {
+			&::after {
+				margin: 0 0.75em;
+				content: '/';
+				font-weight: 100;
+				font-size: 0.875em;
+			}
+		}
+	}
+}

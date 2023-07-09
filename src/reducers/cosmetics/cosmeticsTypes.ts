@@ -1,6 +1,0 @@
-// eslint-disable-next-line import/prefer-default-export
-export enum COSMETICS {
-	COSMETICS_LOAD_START = 'COSMETICS_LOAD_START',
-	COSMETICS_LOAD_DONE = 'COSMETICS_LOAD_DONE',
-	COSMETICS_LOAD_FAIL = 'COSMETICS_LOAD_FAIL'
-}

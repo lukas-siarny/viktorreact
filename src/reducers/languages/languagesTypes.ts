@@ -1,6 +1,0 @@
-// eslint-disable-next-line import/prefer-default-export
-export enum LANGUAGES {
-	LANGUAGES_LOAD_START = 'LANGUAGES_LOAD_START',
-	LANGUAGES_LOAD_DONE = 'LANGUAGES_LOAD_DONE',
-	LANGUAGES_LOAD_FAIL = 'LANGUAGES_LOAD_FAIL'
-}

@@ -25,7 +25,9 @@ i18n.use(Backend)
 		},
 		detection: {
 			// order and from where user language should be detected
-			order: ['path']
+			order: ['querystring', 'path', 'localStorage'],
+			lookupFromPathIndex: 0,
+			lookupQuerystring: 'lng'
 		},
 		defaultNS: 'keep-empty',
 		fallbackLng: 'sk',

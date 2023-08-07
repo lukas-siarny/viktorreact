@@ -13,7 +13,7 @@ const Contact = () => {
 			<div className='contact-content container'>
 				<h2>{t('loc:Kontakt')}</h2>
 				<address>
-					<Trans defaults={t('loc:SNP 12<br />Slovenska Lupca 976 13 , Slovensko')} components={{ strong: <strong /> }} />
+					<Trans defaults={t('loc:SNP 12<br />Slovenská Ľupča 976 13 , Slovensko')} components={{ strong: <strong /> }} />
 					<br />
 					<br />
 					<ListDivided items={[<a href='mailto:kabekovo@gmail.com'>kabekovo@gmail.com</a>, <a href='tel:+421910539872'>+421 910 539 872</a>]} />

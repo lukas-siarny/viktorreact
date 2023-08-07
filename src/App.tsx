@@ -20,7 +20,7 @@ const App = () => {
 		})
 
 		// change language based on url on page load
-		if (window.location.pathname === '/en') {
+		if (window.location.search.includes('lng=en')) {
 			i18n.changeLanguage('en')
 		}
 

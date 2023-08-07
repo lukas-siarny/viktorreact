@@ -27,7 +27,7 @@ const Header = () => {
 			const newValue = Object.entries(newSections).find(([newKey]) => key === newKey)?.[1]
 			hash = newValue
 		}
-		window.history.pushState('', document.title, hash ? `${locale}#${hash}` : locale)
+		window.history.pushState('', document.title, hash ? `${window.location.pathname}?lng=${locale}#${hash}` : `${window.location.pathname}?lng=${locale}`)
 	}
 
 	useEffect(() => {

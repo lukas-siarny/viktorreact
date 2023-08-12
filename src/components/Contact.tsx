@@ -34,6 +34,7 @@ const DEFAULT_VALUES: FormValues = {
 	message: ''
 }
 
+// eslint-disable-next-line no-useless-escape
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
 const validateForm = (values: FormValues, t: TFunction) => {

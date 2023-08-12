@@ -1,5 +1,7 @@
 import React, { Suspense, useEffect, useRef } from 'react'
 import { I18nextProvider } from 'react-i18next'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 // utils
 import i18n from './utils/i18n'
@@ -49,6 +51,18 @@ const App = () => {
 	return (
 		<Suspense fallback={<div className={'suspense-loading-spinner'}>Loading...</div>}>
 			<I18nextProvider i18n={i18n}>
+				<ToastContainer
+					position='bottom-right'
+					autoClose={false}
+					hideProgressBar
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable={false}
+					pauseOnHover
+					theme='dark'
+				/>
 				<Header />
 				<Hero />
 				<About />

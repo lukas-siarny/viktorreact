@@ -22,4 +22,148 @@
 		}
 
 	}
+
+	.divider {
+		width: 100%;
+		max-width: 500px;
+		display: flex;
+		flex-direction: row;
+		margin: 32px 0;
+		gap: 4px;
+		font-size: 0.875rem;
+
+		&::after,
+		&::before {
+			content: "";
+			flex: 1 1;
+			border-bottom: 1px solid $color-primary;
+			margin: auto;
+		 }
+	}
+
+}
+
+.contact-form {
+	width: 100%;
+	max-width: 500px;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 32px;
+	gap: 1rem;
+
+	.form-group {
+		label {
+			display: block;
+			text-align: left;
+			font-size: 1rem;
+		}
+
+		input[type=text],
+		textarea {
+			display: block;
+			width: 100%;
+			padding: 8px 16px;
+			color: $color-primary;
+			font-size: 1rem;
+			border: 1px solid $color-primary;
+			font-family: 'Poppins', sans-serif;
+			outline: 1px solid transparent;
+			transition: all 200ms ease-in-out;
+
+			&::placeholder {
+				font-size: 1rem;
+				font-family: 'Poppins', sans-serif;
+				color: $color-secondary;
+			}
+
+			&:hover {
+				border-color: $color-secondary;
+			}
+
+			&:focus-visible {
+				outline: 1px solid $color-primary;
+			}
+		}
+
+		.error {
+			display: block;
+			font-size: 0.875rem;
+			height: 1rem;
+			color: $color-danger;
+			padding-top: 0.25rem;
+			line-height: 1rem;
+			text-align: left;
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height;
+			transition: all 200ms ease-in-out;
+		}
+
+		&.has-error {
+			.error {
+				height: 100%;
+				max-height: 1.25rem;
+			}
+		}
+	}
+
+	.submit-btn {
+		outline: 1px solid transparent;
+		width: 100%;
+		font-size: 1rem;
+		font-family: 'Poppins', sans-serif;
+		outline: 1px solid transparent;
+		transition: all 200ms ease-in-out;
+		background: $color-primary;
+		color: #fff;
+		padding: 8px 16px;
+		cursor: pointer;
+		border: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+
+		&:not(:disabled) {
+			&:hover {
+				background-color: $color-secondary;
+			}
+
+			&:focus-visible {
+				outline-color: $color-primary;
+			}
+		}
+
+		&:disabled {
+			cursor: not-allowed;
+			opacity: 0.3;
+		}
+
+		svg {
+			width: 1.25rem;
+			height: auto;
+			display: block;
+			flex-shrink: 0;
+			animation: rotating 1s linear infinite;
+			max-width: 0;
+			overflow: hidden;
+			transform-origin: center;
+			transition: max-width 200ms ease-in-out;
+		}
+
+		&.loading {
+			svg {
+				max-width: 1.25rem;
+			}
+		}
+	}
+}
+
+@keyframes rotating {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
 }

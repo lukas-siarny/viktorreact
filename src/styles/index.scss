@@ -3,7 +3,7 @@
 *,
 *::after,
 *::before {
-	box-sizing: content-box;
+	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }
@@ -15,12 +15,12 @@ html {
 body {
 	background: #fff;
 	color: $color-primary;
-	font-size: 16px;
+	font-size: 1rem;
 	font-family: 'Poppins', sans-serif;
 	min-height: 100%;
 
 	@media (max-width: $medium) {
-		font-size: 14px;
+		font-size: 0.875rem;
 	}
 }
 
@@ -124,6 +124,9 @@ a {
 		font-size: 1rem;
 	}
 }
+
+// library
+@import "toast";
 
 // components
 @import "quote";

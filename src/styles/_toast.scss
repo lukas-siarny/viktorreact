@@ -1,0 +1,38 @@
+@import "variables";
+
+.Toastify__toast {
+	&.submit-feedback {
+		color: #fff;
+		font-size: 0.875rem;
+		font-family: 'Poppins', sans-serif;
+		min-height: 100%;
+
+		.toast-content-body {
+			display: flex;
+			align-items: flex-start;
+			gap: 16px;
+
+			svg {
+				width: 24px;
+				height: 24px;
+				display: block;
+			}
+		}
+
+		&.success {
+			.toast-content-body {
+				svg {
+					color: $color-success;
+				}
+			}
+		}
+
+		&.error {
+			.toast-content-body {
+				svg {
+					color: $color-danger;
+				}
+			}
+		}
+	}
+}

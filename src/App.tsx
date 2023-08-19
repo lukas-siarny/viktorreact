@@ -11,6 +11,7 @@ import ContactDivider from './components/ContactDivider'
 import Gallery from './components/Gallery'
 import Header from './components/Header'
 import Hero from './components/Hero'
+import Footer from './components/Footer'
 
 const App = () => {
 	const appInit = useRef(true)
@@ -69,7 +70,7 @@ const App = () => {
 				<ContactDivider />
 				<Gallery />
 				<Contact />
-				<ContactDivider />
+				<Footer />
 			</I18nextProvider>
 		</Suspense>
 	)

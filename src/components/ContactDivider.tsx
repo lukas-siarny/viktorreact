@@ -1,13 +1,7 @@
 import React, { useMemo } from 'react'
 import ListDivided from './ListDivided'
 
-type Props = {
-	isFooter?: boolean
-}
-
-const ContactDivider = (props: Props) => {
-	const { isFooter = false } = props
-
+const ContactDivider = () => {
 	const listDivided = useMemo(
 		() => (
 			<ListDivided
@@ -25,7 +19,7 @@ const ContactDivider = (props: Props) => {
 		[]
 	)
 
-	return isFooter ? <footer className='contact-divider container'>{listDivided}</footer> : <section className='contact-divider container'>{listDivided}</section>
+	return <section className='contact-divider container'>{listDivided}</section>
 }
 
 export default ContactDivider
